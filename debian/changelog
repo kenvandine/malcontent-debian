@@ -1,0 +1,5 @@
+malcontent (0.6.0-1) UNRELEASED; urgency=medium
+
+  * Initial release (Closes: #942166)
+
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 01 Mar 2020 14:01:37 +0100
