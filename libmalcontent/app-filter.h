@@ -78,6 +78,9 @@ void          mct_app_filter_unref (MctAppFilter *filter);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (MctAppFilter, mct_app_filter_unref)
 
 uid_t    mct_app_filter_get_user_id            (MctAppFilter *filter);
+
+gboolean mct_app_filter_is_enabled             (MctAppFilter *filter);
+
 gboolean mct_app_filter_is_path_allowed        (MctAppFilter *filter,
                                                 const gchar  *path);
 gboolean mct_app_filter_is_flatpak_ref_allowed (MctAppFilter *filter,
@@ -95,6 +98,11 @@ MctAppFilterOarsValue   mct_app_filter_get_oars_value    (MctAppFilter *filter,
 
 gboolean                mct_app_filter_is_user_installation_allowed   (MctAppFilter *filter);
 gboolean                mct_app_filter_is_system_installation_allowed (MctAppFilter *filter);
+
+GVariant     *mct_app_filter_serialize   (MctAppFilter  *filter);
+MctAppFilter *mct_app_filter_deserialize (GVariant      *variant,
+                                          uid_t          user_id,
+                                          GError       **error);
 
 /**
  * MctAppFilterBuilder:
