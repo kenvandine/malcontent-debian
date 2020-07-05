@@ -5,6 +5,30 @@
   <object class="GtkApplicationWindow" id="main_window">
     <property name="default-width">500</property>
     <property name="default-height">600</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="show-close-button">True</property>
+        <!-- Translators: This is the title of the main window -->
+        <property name="title" translatable="yes">Parental Controls</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkMenuButton" id="primary_menu">
+            <property name="visible">True</property>
+            <property name="direction">none</property>
+            <property name="can-focus">True</property>
+            <property name="use-popover">True</property>
+            <property name="menu-model">primary-menu</property>
+            <accelerator key="F10" signal="activate"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkStack" id="main_stack">
         <property name="visible">True</property>
@@ -36,6 +60,7 @@
                   <object class="MctUserControls" id="user_controls">
                     <property name="visible">True</property>
                     <property name="margin">12</property>
+                    <property name="dbus-connection">dbus_connection</property>
                   </object>
                 </child>
               </object>
@@ -78,7 +103,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Permission is required to view and change parental controls settings for other users.</property>
+                    <property name="label" translatable="yes">Permission is required to view and change user parental controls settings.</property>
                     <property name="wrap">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject">
@@ -231,4 +256,17 @@
       </object>
     </child>
   </object>
+
+  <menu id="primary-menu">
+    <section>
+      <item>
+        <attribute name="action">app.help</attribute>
+        <attribute name="label" translatable="yes">_Help</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">_About Parental Controls</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

@@ -1,7 +1,7 @@
 project('malcontent', 'c',
-  version : '0.6.0',
-  meson_version : '>= 0.49.0',
-  license: 'LGPLv2.1+',
+  version : '0.8.0',
+  meson_version : '>= 0.50.0',
+  license: ['LGPL-2.1-or-later', 'GPL-2.0-or-later'],
   default_options : [
     'buildtype=debugoptimized',
     'warning_level=2',
@@ -21,6 +21,7 @@ bindir = join_paths(prefix, get_option('bindir'))
 datadir = join_paths(prefix, get_option('datadir'))
 libdir = join_paths(prefix, get_option('libdir'))
 libexecdir = join_paths(prefix, get_option('libexecdir'))
+includedir = join_paths(prefix, get_option('includedir'))
 
 # FIXME: This isn’t exposed in accountsservice.pc
 # See https://gitlab.freedesktop.org/accountsservice/accountsservice/merge_requests/16
@@ -40,15 +41,11 @@ polkit_gobject = dependency('polkit-gobject-1')
 polkitpolicydir = polkit_gobject.get_pkgconfig_variable('policydir',
   define_variable: ['prefix', prefix])
 
-libglib_testing = subproject('libglib-testing')
-libglib_testing_dep = dependency(
-  'libglib-testing',
-  fallback: ['libglib-testing', 'libglib_testing_dep'],
-)
-
 config_h = configuration_data()
 config_h.set_quoted('GETTEXT_PACKAGE', 'malcontent')
 config_h.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('localedir')))
+config_h.set_quoted('PAMLIBDIR', pamlibdir)
+config_h.set_quoted('VERSION', meson.project_version())
 configure_file(
   output: 'config.h',
   configuration: config_h,
@@ -127,10 +124,22 @@ test_env = [
 ]
 
 subdir('accounts-service')
-subdir('libmalcontent')
-subdir('libmalcontent-ui')
+subdir('help')
+if not get_option('use_system_libmalcontent')
+  subdir('libmalcontent')
+else
+  libmalcontent_api_version = '0'
+  libmalcontent_dep = dependency('malcontent-' + libmalcontent_api_version, version: meson.project_version())
+  libmalcontent_gir = ['Malcontent-' + libmalcontent_api_version,
+                       'Malcontent-' + libmalcontent_api_version + '.typelib']
+endif
+if get_option('ui').enabled()
+  subdir('libmalcontent-ui')
+endif
 subdir('malcontent-client')
-subdir('malcontent-control')
+if get_option('ui').enabled()
+  subdir('malcontent-control')
+endif
 subdir('pam')
 subdir('po')
 

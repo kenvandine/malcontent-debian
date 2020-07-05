@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright © 2018, 2019, 2020 Endless, Inc. -->
-<interface>
+<interface domain="malcontent">
   <requires lib="gtk+" version="3.12"/>
   <template class="MctUserControls" parent="GtkGrid">
     <property name="visible">True</property>
@@ -491,6 +491,7 @@
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
+                        <property name="direction">right</property>
                         <property name="popover">oars_popover</property>
                         <child>
                           <object class="GtkBox">
