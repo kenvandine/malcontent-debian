@@ -17,7 +17,7 @@ Build-Depends: appstream-util,
                libpam0g-dev,
                libpolkit-gobject-1-dev,
                libxml2-utils,
-               meson,
+               meson (>= 0.50.0),
                policykit-1
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
