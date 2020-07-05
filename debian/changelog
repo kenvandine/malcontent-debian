@@ -1,6 +1,5 @@
-malcontent (0.8.0-1) UNRELEASED; urgency=medium
+malcontent (0.8.0-1) unstable; urgency=medium
 
   * Initial release (Closes: #942166)
-  * New upstream release
 
- -- Laurent Bigonville <bigon@debian.org>  Sun, 05 Jul 2020 17:47:39 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 05 Jul 2020 18:07:10 +0200
