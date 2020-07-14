@@ -1,3 +1,13 @@
+malcontent (0.8.0-2) unstable; urgency=medium
+
+  [ Laurent Bigonville ]
+  * debian/malcontent-gui.install: Install help pages
+
+  [ Simon McVittie ]
+  * Add pkg.malcontent.nogui build-profile to disable UI library
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 14 Jul 2020 12:39:00 +0200
+
 malcontent (0.8.0-1) unstable; urgency=medium
 
   * Initial release (Closes: #942166)
