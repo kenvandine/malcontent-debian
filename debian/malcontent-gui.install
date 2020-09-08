@@ -3,3 +3,4 @@ usr/share/applications/
 usr/share/help/
 usr/share/icons/
 usr/share/metainfo/
+usr/share/polkit-1/actions/org.freedesktop.MalcontentControl.policy
