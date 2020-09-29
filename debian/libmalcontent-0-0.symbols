@@ -1,8 +1,8 @@
 libmalcontent-0.so.0 libmalcontent-0-0 #MINVER#
 * Build-Depends-Package: libmalcontent-0-dev
- mct_app_filter_builder_blacklist_content_type@Base 0.6.0
- mct_app_filter_builder_blacklist_flatpak_ref@Base 0.6.0
- mct_app_filter_builder_blacklist_path@Base 0.6.0
+ mct_app_filter_builder_blocklist_content_type@Base 0.9.0
+ mct_app_filter_builder_blocklist_flatpak_ref@Base 0.9.0
+ mct_app_filter_builder_blocklist_path@Base 0.9.0
  mct_app_filter_builder_clear@Base 0.6.0
  mct_app_filter_builder_copy@Base 0.6.0
  mct_app_filter_builder_end@Base 0.6.0
