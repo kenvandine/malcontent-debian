@@ -3,7 +3,7 @@ deps = [
   dependency('gio-unix-2.0', version: '>= 2.44'),
   dependency('glib-2.0', version: '>= 2.60.0'),
   dependency('gobject-2.0', version: '>= 2.44'),
-  dependency('glib-testing-0'),
+  dependency('glib-testing-0', fallback: ['libglib-testing', 'libglib_testing_dep']),
   libmalcontent_dep,
 ]
 
@@ -34,8 +34,8 @@ accounts_service_iface_c = custom_target(
 )
 
 accounts_service_extension_ifaces = [
-  join_paths(meson.source_root(), 'accounts-service', 'com.endlessm.ParentalControls.AppFilter.xml'),
-  join_paths(meson.source_root(), 'accounts-service', 'com.endlessm.ParentalControls.SessionLimits.xml'),
+  join_paths(meson.current_source_dir(), '..', '..', 'accounts-service', 'com.endlessm.ParentalControls.AppFilter.xml'),
+  join_paths(meson.current_source_dir(), '..', '..', 'accounts-service', 'com.endlessm.ParentalControls.SessionLimits.xml'),
 ]
 
 accounts_service_extension_iface_h = custom_target(
