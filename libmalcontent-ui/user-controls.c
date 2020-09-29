@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <appstream-glib.h>
 #include <libmalcontent/malcontent.h>
 #include <locale.h>
 #include <gio/gio.h>
@@ -87,6 +88,7 @@ struct _MctUserControls
   GtkPopover *oars_popover;
   MctRestrictApplicationsDialog *restrict_applications_dialog;
   GtkLabel   *restrict_applications_description;
+  GtkListBoxRow *restrict_applications_row;
 
   GtkListBox *application_usage_permissions_listbox;
   GtkListBox *software_installation_permissions_listbox;
@@ -105,7 +107,7 @@ struct _MctUserControls
   MctAppFilter *filter; /* (owned) (nullable) */
   guint         selected_age; /* @oars_disabled_age to disable OARS */
 
-  guint         blacklist_apps_source_id;
+  guint         blocklist_apps_source_id;
   gboolean      flushed_on_dispose;
 
   ActUserAccountType  user_account_type;
@@ -113,7 +115,7 @@ struct _MctUserControls
   gchar              *user_display_name;  /* (nullable) (owned) */
 };
 
-static gboolean blacklist_apps_cb (gpointer data);
+static gboolean blocklist_apps_cb (gpointer data);
 
 static void on_restrict_installation_switch_active_changed_cb (GtkSwitch        *s,
                                                                GParamSpec       *pspec,
@@ -133,6 +135,10 @@ static gboolean on_restrict_applications_dialog_delete_event_cb (GtkWidget *widg
 static void on_restrict_applications_dialog_response_cb (GtkDialog *dialog,
                                                          gint       response_id,
                                                          gpointer   user_data);
+
+static void on_application_usage_permissions_listbox_activated_cb (GtkListBox    *list_box,
+                                                                   GtkListBoxRow *row,
+                                                                   gpointer       user_data);
 
 static void on_set_age_action_activated (GSimpleAction *action,
                                          GVariant      *param,
@@ -161,8 +167,7 @@ static const GActionEntry actions[] = {
   { "set-age", on_set_age_action_activated, "u", NULL, NULL, { 0, }}
 };
 
-/* FIXME: Factor this out and rely on code from libappstream-glib or gnome-software
- * to do it. See: https://gitlab.freedesktop.org/pwithnall/malcontent/issues/7 */
+#if !AS_CHECK_VERSION(0, 7, 15)
 static const gchar * const oars_categories[] =
 {
   "violence-cartoon",
@@ -194,6 +199,7 @@ static const gchar * const oars_categories[] =
   "money-gambling",
   NULL
 };
+#endif  /* appstream-glib < 0.7.15 */
 
 /* Auxiliary methods */
 
@@ -248,26 +254,26 @@ get_user_display_name (ActUser *user)
 }
 
 static void
-schedule_update_blacklisted_apps (MctUserControls *self)
+schedule_update_blocklisted_apps (MctUserControls *self)
 {
-  if (self->blacklist_apps_source_id > 0)
+  if (self->blocklist_apps_source_id > 0)
     return;
 
   /* Use a timeout to batch multiple quick changes into a single
    * update. 1 second is an arbitrary sufficiently small number */
-  self->blacklist_apps_source_id = g_timeout_add_seconds (1, blacklist_apps_cb, self);
+  self->blocklist_apps_source_id = g_timeout_add_seconds (1, blocklist_apps_cb, self);
 }
 
 static void
-flush_update_blacklisted_apps (MctUserControls *self)
+flush_update_blocklisted_apps (MctUserControls *self)
 {
-  if (self->blacklist_apps_source_id > 0)
+  if (self->blocklist_apps_source_id > 0)
     {
       /* Remove the timer and forcefully call the timer callback. */
-      g_source_remove (self->blacklist_apps_source_id);
-      self->blacklist_apps_source_id = 0;
+      g_source_remove (self->blocklist_apps_source_id);
+      self->blocklist_apps_source_id = 0;
 
-      blacklist_apps_cb (self);
+      blocklist_apps_cb (self);
     }
 }
 
@@ -311,10 +317,10 @@ static void
 update_categories_from_language (MctUserControls *self)
 {
   GsContentRatingSystem rating_system;
-  const gchar * const * entries;
+  g_auto(GStrv) entries = NULL;
   const gchar *rating_system_str;
   const guint *ages;
-  gsize i;
+  gsize i, n_ages;
   g_autofree gchar *disabled_action = NULL;
 
   rating_system = get_content_rating_system (self);
@@ -323,7 +329,7 @@ update_categories_from_language (MctUserControls *self)
   g_debug ("Using rating system %s", rating_system_str);
 
   entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system);
+  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
 
   /* Fill in the age menu */
   g_menu_remove_all (self->age_menu);
@@ -341,6 +347,8 @@ update_categories_from_language (MctUserControls *self)
 
       g_menu_append (self->age_menu, entries[i], action);
     }
+
+  g_assert (i == n_ages);
 }
 
 /* Returns a human-readable but untranslated string, not suitable
@@ -365,14 +373,24 @@ oars_value_to_string (MctAppFilterOarsValue oars_value)
     }
 }
 
+/* Ensure the enum casts below are safe. */
+G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_UNKNOWN == (int) AS_CONTENT_RATING_VALUE_UNKNOWN);
+G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_NONE == (int) AS_CONTENT_RATING_VALUE_NONE);
+G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_MILD == (int) AS_CONTENT_RATING_VALUE_MILD);
+G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_MODERATE == (int) AS_CONTENT_RATING_VALUE_MODERATE);
+G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_INTENSE == (int) AS_CONTENT_RATING_VALUE_INTENSE);
+
 static void
 update_oars_level (MctUserControls *self)
 {
   GsContentRatingSystem rating_system;
-  const gchar *rating_age_category;
+  g_autofree gchar *rating_age_category = NULL;
   guint maximum_age;
   gsize i;
   gboolean all_categories_unset;
+#if AS_CHECK_VERSION(0, 7, 15)
+  g_autofree const gchar **oars_categories = as_content_rating_get_all_rating_ids ();
+#endif
 
   g_assert (self->filter != NULL);
 
@@ -386,7 +404,7 @@ update_oars_level (MctUserControls *self)
 
       oars_value = mct_app_filter_get_oars_value (self->filter, oars_categories[i]);
       all_categories_unset &= (oars_value == MCT_APP_FILTER_OARS_VALUE_UNKNOWN);
-      age = as_content_rating_id_value_to_csm_age (oars_categories[i], oars_value);
+      age = as_content_rating_id_value_to_csm_age (oars_categories[i], (AsContentRatingValue) oars_value);
 
       g_debug ("OARS value for '%s': %s", oars_categories[i], oars_value_to_string (oars_value));
 
@@ -402,7 +420,10 @@ update_oars_level (MctUserControls *self)
 
   /* Unrestricted? */
   if (rating_age_category == NULL || all_categories_unset)
-    rating_age_category = _("All Ages");
+    {
+      g_clear_pointer (&rating_age_category, g_free);
+      rating_age_category = g_strdup (_("All Ages"));
+    }
 
   gtk_label_set_label (self->oars_button_label, rating_age_category);
 }
@@ -539,14 +560,14 @@ setup_parental_control_settings (MctUserControls *self)
 /* Callbacks */
 
 static gboolean
-blacklist_apps_cb (gpointer data)
+blocklist_apps_cb (gpointer data)
 {
   g_auto(MctAppFilterBuilder) builder = MCT_APP_FILTER_BUILDER_INIT ();
   g_autoptr(MctAppFilter) new_filter = NULL;
   g_autoptr(GError) error = NULL;
   MctUserControls *self = data;
 
-  self->blacklist_apps_source_id = 0;
+  self->blocklist_apps_source_id = 0;
 
   if (self->user == NULL)
     {
@@ -594,7 +615,7 @@ on_restrict_installation_switch_active_changed_cb (GtkSwitch        *s,
     }
 
   /* Save the changes. */
-  schedule_update_blacklisted_apps (self);
+  schedule_update_blocklisted_apps (self);
 }
 
 static void
@@ -603,7 +624,7 @@ on_restrict_web_browsers_switch_active_changed_cb (GtkSwitch        *s,
                                                    MctUserControls *self)
 {
   /* Save the changes. */
-  schedule_update_blacklisted_apps (self);
+  schedule_update_blocklisted_apps (self);
 }
 
 static void
@@ -639,7 +660,7 @@ on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
   gtk_widget_hide (GTK_WIDGET (self->restrict_applications_dialog));
 
   /* Schedule an update to the saved state. */
-  schedule_update_blacklisted_apps (self);
+  schedule_update_blocklisted_apps (self);
 
   return TRUE;
 }
@@ -655,23 +676,35 @@ on_restrict_applications_dialog_response_cb (GtkDialog *dialog,
 }
 
 static void
+on_application_usage_permissions_listbox_activated_cb (GtkListBox    *list_box,
+                                                       GtkListBoxRow *row,
+                                                       gpointer       user_data)
+{
+  MctUserControls *self = MCT_USER_CONTROLS (user_data);
+
+  if (row == self->restrict_applications_row)
+    on_restrict_applications_button_clicked_cb (NULL, self);
+}
+
+static void
 on_set_age_action_activated (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
 {
   GsContentRatingSystem rating_system;
   MctUserControls *self;
-  const gchar * const * entries;
+  g_auto(GStrv) entries = NULL;
   const guint *ages;
   guint age;
   guint i;
+  gsize n_ages;
 
   self = MCT_USER_CONTROLS (user_data);
   age = g_variant_get_uint32 (param);
 
   rating_system = get_content_rating_system (self);
   entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system);
+  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
 
   /* Update the button */
   if (age == oars_disabled_age)
@@ -695,7 +728,7 @@ on_set_age_action_activated (GSimpleAction *action,
 
   self->selected_age = age;
 
-  schedule_update_blacklisted_apps (self);
+  schedule_update_blocklisted_apps (self);
 }
 
 static void
@@ -750,7 +783,7 @@ mct_user_controls_finalize (GObject *object)
 {
   MctUserControls *self = (MctUserControls *)object;
 
-  g_assert (self->blacklist_apps_source_id == 0);
+  g_assert (self->blocklist_apps_source_id == 0);
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->action_group);
@@ -790,7 +823,7 @@ mct_user_controls_dispose (GObject *object)
    * do it multiple times, and after the first g_object_run_dispose() call,
    * none of our child widgets are still around to extract data from anyway. */
   if (!self->flushed_on_dispose)
-    flush_update_blacklisted_apps (self);
+    flush_update_blocklisted_apps (self);
   self->flushed_on_dispose = TRUE;
 
   G_OBJECT_CLASS (mct_user_controls_parent_class)->dispose (object);
@@ -1031,6 +1064,7 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, oars_popover);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_dialog);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_description);
+  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_row);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, application_usage_permissions_listbox);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, software_installation_permissions_listbox);
 
@@ -1039,6 +1073,7 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_delete_event_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_response_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_application_usage_permissions_listbox_activated_cb);
 }
 
 static void
@@ -1136,7 +1171,7 @@ mct_user_controls_set_user (MctUserControls *self,
 
   /* If we have pending unsaved changes from the previous user, force them to be
    * saved first. */
-  flush_update_blacklisted_apps (self);
+  flush_update_blocklisted_apps (self);
 
   old_user = (self->user != NULL) ? g_object_ref (self->user) : NULL;
 
@@ -1279,7 +1314,7 @@ mct_user_controls_set_app_filter (MctUserControls *self,
 
   /* If we have pending unsaved changes from the previous configuration, force
    * them to be saved first. */
-  flush_update_blacklisted_apps (self);
+  flush_update_blocklisted_apps (self);
 
   if (self->filter == app_filter)
     return;
@@ -1328,7 +1363,7 @@ mct_user_controls_set_user_account_type (MctUserControls    *self,
 
   /* If we have pending unsaved changes from the previous user, force them to be
    * saved first. */
-  flush_update_blacklisted_apps (self);
+  flush_update_blocklisted_apps (self);
 
   if (self->user_account_type == user_account_type)
     return;
@@ -1379,7 +1414,7 @@ mct_user_controls_set_user_locale (MctUserControls *self,
 
   /* If we have pending unsaved changes from the previous user, force them to be
    * saved first. */
-  flush_update_blacklisted_apps (self);
+  flush_update_blocklisted_apps (self);
 
   if (g_strcmp0 (self->user_locale, user_locale) == 0)
     return;
@@ -1431,7 +1466,7 @@ mct_user_controls_set_user_display_name (MctUserControls *self,
 
   /* If we have pending unsaved changes from the previous user, force them to be
    * saved first. */
-  flush_update_blacklisted_apps (self);
+  flush_update_blocklisted_apps (self);
 
   if (g_strcmp0 (self->user_display_name, user_display_name) == 0)
     return;
@@ -1460,15 +1495,18 @@ mct_user_controls_build_app_filter (MctUserControls     *self,
 {
   gboolean restrict_web_browsers;
   gsize i;
+#if AS_CHECK_VERSION(0, 7, 15)
+  g_autofree const gchar **oars_categories = as_content_rating_get_all_rating_ids ();
+#endif
 
   g_return_if_fail (MCT_IS_USER_CONTROLS (self));
   g_return_if_fail (builder != NULL);
 
   g_debug ("Building parental controls settings…");
 
-  /* Blacklist */
+  /* Blocklist */
 
-  g_debug ("\t → Blacklisting apps");
+  g_debug ("\t → Blocklisting apps");
 
   mct_restrict_applications_dialog_build_app_filter (self->restrict_applications_dialog, builder);
 
@@ -1485,7 +1523,7 @@ mct_user_controls_build_app_filter (MctUserControls     *self,
       const gchar *oars_category;
 
       oars_category = oars_categories[i];
-      oars_value = as_content_rating_id_csm_age_to_value (oars_category, self->selected_age);
+      oars_value = (MctAppFilterOarsValue) as_content_rating_id_csm_age_to_value (oars_category, self->selected_age);
 
       g_debug ("\t\t → %s: %s", oars_category, oars_value_to_string (oars_value));
 
@@ -1498,7 +1536,7 @@ mct_user_controls_build_app_filter (MctUserControls     *self,
   g_debug ("\t → %s web browsers", restrict_web_browsers ? "Restricting" : "Allowing");
 
   if (restrict_web_browsers)
-    mct_app_filter_builder_blacklist_content_type (builder, WEB_BROWSERS_CONTENT_TYPE);
+    mct_app_filter_builder_blocklist_content_type (builder, WEB_BROWSERS_CONTENT_TYPE);
 
   /* App installation */
   if (self->user_account_type != ACT_USER_ACCOUNT_TYPE_ADMINISTRATOR)

@@ -8,7 +8,7 @@ endif
 resources = gnome.compile_resources(
   'resources',
   'malcontent-ui.gresource.xml',
-  source_dir: meson.source_root(),
+  source_dir: meson.current_source_dir(),
 )
 
 libmalcontent_ui_sources = [
@@ -36,6 +36,7 @@ libmalcontent_ui_public_deps = [
   libmalcontent_dep,
 ]
 libmalcontent_ui_private_deps = [
+  dependency('appstream-glib'),
   dependency('flatpak'),
 ]
 

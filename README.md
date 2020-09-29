@@ -61,7 +61,7 @@ set parental controls policies for users.
 ```
 $ # This sets the parental controls policy for user ‘philip’ to allow no \\
     installation of apps with anything more than ‘none’ for realistic violence, \\
-    and to blacklist running the org.freedesktop.Bustle flatpak:
+    and to blocklist running the org.freedesktop.Bustle flatpak:
 $ malcontent-client set philip \\
     violence-realistic=none \\
     app/org.freedesktop.Bustle/x86_64/stable
@@ -89,6 +89,7 @@ Dependencies
 ------------
 
  * accounts-service
+ * appstream-glib
  * dbus-daemon
  * flatpak
  * gio-2.0 ≥ 2.60
