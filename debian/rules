@@ -15,4 +15,4 @@ meson_options += -Dui=disabled
 endif
 
 override_dh_auto_configure:
-	dh_auto_configure -- $(meson_options)
+	dh_auto_configure -- -Dprivileged_group=sudo $(meson_options)
