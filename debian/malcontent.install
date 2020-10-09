@@ -4,4 +4,5 @@ usr/share/accountsservice/
 usr/share/dbus-1/
 usr/share/locale/
 usr/share/man/
-usr/share/polkit-1/
+usr/share/polkit-1/actions/com.endlessm.ParentalControls.policy
+usr/share/polkit-1/rules.d/com.endlessm.ParentalControls.rules
