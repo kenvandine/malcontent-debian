@@ -1,7 +1,7 @@
 malcontent (0.9.0-2) unstable; urgency=medium
 
   [ Diego Escalante Urrelo ]
-  * d/malcontent-gui.install: Add missing .policy file
+  * d/malcontent-gui.install: Add missing .policy file (Closes: #971728)
 
   [ Laurent Bigonville ]
   * d/malcontent.install: Explicitly list the polkit files to install
