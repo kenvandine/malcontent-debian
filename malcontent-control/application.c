@@ -27,6 +27,7 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include <libhandy-1/handy.h>
 #include <libmalcontent-ui/malcontent-ui.h>
 #include <polkit/polkit.h>
 
@@ -249,6 +250,8 @@ mct_application_startup (GApplication *application)
 
   /* Chain up. */
   G_APPLICATION_CLASS (mct_application_parent_class)->startup (application);
+
+  hdy_init ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries,
                                    G_N_ELEMENTS (app_entries), application);
