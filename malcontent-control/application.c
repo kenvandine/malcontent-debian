@@ -77,8 +77,7 @@ struct _MctApplication
   MctUserSelector *user_selector;
   MctUserControls *user_controls;
   GtkStack *main_stack;
-  GtkLabel *error_title;
-  GtkLabel *error_message;
+  HdyStatusPage *error_page;
   GtkLockButton *lock_button;
   GtkButton *user_accounts_panel_button;
   GtkLabel *help_label;
@@ -210,8 +209,7 @@ mct_application_activate (GApplication *application)
       self->main_stack = GTK_STACK (gtk_builder_get_object (builder, "main_stack"));
       self->user_selector = MCT_USER_SELECTOR (gtk_builder_get_object (builder, "user_selector"));
       self->user_controls = MCT_USER_CONTROLS (gtk_builder_get_object (builder, "user_controls"));
-      self->error_title = GTK_LABEL (gtk_builder_get_object (builder, "error_title"));
-      self->error_message = GTK_LABEL (gtk_builder_get_object (builder, "error_message"));
+      self->error_page = HDY_STATUS_PAGE (gtk_builder_get_object (builder, "error_page"));
       self->lock_button = GTK_LOCK_BUTTON (gtk_builder_get_object (builder, "lock_button"));
       self->user_accounts_panel_button = GTK_BUTTON (gtk_builder_get_object (builder, "user_accounts_panel_button"));
 
@@ -373,10 +371,10 @@ update_main_stack (MctApplication *self)
   if ((is_user_manager_loaded && act_user_manager_no_service (self->user_manager)) ||
       self->permission_error != NULL)
     {
-      gtk_label_set_label (self->error_title,
-                           _("Failed to load user data from the system"));
-      gtk_label_set_label (self->error_message,
-                           _("Please make sure that the AccountsService is installed and enabled."));
+      hdy_status_page_set_title (self->error_page,
+                                 _("Failed to load user data from the system"));
+      hdy_status_page_set_description (self->error_page,
+                                       _("Please make sure that the AccountsService is installed and enabled."));
 
       new_page_name = "error";
       new_focus_widget = NULL;

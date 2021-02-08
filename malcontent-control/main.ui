@@ -74,54 +74,18 @@
             </child>
 
             <child>
-              <object class="GtkBox">
+              <object class="HdyStatusPage">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child type="center">
-                  <object class="GtkBox">
+                <property name="title" translatable="yes">Permission Required</property>
+                <property name="description" translatable="yes">Permission is required to view and change user parental controls settings.</property>
+                <property name="icon-name">org.freedesktop.MalcontentControl</property>
+                <child>
+                  <object class="GtkLockButton" id="lock_button">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <property name="margin">18</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Permission Required</property>
-                        <attributes>
-                          <attribute name="scale" value="1.4"/>
-                        </attributes>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Permission is required to view and change user parental controls settings.</property>
-                        <property name="wrap">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLockButton" id="lock_button">
-                        <property name="visible">True</property>
-                        <property name="halign">center</property>
-                        <property name="can-default">True</property>
-                        <property name="has-default">True</property>
-                        <property name="can-focus">True</property>
-                        <!-- Give 18px spacing between the label and the button -->
-                        <property name="margin-top">6</property>
-                      </object>
-                    </child>
+                    <property name="halign">center</property>
+                    <property name="can-default">True</property>
+                    <property name="has-default">True</property>
+                    <property name="can-focus">True</property>
                   </object>
                 </child>
               </object>
@@ -131,73 +95,24 @@
             </child>
 
             <child>
-              <object class="GtkBox">
+              <object class="HdyStatusPage">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child type="center">
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <property name="margin">18</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">system-users-symbolic</property>
-                        <property name="pixel-size">96</property>
-                        <property name="visible">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">No Standard User Accounts</property>
-                        <attributes>
-                          <attribute name="scale" value="1.4"/>
-                        </attributes>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="justify">center</property>
-                        <property name="label" translatable="yes">Parental controls can only be applied to standard user
+                <property name="icon-name">system-users-symbolic</property>
+                <property name="title" translatable="yes">No Standard User Accounts</property>
+                <property name="description" translatable="yes">Parental controls can only be applied to standard user
     accounts. These can be created in the user settings.</property>
-                        <property name="wrap">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="user_accounts_panel_button">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_User Settings</property>
-                        <property name="halign">center</property>
-                        <property name="can-default">True</property>
-                        <property name="has-default">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="can-focus">True</property>
-                        <!-- Give 18px spacing between the label and the button -->
-                        <property name="margin-top">6</property>
-                        <style>
-                          <class name="suggested-action"/>
-                        </style>
-                      </object>
-                    </child>
+                <child>
+                  <object class="GtkButton" id="user_accounts_panel_button">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">_User Settings</property>
+                    <property name="halign">center</property>
+                    <property name="can-default">True</property>
+                    <property name="has-default">True</property>
+                    <property name="use-underline">True</property>
+                    <property name="can-focus">True</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -233,38 +148,9 @@
             </child>
 
             <child>
-              <object class="GtkBox">
+              <object class="HdyStatusPage" id="error_page">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child type="center">
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="error_title">
-                        <property name="visible">True</property>
-                        <property name="label"></property>
-                        <attributes>
-                          <attribute name="scale" value="1.4"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="error_message">
-                        <property name="visible">True</property>
-                        <property name="label"></property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject">
-                    <property name="AtkObject::accessible-role">alert</property>
-                  </object>
-                </child>
+                <property name="icon-name">dialog-error-symbolic</property>
               </object>
               <packing>
                 <property name="name">error</property>
