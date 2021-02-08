@@ -56,40 +56,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="MctUserControls" id="user_controls">
                     <property name="visible">True</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="min-content-height">370</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">18</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">18</property>
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel" id="help_label">
-                            <!-- Content is set in code; this string is just a placeholder -->
-                            <property name="label">It’s recommended that restrictions are set as part of an ongoing conversation with $name. Read guidance on what to consider.</property>
-                            <property name="visible">True</property>
-                            <property name="wrap">True</property>
-                            <property name="xalign">0.0</property>
-                            <property name="yalign">0.0</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject">
-                                <property name="AtkObject::accessible-role">static</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="MctUserControls" id="user_controls">
-                            <property name="halign">center</property>
-                            <property name="visible">True</property>
-                            <property name="dbus-connection">dbus_connection</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    <!-- Content is set in code; this string is just a placeholder -->
+                    <property name="description">It’s recommended that restrictions are set as part of an ongoing conversation with $name. Read guidance on what to consider.</property>
+                    <property name="height-request">270</property>
+                    <property name="dbus-connection">dbus_connection</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>

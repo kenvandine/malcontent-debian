@@ -29,6 +29,7 @@ libmalcontent_ui_public_deps = [
   dependency('glib-2.0', version: '>= 2.54.2'),
   dependency('gobject-2.0', version: '>= 2.54'),
   dependency('gtk+-3.0', version: '>= 3.24'),
+  dependency('libhandy-1', version: '>= 1.1.0'),
   libmalcontent_dep,
 ]
 libmalcontent_ui_private_deps = [

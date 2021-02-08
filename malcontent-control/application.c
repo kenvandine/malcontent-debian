@@ -214,7 +214,6 @@ mct_application_activate (GApplication *application)
       self->error_message = GTK_LABEL (gtk_builder_get_object (builder, "error_message"));
       self->lock_button = GTK_LOCK_BUTTON (gtk_builder_get_object (builder, "lock_button"));
       self->user_accounts_panel_button = GTK_BUTTON (gtk_builder_get_object (builder, "user_accounts_panel_button"));
-      self->help_label = GTK_LABEL (gtk_builder_get_object (builder, "help_label"));
 
       /* Connect signals. */
       g_signal_connect_object (self->user_selector, "notify::user",
@@ -413,7 +412,7 @@ update_main_stack (MctApplication *self)
                                       "with %s. <a href='https://www.commonsensemedia.org/privacy-and-internet-safety'>"
                                       "Read guidance</a> on what to consider."),
                                     act_user_get_real_name (selected_user));
-      gtk_label_set_markup (self->help_label, help_label);
+      mct_user_controls_set_description (self->user_controls, help_label);
 
       mct_user_controls_set_user (self->user_controls, selected_user);
 
