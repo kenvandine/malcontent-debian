@@ -28,6 +28,7 @@
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
+#include <libhandy-1/handy.h>
 #include <libmalcontent/app-filter.h>
 
 #include "restrict-applications-selector.h"
@@ -312,7 +313,7 @@ create_row_for_app_cb (gpointer item,
   MctRestrictApplicationsSelector *self = MCT_RESTRICT_APPLICATIONS_SELECTOR (user_data);
   GAppInfo *app = G_APP_INFO (item);
   g_autoptr(GIcon) icon = NULL;
-  GtkWidget *box, *w;
+  GtkWidget *row, *w;
   const gchar *app_name;
   gint size;
   GtkStyleContext *context;
@@ -327,23 +328,16 @@ create_row_for_app_cb (gpointer item,
   else
     g_object_ref (icon);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 12);
-  gtk_widget_set_margin_end (box, 12);
+  row = hdy_action_row_new ();
 
   /* Icon */
   w = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &size, NULL);
   gtk_image_set_pixel_size (GTK_IMAGE (w), size);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), w);
 
   /* App name label */
-  w = g_object_new (GTK_TYPE_LABEL,
-                    "label", app_name,
-                    "hexpand", TRUE,
-                    "xalign", 0.0,
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), app_name);
 
   /* Switch */
   w = g_object_new (GTK_TYPE_SWITCH,
@@ -354,16 +348,17 @@ create_row_for_app_cb (gpointer item,
   gtk_style_context_add_provider (context,
                                   GTK_STYLE_PROVIDER (self->css_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  gtk_container_add (GTK_CONTAINER (row), w);
+  hdy_action_row_set_activatable_widget (HDY_ACTION_ROW (row), w);
 
-  gtk_widget_show_all (box);
+  gtk_widget_show_all (row);
 
   /* Fetch status from AccountService */
   g_object_set_data_full (G_OBJECT (w), "GAppInfo", g_object_ref (app), g_object_unref);
   update_listbox_row_switch (self, GTK_SWITCH (w));
   g_signal_connect (w, "notify::active", G_CALLBACK (on_switch_active_changed_cb), self);
 
-  return box;
+  return row;
 }
 
 static gint
@@ -792,7 +787,11 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
       children = gtk_container_get_children (GTK_CONTAINER (box));
       g_assert (children != NULL);
 
-      w = g_list_nth_data (children, 2);
+      w = g_list_nth_data (children, 3);
+      g_assert (w != NULL && GTK_IS_BOX (w));
+      children = gtk_container_get_children (GTK_CONTAINER (w));
+
+      w = g_list_nth_data (children, 0);
       g_assert (w != NULL && GTK_IS_SWITCH (w));
 
       update_listbox_row_switch (self, GTK_SWITCH (w));
