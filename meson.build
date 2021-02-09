@@ -134,6 +134,7 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
+  libhandy_dep = dependency('libhandy-1', version: '>=1.1.0', fallback: ['libhandy', 'libhandy_dep'])
   subdir('libmalcontent-ui')
 endif
 subdir('malcontent-client')
