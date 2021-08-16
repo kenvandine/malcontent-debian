@@ -374,8 +374,8 @@ compare_app_info_cb (gconstpointer a,
   GAppInfo *app_a = (GAppInfo*) a;
   GAppInfo *app_b = (GAppInfo*) b;
 
-  return g_utf8_collate (g_app_info_get_display_name (app_a),
-                         g_app_info_get_display_name (app_b));
+  return g_utf8_collate (g_app_info_get_name (app_a),
+                         g_app_info_get_name (app_b));
 }
 
 static gint
@@ -521,8 +521,6 @@ reload_apps (MctRestrictApplicationsSelector *self)
       if (!G_IS_DESKTOP_APP_INFO (app) ||
           !g_app_info_should_show (app) ||
           app_name[0] == '\0' ||
-          /* Endless' link apps have the "eos-link" prefix, and should be ignored too */
-          g_str_has_prefix (g_app_info_get_id (app), "eos-link") ||
           /* FIXME: Only list flatpak apps and apps with X-Parental-Controls
            * key set for now; we really need a system-wide MAC to be able to
            * reliably support blocklisting system programs. */
