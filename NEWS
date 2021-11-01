@@ -1,3 +1,17 @@
+Overview of changes in malcontent 0.10.3
+========================================
+
+* Bugs fixed:
+ - #44 Do not make malcontent-control user uninstallable using gui
+ - !123 Add Czech translation
+ - !124 Update Czech translation
+ - !125 malcontent-control: Fix an unterminated option entry array
+ - !126 malcontent-control: Focus controls rather than user selector
+
+* Translation updates:
+ - Czech
+
+
 Overview of changes in malcontent 0.10.2
 ========================================
 
