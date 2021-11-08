@@ -1,3 +1,9 @@
+malcontent (0.10.3-1) UNRELEASED; urgency=medium
+
+  * New upstream release
+
+ -- Laurent Bigonville <bigon@debian.org>  Mon, 08 Nov 2021 18:58:28 +0100
+
 malcontent (0.10.1-1) unstable; urgency=medium
 
   * New upstream release
