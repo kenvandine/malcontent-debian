@@ -1,3 +1,33 @@
+Overview of changes in malcontent 0.10.3
+========================================
+
+* Bugs fixed:
+ - #44 Do not make malcontent-control user uninstallable using gui
+ - !123 Add Czech translation
+ - !124 Update Czech translation
+ - !125 malcontent-control: Fix an unterminated option entry array
+ - !126 malcontent-control: Focus controls rather than user selector
+
+* Translation updates:
+ - Czech
+
+
+Overview of changes in malcontent 0.10.2
+========================================
+
+* Hide the launcher for malcontent-control from gnome-shell if using the GNOME
+  desktop; find it via gnome-control-center instead (!119)
+
+* Bugs fixed:
+ - !118 ci: Limit depth of clone of subprojects
+ - !119 malcontent-control: Hide application in GNOME
+ - !121 ci: Rename master to main branch
+
+* Translation updates:
+ - Indonesian
+ - Italian
+
+
 Overview of changes in malcontent 0.10.1
 ========================================
 
