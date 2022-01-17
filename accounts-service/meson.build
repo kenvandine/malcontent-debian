@@ -1,4 +1,4 @@
-i18n.merge_file('com.endlessm.ParentalControls.policy',
+i18n.merge_file(
   input: 'com.endlessm.ParentalControls.policy.in',
   output: 'com.endlessm.ParentalControls.policy',
   po_dir: po_dir,
