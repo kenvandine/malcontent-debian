@@ -1,3 +1,19 @@
+Overview of changes in malcontent 0.10.4
+========================================
+
+* Bugs fixed:
+ - !127 Update Catalan translation
+ - !128 Update German proof-read translation from https://l10n.gnome.org/vertimus/malcontent/main/po/de/
+ - !129 Update it.po
+ - !132 Remove superfluous arguments to i18n.merge_file
+ - !133 help: Add Italian help translation
+
+* Translation updates:
+ - Catalan
+ - German
+ - Italian
+
+
 Overview of changes in malcontent 0.10.3
 ========================================
 
