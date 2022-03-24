@@ -4,7 +4,7 @@
 binaries := $(shell dh_listpackages)
 
 %:
-	dh $@ --with gir
+	dh $@
 
 meson_options := -Dpamlibdir=/lib/$(DEB_HOST_MULTIARCH)/security
 

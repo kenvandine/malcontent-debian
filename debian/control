@@ -5,7 +5,7 @@ Uploaders: Laurent Bigonville <bigon@debian.org>
 Build-Depends: appstream-util,
                debhelper-compat (= 12),
                desktop-file-utils,
-               gobject-introspection,
+               dh-sequence-gir,
                itstool,
                libaccountsservice-dev,
                libappstream-glib-dev (>= 0.7.18),
