@@ -3,7 +3,7 @@ Priority: optional
 Maintainer: Debian freedesktop.org maintainers <pkg-freedesktop-maintainers@lists.alioth.debian.org>
 Uploaders: Laurent Bigonville <bigon@debian.org>
 Build-Depends: appstream-util,
-               debhelper-compat (= 12),
+               debhelper-compat (= 13),
                desktop-file-utils,
                dh-sequence-gir,
                itstool,
