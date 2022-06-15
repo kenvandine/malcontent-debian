@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
 "POT-Creation-Date: 2020-12-18 15:14+0000\n"
-"PO-Revision-Date: 2022-01-06 13:27+0100\n"
+"PO-Revision-Date: 2022-03-12 13:27+0100\n"
 "Last-Translator: Albano Battistella <albano_battistella@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -192,7 +192,7 @@ msgstr "Generale"
 
 #: libmalcontent-ui/gs-content-rating.c:218
 msgid "ALL"
-msgstr "Tutto"
+msgstr "TUTTO"
 
 #: libmalcontent-ui/gs-content-rating.c:222
 #: libmalcontent-ui/gs-content-rating.c:485
@@ -334,7 +334,7 @@ msgstr "Copyright © 2019, 2020 Endless Mobile, Inc."
 #. this language, one per line.
 #: malcontent-control/application.c:313
 msgid "translator-credits"
-msgstr "Milo Casagrande <milo@milo.name>, 2020"
+msgstr "Milo Casagrande <milo@milo.name>, 2020, Albano Battistella,2022"
 
 #. Translators: "Malcontent" is the brand name of this
 #. project, so should not be translated.

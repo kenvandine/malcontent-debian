@@ -1,3 +1,20 @@
+Overview of changes in malcontent 0.10.5
+========================================
+
+* Bugs fixed:
+ - !134 Update it.po
+ - !135 Add German help translation
+ - !136 Update pt_BR.po
+ - !137 Update tr.po
+ - !138 Update Chinese (Taiwan) translation file.
+
+* Translation updates:
+ - Chinese (Taiwan)
+ - Italian
+ - Portuguese (Brazil)
+ - Turkish
+
+
 Overview of changes in malcontent 0.10.4
 ========================================
 
