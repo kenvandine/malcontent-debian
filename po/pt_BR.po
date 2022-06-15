@@ -125,6 +125,25 @@ msgid "Authentication is required to read another user’s account info."
 msgstr ""
 "Autenticação é necessária para ler as informações da conta de outro usuário."
 
+#: malcontent-control/main.ui:197
+msgid ""
+"Parental controls can only be applied to standard user\n"
+"accounts. These can be created in the user settings."
+msgstr ""
+"O controle dos pais só pode ser aplicado para o usuário\n"
+"padrão. É possível cria-lo nas configurações do usuário."
+
+#: malcontent-control/application.c:407
+#, c-format
+msgid ""
+"It’s recommended that restrictions are set as part of an ongoing "
+"conversation with %s. <a href='https://www.commonsensemedia.org/privacy-and-"
+"internet-safety'>Read guidance</a> on what to consider."
+msgstr ""
+"É recomendável que as restrições sejam definidas como parte de uma "
+"conversa em andamento com %s. Para mais informações <a href='https://www."
+"commonsensemedia.org/privacy-and-internet-safety'>Leia as orientações</a>"
+
 #: libmalcontent/app-filter.c:694
 #, c-format
 msgid "App filter for user %u was in an unrecognized format"
