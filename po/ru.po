@@ -9,8 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
 "POT-Creation-Date: 2022-06-04 15:25+0000\n"
-"PO-Revision-Date: 2022-06-05 11:39+1000\n"
-"Last-Translator: Ser82-png <sw@atrus.ru>\n"
+"PO-Revision-Date: 2022-06-19 20:05+1000\n"
+"Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -254,20 +254,20 @@ msgid ""
 "Prevents %s from running web browsers. Limited web content may still be "
 "available in other applications."
 msgstr ""
-"Запрещает %s запускать веб-браузеры. Ограниченный веб-контент может быть "
+"Запретить %s запускать веб-браузеры. Ограниченный веб-контент может быть "
 "доступен в других приложениях."
 
 #. Translators: The placeholder is a user’s display name.
 #: libmalcontent-ui/user-controls.c:482
 #, c-format
 msgid "Prevents specified applications from being used by %s."
-msgstr "Запрещает %s использование указанных приложений."
+msgstr "Запретить %s использование указанных приложений."
 
 #. Translators: The placeholder is a user’s display name.
 #: libmalcontent-ui/user-controls.c:487
 #, c-format
 msgid "Prevents %s from installing applications."
-msgstr "Запрещает %s устанавливать приложения."
+msgstr "Запретить %s устанавливать приложения."
 
 #: libmalcontent-ui/user-controls.ui:16
 msgid "Application Usage Restrictions"
@@ -298,8 +298,8 @@ msgid ""
 "Restricts browsing or installation of applications to applications suitable "
 "for certain ages or above."
 msgstr ""
-"Ограничивает просмотр или установку приложений в соответствии с "
-"распределением доступности по возрастным группам."
+"Ограничить просмотр или установку приложений в соответствии с распределением "
+"доступности по возрастным группам."
 
 #. Translators: This documents the --user command line option to malcontent-control:
 #: malcontent-control/application.c:102
@@ -332,7 +332,7 @@ msgstr "Copyright © 2019, 2020 Endless Mobile, Inc."
 #. this language, one per line.
 #: malcontent-control/application.c:314
 msgid "translator-credits"
-msgstr "Ser82-png <sw@atrus.ru>, 2022"
+msgstr "Ser82-png <asvmail.as@gmail.com>, 2022"
 
 #. Translators: "Malcontent" is the brand name of this
 #. project, so should not be translated.
@@ -454,7 +454,7 @@ msgid ""
 "usage;usage limit;kid;child;"
 msgstr ""
 "parental controls;screen time;app restrictions;web browser restrictions;oars;"
-"usage;usage limit;kid;child;родительский контроль;"
+"usage;usage limit;kid;child;родительский контроль;ребенок;"
 
 #: malcontent-control/org.freedesktop.MalcontentControl.policy.in:9
 msgid "Manage parental controls"
