@@ -597,7 +597,7 @@ on_restrict_applications_action_activated (GSimpleAction *action,
   mct_restrict_applications_dialog_set_user_display_name (self->restrict_applications_dialog, self->user_display_name);
   mct_restrict_applications_dialog_set_app_filter (self->restrict_applications_dialog, self->filter);
 
-  gtk_widget_show (GTK_WIDGET (self->restrict_applications_dialog));
+  gtk_window_present (GTK_WINDOW (self->restrict_applications_dialog));
 }
 
 static gboolean

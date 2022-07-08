@@ -228,7 +228,7 @@ mct_application_activate (GApplication *application)
       user_selector_notify_user_cb (G_OBJECT (self->user_selector), NULL, self);
       user_manager_notify_is_loaded_cb (G_OBJECT (self->user_manager), NULL, self);
 
-      gtk_widget_show (GTK_WIDGET (window));
+      gtk_window_present (GTK_WINDOW (window));
     }
 
   /* Bring the window to the front. */
