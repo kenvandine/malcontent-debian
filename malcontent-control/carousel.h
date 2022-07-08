@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (MctCarouselItem, mct_carousel_item, MCT, CAROUSEL_ITEM, GtkButton)
 
 #define MCT_TYPE_CAROUSEL (mct_carousel_get_type ())
-G_DECLARE_FINAL_TYPE (MctCarousel, mct_carousel, MCT, CAROUSEL, GtkRevealer)
+G_DECLARE_FINAL_TYPE (MctCarousel, mct_carousel, MCT, CAROUSEL, AdwBin)
 
 GtkWidget       *mct_carousel_item_new       (void);
 
@@ -51,5 +51,11 @@ void             mct_carousel_select_item    (MctCarousel     *self,
                                               MctCarouselItem *item);
 
 guint            mct_carousel_get_item_count (MctCarousel  *self);
+
+void             mct_carousel_add            (MctCarousel     *self,
+                                              MctCarouselItem *item);
+
+void             mct_carousel_set_revealed   (MctCarousel     *self,
+                                              gboolean         revealed);
 
 G_END_DECLS

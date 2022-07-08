@@ -64,7 +64,9 @@ mct_carousel_item_init (MctCarouselItem *self)
 }
 
 struct _MctCarousel {
-  GtkRevealer parent;
+  AdwBin parent;
+
+  GtkRevealer *revealer;
 
   GList *children;
   gint visible_page;
@@ -81,7 +83,7 @@ struct _MctCarousel {
   GtkStyleProvider *provider;
 };
 
-G_DEFINE_TYPE (MctCarousel, mct_carousel, GTK_TYPE_REVEALER)
+G_DEFINE_TYPE (MctCarousel, mct_carousel, ADW_TYPE_BIN)
 
 enum {
   ITEM_ACTIVATED,
@@ -160,7 +162,7 @@ mct_carousel_move_arrow (MctCarousel *self)
     }
 
   self->provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (self->provider), css, -1, NULL);
+  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (self->provider), css, -1);
   gtk_style_context_add_provider (context, self->provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   g_free (css);
@@ -307,24 +309,17 @@ mct_carousel_goto_next_page (GtkWidget *button,
   mct_carousel_select_item_at_index (self, self->visible_page * ITEMS_PER_PAGE);
 }
 
-static void
-mct_carousel_add (GtkContainer *container,
-                  GtkWidget    *widget)
+void
+mct_carousel_add (MctCarousel     *self,
+                  MctCarouselItem *item)
 {
-  MctCarousel *self = MCT_CAROUSEL (container);
   gboolean last_box_is_full;
 
-  if (!MCT_IS_CAROUSEL_ITEM (widget))
-    {
-      GTK_CONTAINER_CLASS (mct_carousel_parent_class)->add (container, widget);
-      return;
-    }
+  g_return_if_fail (MCT_IS_CAROUSEL (self));
+  g_return_if_fail (MCT_IS_CAROUSEL_ITEM (item));
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "menu");
-  gtk_button_set_relief (GTK_BUTTON (widget), GTK_RELIEF_NONE);
-
-  self->children = g_list_append (self->children, widget);
-  MCT_CAROUSEL_ITEM (widget)->page = get_last_page_number (self);
+  self->children = g_list_append (self->children, item);
+  item->page = get_last_page_number (self);
   g_signal_connect (item, "clicked", G_CALLBACK (on_item_toggled), self);
 
   last_box_is_full = ((g_list_length (self->children) - 1) % ITEMS_PER_PAGE == 0);
@@ -332,30 +327,24 @@ mct_carousel_add (GtkContainer *container,
     {
       g_autofree gchar *page = NULL;
 
-      page = g_strdup_printf ("%d", MCT_CAROUSEL_ITEM (widget)->page);
+      page = g_strdup_printf ("%d", item->page);
       self->last_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_valign (self->last_box, GTK_ALIGN_CENTER);
       gtk_stack_add_named (self->stack, self->last_box, page);
     }
 
-  gtk_box_append (GTK_BOX (self->last_box), widget);
+  gtk_box_append (GTK_BOX (self->last_box), GTK_WIDGET (item));
 
   update_buttons_visibility (self);
-}
-
-static void
-destroy_widget_cb (GtkWidget *widget,
-                   gpointer   user_data)
-{
-  gtk_widget_destroy (widget);
 }
 
 void
 mct_carousel_purge_items (MctCarousel *self)
 {
-  gtk_container_forall (GTK_CONTAINER (self->stack),
-                        destroy_widget_cb,
-                        NULL);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->stack))) != NULL)
+    gtk_stack_remove (self->stack, child);
 
   g_list_free (self->children);
   self->children = NULL;
@@ -389,7 +378,6 @@ mct_carousel_class_init (MctCarouselClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (wclass,
                                                "/org/freedesktop/MalcontentControl/ui/carousel.ui");
@@ -398,13 +386,12 @@ mct_carousel_class_init (MctCarouselClass *klass)
   gtk_widget_class_bind_template_child (wclass, MctCarousel, go_back_button);
   gtk_widget_class_bind_template_child (wclass, MctCarousel, go_next_button);
   gtk_widget_class_bind_template_child (wclass, MctCarousel, arrow);
+  gtk_widget_class_bind_template_child (wclass, MctCarousel, revealer);
 
   gtk_widget_class_bind_template_callback (wclass, mct_carousel_goto_previous_page);
   gtk_widget_class_bind_template_callback (wclass, mct_carousel_goto_next_page);
 
   object_class->dispose = mct_carousel_dispose;
-
-  container_class->add = mct_carousel_add;
 
   signals[ITEM_ACTIVATED] =
       g_signal_new ("item-activated",
@@ -462,4 +449,13 @@ guint
 mct_carousel_get_item_count (MctCarousel *self)
 {
   return g_list_length (self->children);
+}
+
+void
+mct_carousel_set_revealed (MctCarousel *self,
+                           gboolean     revealed)
+{
+  g_return_if_fail (MCT_IS_CAROUSEL (self));
+
+  gtk_revealer_set_reveal_child (self->revealer, revealed);
 }

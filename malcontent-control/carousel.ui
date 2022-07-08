@@ -3,7 +3,9 @@
 <!-- Copyright © 2020 Endless, Inc. -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <template class="MctCarousel" parent="GtkRevealer">
+  <template class="MctCarousel" parent="AdwBin">
+    <child>
+      <object class="GtkRevealer" id="revealer">
     <property name="transition_duration">400</property>
     <property name="reveal-child">True</property>
     <child>
@@ -99,6 +101,8 @@
             <property name="pass-through">True</property>
           </packing>
         </child>
+      </object>
+    </child>
       </object>
     </child>
   </template>

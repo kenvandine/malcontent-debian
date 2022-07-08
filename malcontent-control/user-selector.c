@@ -397,7 +397,7 @@ reload_users (MctUserSelector *self,
 
   g_object_set (settings, "gtk-enable-animations", animations, NULL);
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self->carousel), TRUE);
+  mct_carousel_set_revealed (self->carousel, TRUE);
 }
 
 static GtkWidget *
@@ -458,7 +458,7 @@ user_added_cb (ActUserManager *user_manager,
   mct_carousel_item_set_child (MCT_CAROUSEL_ITEM (item), widget);
 
   g_object_set_data (G_OBJECT (item), "uid", GINT_TO_POINTER (act_user_get_uid (user)));
-  gtk_container_add (GTK_CONTAINER (self->carousel), item);
+  mct_carousel_add (self->carousel, MCT_CAROUSEL_ITEM (item));
 }
 
 static void
