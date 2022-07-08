@@ -323,13 +323,16 @@ about_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data
 }
 
 static void
-help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
+on_malcontent_help_shown_finished_cb (GObject      *source,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
   g_autoptr(GError) local_error = NULL;
 
-  if (!gtk_show_uri_on_window (mct_application_get_main_window (self), "help:malcontent",
-                               gtk_get_current_event_time (), &local_error))
+  if (!gtk_show_uri_full_finish (mct_application_get_main_window (self),
+                                 result,
+                                 &local_error))
     {
       GtkWidget *dialog = gtk_message_dialog_new (mct_application_get_main_window (self),
                                                   GTK_DIALOG_MODAL,
@@ -337,11 +340,21 @@ help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
                                                   GTK_BUTTONS_OK,
                                                   _("The help contents could not be displayed"));
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", local_error->message);
-
-      gtk_dialog_run (GTK_DIALOG (dialog));
-
-      gtk_widget_destroy (dialog);
+      gtk_window_present (GTK_WINDOW (dialog));
     }
+}
+
+static void
+help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
+{
+  MctApplication *self = MCT_APPLICATION (user_data);
+
+  gtk_show_uri_full (mct_application_get_main_window (self),
+                     "help:malcontent",
+                     GDK_CURRENT_TIME,
+                     NULL,
+                     on_malcontent_help_shown_finished_cb,
+                     self);
 }
 
 static void
