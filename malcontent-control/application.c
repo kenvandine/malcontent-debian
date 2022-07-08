@@ -27,7 +27,7 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
+#include <adwaita.h>
 #include <libmalcontent-ui/malcontent-ui.h>
 #include <polkit/polkit.h>
 
@@ -77,7 +77,7 @@ struct _MctApplication
   MctUserSelector *user_selector;
   MctUserControls *user_controls;
   GtkStack *main_stack;
-  HdyStatusPage *error_page;
+  AdwStatusPage *error_page;
   GtkLockButton *lock_button;
   GtkButton *user_accounts_panel_button;
   GtkLabel *help_label;
@@ -209,7 +209,7 @@ mct_application_activate (GApplication *application)
       self->main_stack = GTK_STACK (gtk_builder_get_object (builder, "main_stack"));
       self->user_selector = MCT_USER_SELECTOR (gtk_builder_get_object (builder, "user_selector"));
       self->user_controls = MCT_USER_CONTROLS (gtk_builder_get_object (builder, "user_controls"));
-      self->error_page = HDY_STATUS_PAGE (gtk_builder_get_object (builder, "error_page"));
+      self->error_page = ADW_STATUS_PAGE (gtk_builder_get_object (builder, "error_page"));
       self->lock_button = GTK_LOCK_BUTTON (gtk_builder_get_object (builder, "lock_button"));
       self->user_accounts_panel_button = GTK_BUTTON (gtk_builder_get_object (builder, "user_accounts_panel_button"));
 
@@ -248,7 +248,7 @@ mct_application_startup (GApplication *application)
   /* Chain up. */
   G_APPLICATION_CLASS (mct_application_parent_class)->startup (application);
 
-  hdy_init ();
+  adw_init ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries,
                                    G_N_ELEMENTS (app_entries), application);
@@ -371,9 +371,9 @@ update_main_stack (MctApplication *self)
   if ((is_user_manager_loaded && act_user_manager_no_service (self->user_manager)) ||
       self->permission_error != NULL)
     {
-      hdy_status_page_set_title (self->error_page,
+      adw_status_page_set_title (self->error_page,
                                  _("Failed to load user data from the system"));
-      hdy_status_page_set_description (self->error_page,
+      adw_status_page_set_description (self->error_page,
                                        _("Please make sure that the AccountsService is installed and enabled."));
 
       new_page_name = "error";

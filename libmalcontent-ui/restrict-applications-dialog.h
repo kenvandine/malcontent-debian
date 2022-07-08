@@ -24,14 +24,14 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
+#include <adwaita.h>
 #include <libmalcontent/manager.h>
 
 
 G_BEGIN_DECLS
 
 #define MCT_TYPE_RESTRICT_APPLICATIONS_DIALOG (mct_restrict_applications_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, MCT, RESTRICT_APPLICATIONS_DIALOG, HdyPreferencesWindow)
+G_DECLARE_FINAL_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, MCT, RESTRICT_APPLICATIONS_DIALOG, AdwPreferencesWindow)
 
 MctRestrictApplicationsDialog *mct_restrict_applications_dialog_new (MctAppFilter *app_filter,
                                                                      const gchar  *user_display_name);

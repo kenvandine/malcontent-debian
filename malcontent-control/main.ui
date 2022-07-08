@@ -2,14 +2,14 @@
 <!-- Copyright © 2019, 2020 Endless Mobile, Inc. -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <object class="HdyApplicationWindow" id="main_window">
+  <object class="AdwApplicationWindow" id="main_window">
     <property name="default-width">540</property>
     <property name="default-height">580</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="HdyHeaderBar" id="header">
+          <object class="AdwHeaderBar" id="header">
             <property name="show-close-button">True</property>
             <!-- Translators: This is the title of the main window -->
             <property name="title" translatable="yes">Parental Controls</property>
@@ -65,7 +65,7 @@
             </child>
 
             <child>
-              <object class="HdyStatusPage">
+              <object class="AdwStatusPage">
                 <property name="title" translatable="yes">Permission Required</property>
                 <property name="description" translatable="yes">Permission is required to view and change user parental controls settings.</property>
                 <property name="icon-name">org.freedesktop.MalcontentControl</property>
@@ -83,7 +83,7 @@
             </child>
 
             <child>
-              <object class="HdyStatusPage">
+              <object class="AdwStatusPage">
                 <property name="icon-name">system-users-symbolic</property>
                 <property name="title" translatable="yes">No Standard User Accounts</property>
                 <property name="description" translatable="yes">Parental controls can only be applied to standard user
@@ -126,7 +126,7 @@
             </child>
 
             <child>
-              <object class="HdyStatusPage" id="error_page">
+              <object class="AdwStatusPage" id="error_page">
                 <property name="icon-name">dialog-error-symbolic</property>
               </object>
               <packing>

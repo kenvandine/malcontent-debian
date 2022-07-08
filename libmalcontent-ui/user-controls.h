@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
+#include <adwaita.h>
 #include <libmalcontent/malcontent.h>
 
 

@@ -26,7 +26,7 @@
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
+#include <adwaita.h>
 
 #include "restrict-applications-dialog.h"
 #include "restrict-applications-selector.h"
@@ -54,13 +54,13 @@ struct _MctRestrictApplicationsDialog
   GtkDialog parent_instance;
 
   MctRestrictApplicationsSelector *selector;
-  HdyPreferencesGroup *group;
+  AdwPreferencesGroup *group;
 
   MctAppFilter *app_filter;  /* (owned) (not nullable) */
   gchar *user_display_name;  /* (owned) (nullable) */
 };
 
-G_DEFINE_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, HDY_TYPE_PREFERENCES_WINDOW)
+G_DEFINE_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, ADW_TYPE_PREFERENCES_WINDOW)
 
 typedef enum
 {
@@ -215,14 +215,14 @@ update_description (MctRestrictApplicationsDialog *self)
 
   if (self->user_display_name == NULL)
     {
-      hdy_preferences_group_set_description (self->group, NULL);
+      adw_preferences_group_set_description (self->group, NULL);
       return;
     }
 
   /* Translators: the placeholder is a user’s full name */
   description = g_strdup_printf (_("Restrict %s from using the following installed applications."),
                                  self->user_display_name);
-  hdy_preferences_group_set_description (self->group, description);
+  adw_preferences_group_set_description (self->group, description);
 }
 
 /**

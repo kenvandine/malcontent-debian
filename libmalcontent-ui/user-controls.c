@@ -78,15 +78,15 @@ struct _MctUserControls
   GtkLabel *description_label;
   GMenu      *age_menu;
   GtkSwitch  *restrict_software_installation_switch;
-  HdyActionRow *restrict_software_installation_row;
+  AdwActionRow *restrict_software_installation_row;
   GtkSwitch  *restrict_web_browsers_switch;
-  HdyActionRow *restrict_web_browsers_row;
+  AdwActionRow *restrict_web_browsers_row;
   GtkButton  *oars_button;
   GtkLabel   *oars_button_label;
   GtkPopover *oars_popover;
   MctRestrictApplicationsDialog *restrict_applications_dialog;
   GtkLabel   *restrict_applications_description;
-  HdyActionRow *restrict_applications_row;
+  AdwActionRow *restrict_applications_row;
 
   GSimpleActionGroup *action_group; /* (owned) */
 
@@ -470,17 +470,17 @@ update_labels_from_name (MctUserControls *self)
 
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents %s from running web browsers. Limited web content may still be available in other applications."), self->user_display_name);
-  hdy_action_row_set_subtitle (self->restrict_web_browsers_row, l);
+  adw_action_row_set_subtitle (self->restrict_web_browsers_row, l);
   g_clear_pointer (&l, g_free);
 
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents specified applications from being used by %s."), self->user_display_name);
-  hdy_action_row_set_subtitle (self->restrict_applications_row, l);
+  adw_action_row_set_subtitle (self->restrict_applications_row, l);
   g_clear_pointer (&l, g_free);
 
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents %s from installing applications."), self->user_display_name);
-  hdy_action_row_set_subtitle (self->restrict_software_installation_row, l);
+  adw_action_row_set_subtitle (self->restrict_software_installation_row, l);
   g_clear_pointer (&l, g_free);
 }
 

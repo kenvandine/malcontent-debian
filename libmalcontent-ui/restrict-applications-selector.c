@@ -28,7 +28,7 @@
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <libhandy-1/handy.h>
+#include <adwaita.h>
 #include <libmalcontent/app-filter.h>
 
 #include "restrict-applications-selector.h"
@@ -336,16 +336,16 @@ create_row_for_app_cb (gpointer item,
   else
     g_object_ref (icon);
 
-  row = hdy_action_row_new ();
+  row = adw_action_row_new ();
 
   /* Icon */
   w = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &size, NULL);
   gtk_image_set_pixel_size (GTK_IMAGE (w), size);
-  hdy_action_row_add_prefix (HDY_ACTION_ROW (row), w);
+  adw_action_row_add_prefix (ADW_ACTION_ROW (row), w);
 
   /* App name label */
-  hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), app_name);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), app_name);
 
   /* Switch */
   w = g_object_new (GTK_TYPE_SWITCH,
@@ -357,7 +357,7 @@ create_row_for_app_cb (gpointer item,
                                   GTK_STYLE_PROVIDER (self->css_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
   gtk_container_add (GTK_CONTAINER (row), w);
-  hdy_action_row_set_activatable_widget (HDY_ACTION_ROW (row), w);
+  adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
   gtk_widget_show_all (row);
 
