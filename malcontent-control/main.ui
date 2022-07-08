@@ -82,7 +82,6 @@
                     <child>
                       <object class="GtkLockButton" id="lock_button">
                         <property name="halign">center</property>
-                        <property name="has-default">True</property>
                       </object>
                     </child>
                   </object>
@@ -103,7 +102,6 @@
                       <object class="GtkButton" id="user_accounts_panel_button">
                         <property name="label" translatable="yes">_User Settings</property>
                         <property name="halign">center</property>
-                        <property name="has-default">True</property>
                         <property name="use-underline">True</property>
                         <style>
                           <class name="suggested-action"/>
