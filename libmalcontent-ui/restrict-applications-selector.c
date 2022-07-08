@@ -323,7 +323,6 @@ create_row_for_app_cb (gpointer item,
   g_autoptr(GIcon) icon = NULL;
   GtkWidget *row, *w;
   const gchar *app_name;
-  gint size;
   GtkStyleContext *context;
 
   app_name = g_app_info_get_name (app);
@@ -339,9 +338,8 @@ create_row_for_app_cb (gpointer item,
   row = adw_action_row_new ();
 
   /* Icon */
-  w = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &size, NULL);
-  gtk_image_set_pixel_size (GTK_IMAGE (w), size);
+  w = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (w), GTK_ICON_SIZE_LARGE);
   adw_action_row_add_prefix (ADW_ACTION_ROW (row), w);
 
   /* App name label */
