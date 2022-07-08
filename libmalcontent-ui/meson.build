@@ -28,8 +28,8 @@ libmalcontent_ui_public_deps = [
   dependency('gio-2.0', version: '>= 2.44'),
   dependency('glib-2.0', version: '>= 2.54.2'),
   dependency('gobject-2.0', version: '>= 2.54'),
-  dependency('gtk+-3.0', version: '>= 3.24'),
-  libhandy_dep,
+  dependency('gtk4', version: '>= 4.6'),
+  libadwaita_dep,
   libmalcontent_dep,
 ]
 libmalcontent_ui_private_deps = [
@@ -87,7 +87,7 @@ if xmllint.found()
     'validate-ui', xmllint,
     args: [
       '--nonet', '--noblanks', '--noout',
-      '--relaxng', join_paths(gtk_prefix, 'share', 'gtk-3.0', 'gtkbuilder.rng'),
+      '--relaxng', join_paths(gtk_prefix, 'share', 'gtk-4.0', 'gtk4builder.rng'),
       files(
         'restrict-applications-dialog.ui',
         'restrict-applications-selector.ui',
