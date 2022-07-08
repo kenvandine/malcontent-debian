@@ -356,12 +356,13 @@ create_row_for_app_cb (gpointer item,
   gtk_style_context_add_provider (context,
                                   GTK_STYLE_PROVIDER (self->css_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
-  gtk_container_add (GTK_CONTAINER (row), w);
+  adw_action_row_add_suffix (ADW_ACTION_ROW (row), w);
   adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
   gtk_widget_show_all (row);
 
   /* Fetch status from AccountService */
+  g_object_set_data (G_OBJECT (row), "GtkSwitch", w);
   g_object_set_data_full (G_OBJECT (w), "GAppInfo", g_object_ref (app), g_object_unref);
   update_listbox_row_switch (self, GTK_SWITCH (w));
   g_signal_connect (w, "notify::active", G_CALLBACK (on_switch_active_changed_cb), self);
@@ -782,24 +783,13 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
   for (guint i = 0; i < n_apps; i++)
     {
       GtkListBoxRow *row;
-      GtkWidget *box, *w;
-      g_autoptr(GList) children = NULL;  /* (element-type GtkWidget) */
+      GtkWidget *w;
 
       /* Navigate the widget hierarchy set up in create_row_for_app_cb(). */
       row = gtk_list_box_get_row_at_index (self->listbox, i);
       g_assert (row != NULL && GTK_IS_LIST_BOX_ROW (row));
 
-      box = gtk_bin_get_child (GTK_BIN (row));
-      g_assert (box != NULL && GTK_IS_BOX (box));
-
-      children = gtk_container_get_children (GTK_CONTAINER (box));
-      g_assert (children != NULL);
-
-      w = g_list_nth_data (children, 3);
-      g_assert (w != NULL && GTK_IS_BOX (w));
-      children = gtk_container_get_children (GTK_CONTAINER (w));
-
-      w = g_list_nth_data (children, 0);
+      w = g_object_get_data (G_OBJECT (row), "GtkSwitch");
       g_assert (w != NULL && GTK_IS_SWITCH (w));
 
       update_listbox_row_switch (self, GTK_SWITCH (w));
