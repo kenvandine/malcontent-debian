@@ -30,12 +30,12 @@
 #define ARROW_SIZE 20
 
 struct _MctCarouselItem {
-  GtkRadioButton parent;
+  GtkButton parent;
 
   gint page;
 };
 
-G_DEFINE_TYPE (MctCarouselItem, mct_carousel_item, GTK_TYPE_RADIO_BUTTON)
+G_DEFINE_TYPE (MctCarouselItem, mct_carousel_item, GTK_TYPE_BUTTON)
 
 GtkWidget *
 mct_carousel_item_new (void)
@@ -43,17 +43,24 @@ mct_carousel_item_new (void)
   return g_object_new (MCT_TYPE_CAROUSEL_ITEM, NULL);
 }
 
+void
+mct_carousel_item_set_child (MctCarouselItem *self,
+                             GtkWidget       *child)
+{
+  g_return_if_fail (MCT_IS_CAROUSEL_ITEM (self));
+
+  gtk_button_set_child (GTK_BUTTON (self), child);
+}
+
 static void
 mct_carousel_item_class_init (MctCarouselItemClass *klass)
 {
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (klass), "carousel-item");
 }
 
 static void
 mct_carousel_item_init (MctCarouselItem *self)
 {
-  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (self), FALSE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)),
-             "carousel-item");
 }
 
 struct _MctCarousel {
@@ -318,9 +325,7 @@ mct_carousel_add (GtkContainer *container,
 
   self->children = g_list_append (self->children, widget);
   MCT_CAROUSEL_ITEM (widget)->page = get_last_page_number (self);
-  if (self->selected_item != NULL)
-    gtk_radio_button_join_group (GTK_RADIO_BUTTON (widget), GTK_RADIO_BUTTON (self->selected_item));
-  g_signal_connect (widget, "button-press-event", G_CALLBACK (on_item_toggled), self);
+  g_signal_connect (item, "clicked", G_CALLBACK (on_item_toggled), self);
 
   last_box_is_full = ((g_list_length (self->children) - 1) % ITEMS_PER_PAGE == 0);
   if (last_box_is_full)

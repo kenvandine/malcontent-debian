@@ -23,18 +23,21 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 
 G_BEGIN_DECLS
 
 #define MCT_TYPE_CAROUSEL_ITEM (mct_carousel_item_get_type ())
-G_DECLARE_FINAL_TYPE (MctCarouselItem, mct_carousel_item, MCT, CAROUSEL_ITEM, GtkRadioButton)
+G_DECLARE_FINAL_TYPE (MctCarouselItem, mct_carousel_item, MCT, CAROUSEL_ITEM, GtkButton)
 
 #define MCT_TYPE_CAROUSEL (mct_carousel_get_type ())
 G_DECLARE_FINAL_TYPE (MctCarousel, mct_carousel, MCT, CAROUSEL, GtkRevealer)
 
 GtkWidget       *mct_carousel_item_new       (void);
+
+void             mct_carousel_item_set_child (MctCarouselItem *self,
+                                              GtkWidget       *child);
 
 MctCarousel     *mct_carousel_new            (void);
 
