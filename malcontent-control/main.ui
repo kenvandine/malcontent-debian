@@ -40,7 +40,7 @@
                     <property name="user-manager">user_manager</property>
                     <property name="show-administrators">False</property>
                     <accessibility>
-                      <relation target="user_controls" type="controller-for"/>
+                      <relation name="controls">user_controls</relation>
                     </accessibility>
                   </object>
                   <packing>
@@ -118,11 +118,6 @@
                     <attributes>
                       <attribute name="scale" value="1.4"/>
                     </attributes>
-                    <child internal-child="accessible">
-                      <object class="AtkObject">
-                        <property name="AtkObject::accessible-role">static</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>

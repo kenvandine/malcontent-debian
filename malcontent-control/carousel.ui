@@ -36,11 +36,9 @@
                       <object class="GtkImage">
                         <property name="icon-size">4</property>
                         <property name="icon_name">go-previous-symbolic</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="accessible-name" translatable="yes">Previous Page</property>
-                          </object>
-                        </child>
+                        <accessibility>
+                          <property name="label" translatable="yes">Previous Page</property>
+                        </accessibility>
                       </object>
                     </child>
                     <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
@@ -59,11 +57,9 @@
                       <object class="GtkImage">
                         <property name="icon-size">4</property>
                         <property name="icon_name">go-next-symbolic</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject">
-                            <property name="accessible-name" translatable="yes">Next Page</property>
-                          </object>
-                        </child>
+                        <accessibility>
+                          <property name="label" translatable="yes">Next Page</property>
+                        </accessibility>
                       </object>
                     </child>
                     <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>

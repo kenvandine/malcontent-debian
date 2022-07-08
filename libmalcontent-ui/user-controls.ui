@@ -12,11 +12,6 @@
                 <property name="wrap">True</property>
                 <property name="xalign">0.0</property>
                 <property name="yalign">0.0</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject">
-                    <property name="AtkObject::accessible-role">static</property>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -140,11 +135,7 @@
     </child>
   </template>
 
-  <object class="GtkPopoverMenu" id="oars_popover">
-    <accessibility>
-      <relation target="oars_button" type="popup-for"/>
-    </accessibility>
-  </object>
+  <object class="GtkPopoverMenu" id="oars_popover" />
 
   <menu id="age_menu" />
 
