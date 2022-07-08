@@ -335,7 +335,7 @@ mct_carousel_add (GtkContainer *container,
     }
 
   gtk_widget_show_all (widget);
-  gtk_box_pack_start (GTK_BOX (self->last_box), widget, TRUE, FALSE, 10);
+  gtk_box_append (GTK_BOX (self->last_box), widget);
 
   update_buttons_visibility (self);
 }

@@ -49,13 +49,12 @@
                     </child>
                     <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack_type">GTK_PACK_START</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="go_next_button">
                     <property name="valign">center</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
                     <style>
                       <class name="circular"/>
                     </style>
@@ -70,9 +69,6 @@
                     </child>
                     <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack_type">GTK_PACK_END</property>
-                  </packing>
                 </child>
               </object>
             </child>

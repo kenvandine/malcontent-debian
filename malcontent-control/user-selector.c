@@ -411,7 +411,7 @@ create_carousel_entry (MctUserSelector *self,
 
   widget = mct_user_image_new ();
   mct_user_image_set_user (MCT_USER_IMAGE (widget), user);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  gtk_box_append (GTK_BOX (box), widget);
 
   label = g_strdup_printf ("<b>%s</b>",
                            get_real_or_user_name (user));
@@ -419,7 +419,7 @@ create_carousel_entry (MctUserSelector *self,
   gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (widget), PANGO_ELLIPSIZE_END);
   gtk_widget_set_margin_top (widget, 5);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  gtk_box_append (GTK_BOX (box), widget);
   g_free (label);
 
   if (act_user_get_uid (user) == getuid ())
@@ -431,7 +431,7 @@ create_carousel_entry (MctUserSelector *self,
   gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
   g_free (label);
 
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+  gtk_box_append (GTK_BOX (box), widget);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget),
                                "dim-label");
 

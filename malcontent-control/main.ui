@@ -42,10 +42,6 @@
                       <relation name="controls">user_controls</relation>
                     </accessibility>
                   </object>
-                  <packing>
-                    <property name="fill">False</property>
-                    <property name="expand">False</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="MctUserControls" id="user_controls">
@@ -53,10 +49,8 @@
                     <property name="description">It’s recommended that restrictions are set as part of an ongoing conversation with $name. Read guidance on what to consider.</property>
                     <property name="height-request">270</property>
                     <property name="dbus-connection">dbus_connection</property>
+                    <property name="vexpand">True</property>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
                 </child>
               </object>
               <packing>
