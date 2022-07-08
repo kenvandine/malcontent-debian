@@ -585,14 +585,14 @@ on_restrict_applications_action_activated (GSimpleAction *action,
                                            gpointer       user_data)
 {
   MctUserControls *self = MCT_USER_CONTROLS (user_data);
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
   /* Show the restrict applications dialogue modally, making sure to update its
    * state first. */
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  if (GTK_IS_WINDOW (toplevel))
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  if (GTK_IS_WINDOW (root))
     gtk_window_set_transient_for (GTK_WINDOW (self->restrict_applications_dialog),
-                                  GTK_WINDOW (toplevel));
+                                  GTK_WINDOW (root));
 
   mct_restrict_applications_dialog_set_user_display_name (self->restrict_applications_dialog, self->user_display_name);
   mct_restrict_applications_dialog_set_app_filter (self->restrict_applications_dialog, self->filter);
