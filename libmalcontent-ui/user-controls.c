@@ -1019,9 +1019,9 @@ mct_user_controls_init (MctUserControls *self)
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider,
                                        "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 
   self->selected_age = (guint) -1;
 

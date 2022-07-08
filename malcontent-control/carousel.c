@@ -443,9 +443,9 @@ mct_carousel_init (MctCarousel *self)
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider),
                                        "/org/freedesktop/MalcontentControl/ui/carousel.css");
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             provider,
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              provider,
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 
   g_object_unref (provider);
 
