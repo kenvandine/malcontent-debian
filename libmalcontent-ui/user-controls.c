@@ -1009,7 +1009,6 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
 static void
 mct_user_controls_init (MctUserControls *self)
 {
-  g_autoptr(GError) error = NULL;
   g_autoptr(GtkCssProvider) provider = NULL;
 
   /* Ensure the types used in the UI are registered. */
