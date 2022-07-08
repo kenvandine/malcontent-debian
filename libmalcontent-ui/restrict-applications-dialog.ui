@@ -10,16 +10,12 @@
     <property name="search-enabled">False</property>
     <child>
       <object class="HdyPreferencesPage">
-        <property name="visible">True</property>
         <child>
           <object class="HdyPreferencesGroup" id="group">
-            <property name="visible">True</property>
             <!-- Translated dynamically: -->
             <property name="description">Restrict {username} from using the following installed applications.</property>
             <child>
-              <object class="MctRestrictApplicationsSelector" id="selector">
-                <property name="visible">True</property>
-              </object>
+              <object class="MctRestrictApplicationsSelector" id="selector" />
             </child>
           </object>
         </child>

@@ -5,12 +5,10 @@
   <template class="MctRestrictApplicationsSelector" parent="GtkBox">
     <child>
       <object class="GtkListBox" id="listbox">
-        <property name="visible">True</property>
         <property name="selection-mode">none</property>
 
         <child type="placeholder">
           <object class="GtkLabel" id="placeholder">
-            <property name="visible">True</property>
             <property name="label" translatable="yes">No applications found to restrict.</property>
           </object>
         </child>
