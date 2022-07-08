@@ -82,7 +82,7 @@ struct _MctUserControls
   GtkSwitch  *restrict_web_browsers_switch;
   AdwActionRow *restrict_web_browsers_row;
   GtkMenuButton *oars_button;
-  GtkPopover *oars_popover;
+  GtkPopoverMenu *oars_popover;
   MctRestrictApplicationsDialog *restrict_applications_dialog;
   GtkLabel   *restrict_applications_description;
   AdwActionRow *restrict_applications_row;
@@ -1037,7 +1037,7 @@ mct_user_controls_init (MctUserControls *self)
                                   "permissions",
                                   G_ACTION_GROUP (self->action_group));
 
-  gtk_popover_bind_model (self->oars_popover, G_MENU_MODEL (self->age_menu), NULL);
+  gtk_popover_menu_set_menu_model (self->oars_popover, G_MENU_MODEL (self->age_menu));
 }
 
 /**
