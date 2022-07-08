@@ -36,7 +36,6 @@
                 <property name="subtitle_lines">0</property>
                 <child>
                   <object class="GtkSwitch" id="restrict_web_browsers_switch">
-                    <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <signal name="notify::active" handler="on_restrict_web_browsers_switch_active_changed_cb" object="MctUserControls" swapped="no" />
@@ -85,7 +84,6 @@
                 <property name="subtitle_lines">0</property>
                 <child>
                   <object class="GtkSwitch" id="restrict_software_installation_switch">
-                    <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <signal name="notify::active" handler="on_restrict_installation_switch_active_changed_cb" object="MctUserControls" swapped="no" />
@@ -106,7 +104,6 @@
                 <property name="subtitle_lines">0</property>
                 <child>
                   <object class="GtkMenuButton" id="oars_button">
-                    <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <property name="direction">right</property>

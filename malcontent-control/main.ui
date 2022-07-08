@@ -16,7 +16,6 @@
             <child>
               <object class="GtkMenuButton" id="primary_menu">
                 <property name="direction">none</property>
-                <property name="can-focus">True</property>
                 <property name="use-popover">True</property>
                 <property name="menu-model">primary-menu</property>
                 <accelerator key="F10" signal="activate"/>
@@ -76,7 +75,6 @@
                     <property name="halign">center</property>
                     <property name="can-default">True</property>
                     <property name="has-default">True</property>
-                    <property name="can-focus">True</property>
                   </object>
                 </child>
               </object>
@@ -98,7 +96,6 @@
                     <property name="can-default">True</property>
                     <property name="has-default">True</property>
                     <property name="use-underline">True</property>
-                    <property name="can-focus">True</property>
                     <style>
                       <class name="suggested-action"/>
                     </style>

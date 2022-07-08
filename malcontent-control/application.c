@@ -427,12 +427,7 @@ update_main_stack (MctApplication *self)
   gtk_stack_set_visible_child_name (self->main_stack, new_page_name);
 
   if (new_focus_widget != NULL && !g_str_equal (old_page_name, new_page_name))
-    {
-      if (gtk_widget_get_can_focus (new_focus_widget))
-        gtk_widget_grab_focus (new_focus_widget);
-      else
-        gtk_widget_child_focus (new_focus_widget, GTK_DIR_TAB_FORWARD);
-    }
+    gtk_widget_grab_focus (new_focus_widget);
 }
 
 static void

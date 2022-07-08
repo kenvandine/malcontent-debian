@@ -28,14 +28,12 @@
                 <child>
                   <object class="GtkButton" id="go_back_button">
                     <property name="visible">False</property>
-                    <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <style>
                       <class name="circular"/>
                     </style>
                     <child>
                       <object class="GtkImage">
-                        <property name="can_focus">False</property>
                         <property name="icon-size">4</property>
                         <property name="icon_name">go-previous-symbolic</property>
                         <child internal-child="accessible">
@@ -53,14 +51,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="go_next_button">
-                    <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <style>
                       <class name="circular"/>
                     </style>
                     <child>
                       <object class="GtkImage">
-                        <property name="can_focus">False</property>
                         <property name="icon-size">4</property>
                         <property name="icon_name">go-next-symbolic</property>
                         <child internal-child="accessible">
@@ -80,6 +76,7 @@
             </child>
             <child type="overlay">
               <object class="GtkBox">
+                <property name="can-focus">False</property>
                 <property name="valign">GTK_ALIGN_END</property>
                 <style>
                   <class name="carousel-arrow-container"/>
