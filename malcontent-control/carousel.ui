@@ -35,18 +35,13 @@
                   <object class="GtkButton" id="go_back_button">
                     <property name="visible">False</property>
                     <property name="valign">center</property>
+                    <property name="icon_name">go-previous-symbolic</property>
+                    <accessibility>
+                      <property name="label" translatable="yes">Previous Page</property>
+                    </accessibility>
                     <style>
                       <class name="circular"/>
                     </style>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-size">4</property>
-                        <property name="icon_name">go-previous-symbolic</property>
-                        <accessibility>
-                          <property name="label" translatable="yes">Previous Page</property>
-                        </accessibility>
-                      </object>
-                    </child>
                     <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
                   </object>
                 </child>
@@ -55,18 +50,13 @@
                     <property name="valign">center</property>
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
+                    <property name="icon_name">go-next-symbolic</property>
+                    <accessibility>
+                      <property name="label" translatable="yes">Next Page</property>
+                    </accessibility>
                     <style>
                       <class name="circular"/>
                     </style>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-size">4</property>
-                        <property name="icon_name">go-next-symbolic</property>
-                        <accessibility>
-                          <property name="label" translatable="yes">Next Page</property>
-                        </accessibility>
-                      </object>
-                    </child>
                     <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
                   </object>
                 </child>

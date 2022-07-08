@@ -103,25 +103,7 @@
                     <property name="valign">center</property>
                     <property name="direction">right</property>
                     <property name="popover">oars_popover</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">horizontal</property>
-                        <child>
-                          <object class="GtkLabel" id="oars_button_label">
-                            <property name="label"></property>
-                            <property name="expand">True</property>
-                            <property name="halign">start</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">pan-down-symbolic</property>
-                            <property name="icon-size">4</property><!-- GTK_ICON_SIZE_BUTTON -->
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    <property name="always-show-arrow">True</property>
                   </object>
                 </child>
               </object>
