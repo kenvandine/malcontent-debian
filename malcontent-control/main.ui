@@ -9,11 +9,15 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="AdwHeaderBar" id="header">
-            <property name="show-close-button">True</property>
-            <!-- Translators: This is the title of the main window -->
-            <property name="title" translatable="yes">Parental Controls</property>
-            <child>
+          <object class="GtkHeaderBar" id="header">
+            <property name="show-title-buttons">True</property>
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <!-- Translators: This is the title of the main window -->
+                <property name="title" translatable="yes">Parental Controls</property>
+              </object>
+            </property>
+            <child type="end">
               <object class="GtkMenuButton" id="primary_menu">
                 <property name="direction">none</property>
                 <property name="use-popover">True</property>
@@ -23,9 +27,6 @@
                   <class name="image-button"/>
                 </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
           </object>
         </child>
