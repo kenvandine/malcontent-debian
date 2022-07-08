@@ -357,8 +357,6 @@ create_row_for_app_cb (gpointer item,
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), w);
   adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
-  gtk_widget_show_all (row);
-
   /* Fetch status from AccountService */
   g_object_set_data (G_OBJECT (row), "GtkSwitch", w);
   g_object_set_data_full (G_OBJECT (w), "GAppInfo", g_object_ref (app), g_object_unref);
