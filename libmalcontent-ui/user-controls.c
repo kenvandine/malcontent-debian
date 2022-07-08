@@ -125,9 +125,8 @@ static void on_restrict_applications_action_activated (GSimpleAction *action,
                                                        GVariant      *param,
                                                        gpointer       user_data);
 
-static gboolean on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
-                                                                 GdkEvent  *event,
-                                                                 gpointer   user_data);
+static gboolean on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
+                                                                  gpointer   user_data);
 
 static void on_set_age_action_activated (GSimpleAction *action,
                                          GVariant      *param,
@@ -601,9 +600,8 @@ on_restrict_applications_action_activated (GSimpleAction *action,
 }
 
 static gboolean
-on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
-                                                 GdkEvent  *event,
-                                                 gpointer   user_data)
+on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
+                                                  gpointer   user_data)
 {
   MctUserControls *self = MCT_USER_CONTROLS (user_data);
 
@@ -1003,7 +1001,7 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_installation_switch_active_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_web_browsers_switch_active_changed_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_delete_event_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_close_request_cb);
 }
 
 static void
