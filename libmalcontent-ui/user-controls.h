@@ -34,7 +34,7 @@
 G_BEGIN_DECLS
 
 #define MCT_TYPE_USER_CONTROLS (mct_user_controls_get_type())
-G_DECLARE_FINAL_TYPE (MctUserControls, mct_user_controls, MCT, USER_CONTROLS, GtkBin)
+G_DECLARE_FINAL_TYPE (MctUserControls, mct_user_controls, MCT, USER_CONTROLS, AdwBin)
 
 ActUser *mct_user_controls_get_user (MctUserControls *self);
 void     mct_user_controls_set_user (MctUserControls *self,

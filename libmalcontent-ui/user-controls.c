@@ -73,7 +73,7 @@ static const guint32 oars_disabled_age = (guint32) -1;
  */
 struct _MctUserControls
 {
-  GtkGrid     parent_instance;
+  AdwBin     parent_instance;
 
   GtkLabel *description_label;
   GMenu      *age_menu;
@@ -138,7 +138,7 @@ static void on_permission_allowed_cb (GObject    *obj,
                                       GParamSpec *pspec,
                                       gpointer    user_data);
 
-G_DEFINE_TYPE (MctUserControls, mct_user_controls, GTK_TYPE_BIN)
+G_DEFINE_TYPE (MctUserControls, mct_user_controls, ADW_TYPE_BIN)
 
 typedef enum
 {

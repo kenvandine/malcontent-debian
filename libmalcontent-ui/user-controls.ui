@@ -2,7 +2,7 @@
 <!-- Copyright © 2018, 2019, 2020 Endless, Inc. -->
 <interface domain="malcontent">
   <requires lib="gtk+" version="3.12"/>
-  <template class="MctUserControls" parent="GtkBin">
+  <template class="MctUserControls" parent="AdwBin">
     <child>
       <object class="AdwPreferencesPage">
         <child>
