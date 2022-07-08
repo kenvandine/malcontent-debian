@@ -20,7 +20,6 @@
             <child type="end">
               <object class="GtkMenuButton" id="primary_menu">
                 <property name="direction">none</property>
-                <property name="use-popover">True</property>
                 <property name="menu-model">primary-menu</property>
                 <style>
                   <class name="image-button"/>
