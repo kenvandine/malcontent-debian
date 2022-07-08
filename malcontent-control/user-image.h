@@ -21,14 +21,14 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 #include <act/act.h>
 
 
 G_BEGIN_DECLS
 
 #define MCT_TYPE_USER_IMAGE (mct_user_image_get_type ())
-G_DECLARE_FINAL_TYPE (MctUserImage, mct_user_image, MCT, USER_IMAGE, GtkImage)
+G_DECLARE_FINAL_TYPE (MctUserImage, mct_user_image, MCT, USER_IMAGE, AdwBin)
 
 GtkWidget *mct_user_image_new      (void);
 void       mct_user_image_set_user (MctUserImage *image,
