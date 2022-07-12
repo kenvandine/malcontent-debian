@@ -328,8 +328,10 @@ mct_carousel_add (MctCarousel     *self,
       g_autofree gchar *page = NULL;
 
       page = g_strdup_printf ("%d", item->page);
-      self->last_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      self->last_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
+      gtk_widget_set_hexpand (self->last_box, TRUE);
       gtk_widget_set_valign (self->last_box, GTK_ALIGN_CENTER);
+      gtk_box_set_homogeneous (GTK_BOX (self->last_box), TRUE);
       gtk_stack_add_named (self->stack, self->last_box, page);
     }
 
