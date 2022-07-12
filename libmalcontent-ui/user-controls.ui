@@ -121,14 +121,6 @@
 
   <menu id="age_menu" />
 
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="oars_button" />
-      <widget name="oars_popover" />
-    </widgets>
-  </object>
-
   <object class="MctRestrictApplicationsDialog" id="restrict_applications_dialog">
     <property name="visible">False</property>
     <property name="modal">True</property>
