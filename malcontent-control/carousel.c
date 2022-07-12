@@ -29,6 +29,9 @@
 
 #define ARROW_SIZE 20
 
+#define MCT_TYPE_CAROUSEL_LAYOUT (mct_carousel_layout_get_type ())
+G_DECLARE_FINAL_TYPE (MctCarouselLayout, mct_carousel_layout, MCT, CAROUSEL_LAYOUT, GtkLayoutManager)
+
 struct _MctCarouselItem {
   GtkButton parent;
 
@@ -393,6 +396,8 @@ mct_carousel_class_init (MctCarouselClass *klass)
   gtk_widget_class_bind_template_callback (wclass, mct_carousel_goto_previous_page);
   gtk_widget_class_bind_template_callback (wclass, mct_carousel_goto_next_page);
 
+  gtk_widget_class_set_layout_manager_type (wclass, MCT_TYPE_CAROUSEL_LAYOUT);
+
   object_class->dispose = mct_carousel_dispose;
 
   signals[ITEM_ACTIVATED] =
@@ -404,19 +409,6 @@ mct_carousel_class_init (MctCarouselClass *klass)
                     g_cclosure_marshal_VOID__OBJECT,
                     G_TYPE_NONE, 1,
                     MCT_TYPE_CAROUSEL_ITEM);
-}
-
-static void
-on_size_allocate (MctCarousel *self)
-{
-  if (self->selected_item == NULL)
-    return;
-
-  if (gtk_stack_get_transition_running (self->stack))
-    return;
-
-  self->arrow_start_x = mct_carousel_item_get_x (self->selected_item, self);
-  mct_carousel_move_arrow (self);
 }
 
 static void
@@ -443,7 +435,6 @@ mct_carousel_init (MctCarousel *self)
 
   g_object_unref (provider);
 
-  g_signal_connect_swapped (self->stack, "size-allocate", G_CALLBACK (on_size_allocate), self);
   g_signal_connect_swapped (self->stack, "notify::transition-running", G_CALLBACK (on_transition_running), self);
 }
 
@@ -460,4 +451,70 @@ mct_carousel_set_revealed (MctCarousel *self,
   g_return_if_fail (MCT_IS_CAROUSEL (self));
 
   gtk_revealer_set_reveal_child (self->revealer, revealed);
+}
+
+struct _MctCarouselLayout {
+  GtkLayoutManager parent;
+};
+
+G_DEFINE_FINAL_TYPE (MctCarouselLayout, mct_carousel_layout, GTK_TYPE_LAYOUT_MANAGER)
+
+static void
+mct_carousel_layout_measure (GtkLayoutManager *layout_manager,
+                             GtkWidget        *widget,
+                             GtkOrientation    orientation,
+                             int               for_size,
+                             int              *minimum,
+                             int              *natural,
+                             int              *minimum_baseline,
+                             int              *natural_baseline)
+{
+  MctCarousel *carousel;
+
+  g_assert (MCT_IS_CAROUSEL (widget));
+
+  carousel = MCT_CAROUSEL (widget);
+
+  gtk_widget_measure (GTK_WIDGET (carousel->revealer),
+                      orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+mct_carousel_layout_allocate (GtkLayoutManager *layout_manager,
+                              GtkWidget        *widget,
+                              int               width,
+                              int               height,
+                              int               baseline)
+{
+  MctCarousel *carousel;
+
+  g_assert (MCT_IS_CAROUSEL (widget));
+
+  carousel = MCT_CAROUSEL (widget);
+  gtk_widget_allocate (GTK_WIDGET (carousel->revealer), width, height, baseline, NULL);
+
+  if (carousel->selected_item == NULL)
+    return;
+
+  if (gtk_stack_get_transition_running (carousel->stack))
+    return;
+
+  carousel->arrow_start_x = mct_carousel_item_get_x (carousel->selected_item, carousel);
+  mct_carousel_move_arrow (carousel);
+}
+
+static void
+mct_carousel_layout_class_init (MctCarouselLayoutClass *klass)
+{
+  GtkLayoutManagerClass *layout_manager_class = GTK_LAYOUT_MANAGER_CLASS (klass);
+
+  layout_manager_class->measure = mct_carousel_layout_measure;
+  layout_manager_class->allocate = mct_carousel_layout_allocate;
+}
+
+static void
+mct_carousel_layout_init (MctCarouselLayout *self)
+{
 }
