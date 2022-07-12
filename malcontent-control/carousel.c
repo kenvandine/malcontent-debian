@@ -76,7 +76,6 @@ struct _MctCarousel {
   MctCarouselItem *selected_item;
   GtkWidget *last_box;
   GtkWidget *arrow;
-  gint arrow_start_x;
 
   /* Widgets */
   GtkStack *stack;
@@ -128,8 +127,6 @@ mct_carousel_move_arrow (MctCarousel *self)
   GtkStyleContext *context;
   gchar *css;
   gint end_x;
-  GtkSettings *settings;
-  gboolean animations;
 
   if (!self->selected_item)
     return;
@@ -141,29 +138,7 @@ mct_carousel_move_arrow (MctCarousel *self)
     gtk_style_context_remove_provider (context, self->provider);
   g_clear_object (&self->provider);
 
-  settings = gtk_widget_get_settings (GTK_WIDGET (self));
-  g_object_get (settings, "gtk-enable-animations", &animations, NULL);
-
-  /* Animate the arrow movement if animations are enabled. Otherwise,
-   * jump the arrow to the right location instantly. */
-  if (animations)
-    {
-      css = g_strdup_printf ("@keyframes arrow_keyframes-%d-%d {\n"
-                             "  from { margin-left: %dpx; }\n"
-                             "  to { margin-left: %dpx; }\n"
-                             "}\n"
-                             "* {\n"
-                             "  animation-name: arrow_keyframes-%d-%d;\n"
-                             "}\n",
-                             self->arrow_start_x, end_x,
-                             self->arrow_start_x, end_x,
-                             self->arrow_start_x, end_x);
-    }
-  else
-    {
-      css = g_strdup_printf ("* { margin-left: %dpx }", end_x);
-    }
-
+  css = g_strdup_printf ("* { margin-left: %dpx; }", end_x);
   self->provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
   gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (self->provider), css, -1);
   gtk_style_context_add_provider (context, self->provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -246,10 +221,7 @@ mct_carousel_select_item (MctCarousel     *self,
     }
 
   if (self->selected_item != NULL)
-    {
-      page_changed = (self->selected_item->page != item->page);
-      self->arrow_start_x = mct_carousel_item_get_x (self->selected_item, self);
-    }
+    page_changed = (self->selected_item->page != item->page);
 
   self->selected_item = item;
   self->visible_page = item->page;
@@ -501,7 +473,6 @@ mct_carousel_layout_allocate (GtkLayoutManager *layout_manager,
   if (gtk_stack_get_transition_running (carousel->stack))
     return;
 
-  carousel->arrow_start_x = mct_carousel_item_get_x (carousel->selected_item, carousel);
   mct_carousel_move_arrow (carousel);
 }
 
