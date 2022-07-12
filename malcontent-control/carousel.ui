@@ -25,70 +25,66 @@
               </object>
             </child>
             <child type="overlay">
-              <object class="GtkOverlay">
+              <object class="GtkButton" id="go_back_button">
+                <property name="visible">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="icon_name">go-previous-symbolic</property>
+                <accessibility>
+                  <property name="label" translatable="yes">Previous Page</property>
+                </accessibility>
+                <style>
+                  <class name="circular"/>
+                </style>
+                <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="GtkButton" id="go_next_button">
+                <property name="valign">center</property>
+                <property name="halign">end</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="hexpand">True</property>
+                <property name="icon_name">go-next-symbolic</property>
+                <accessibility>
+                  <property name="label" translatable="yes">Next Page</property>
+                </accessibility>
+                <style>
+                  <class name="circular"/>
+                </style>
+                <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="GtkBox">
+                <property name="can-focus">False</property>
+                <property name="valign">GTK_ALIGN_END</property>
+                <style>
+                  <class name="carousel-arrow-container"/>
+                </style>
                 <child>
-                  <object class="GtkBox">
-                    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                    <property name="margin-top">12</property>
-                    <property name="margin-bottom">12</property>
-                    <property name="margin-start">12</property>
-                    <property name="margin-end">12</property>
+                  <object class="GtkOverlay">
                     <child>
-                      <object class="GtkButton" id="go_back_button">
-                        <property name="visible">False</property>
-                        <property name="valign">center</property>
-                        <property name="icon_name">go-previous-symbolic</property>
-                        <accessibility>
-                          <property name="label" translatable="yes">Previous Page</property>
-                        </accessibility>
+                      <object class="GtkBox" id="arrow">
+                        <property name="halign">GTK_ALIGN_END</property>
                         <style>
-                          <class name="circular"/>
+                          <class name="carousel-arrow"/>
                         </style>
-                        <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="go_next_button">
-                        <property name="valign">center</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="icon_name">go-next-symbolic</property>
-                        <accessibility>
-                          <property name="label" translatable="yes">Next Page</property>
-                        </accessibility>
+                    <child type="overlay">
+                      <object class="GtkBox">
+                        <property name="halign">GTK_ALIGN_END</property>
                         <style>
-                          <class name="circular"/>
+                          <class name="carousel-inner-arrow"/>
                         </style>
-                        <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="overlay">
-                  <object class="GtkBox">
-                    <property name="can-focus">False</property>
-                    <property name="valign">GTK_ALIGN_END</property>
-                    <style>
-                      <class name="carousel-arrow-container"/>
-                    </style>
-                    <child>
-                      <object class="GtkOverlay">
-                        <child>
-                          <object class="GtkBox" id="arrow">
-                            <property name="halign">GTK_ALIGN_END</property>
-                            <style>
-                              <class name="carousel-arrow"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child type="overlay">
-                          <object class="GtkBox">
-                            <property name="halign">GTK_ALIGN_END</property>
-                            <style>
-                              <class name="carousel-inner-arrow"/>
-                            </style>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
