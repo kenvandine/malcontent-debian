@@ -6,7 +6,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     gtk-doc-tools \
     lcov \
     libaccountsservice-dev \
-    libappstream-glib-dev \
+    libappstream-dev \
     libflatpak-dev \
     libgirepository1.0-dev \
     libglib2.0-dev \

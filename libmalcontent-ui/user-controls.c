@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <appstream-glib.h>
+#include <appstream.h>
 #include <libmalcontent/malcontent.h>
 #include <locale.h>
 #include <gio/gio.h>
@@ -30,7 +30,6 @@
 #include <glib/gi18n-lib.h>
 #include <strings.h>
 
-#include "gs-content-rating.h"
 #include "restrict-applications-dialog.h"
 #include "user-controls.h"
 
@@ -168,13 +167,13 @@ static const GActionEntry actions[] = {
 
 /* Auxiliary methods */
 
-static GsContentRatingSystem
+static AsContentRatingSystem
 get_content_rating_system (MctUserControls *self)
 {
   if (self->user_locale == NULL)
-    return GS_CONTENT_RATING_SYSTEM_UNKNOWN;
+    return AS_CONTENT_RATING_SYSTEM_UNKNOWN;
 
-  return gs_utils_content_rating_system_from_locale (self->user_locale);
+  return as_content_rating_system_from_locale (self->user_locale);
 }
 
 static const gchar *
@@ -290,7 +289,7 @@ update_restricted_apps (MctUserControls *self)
 static void
 update_categories_from_language (MctUserControls *self)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   g_auto(GStrv) entries = NULL;
   const gchar *rating_system_str;
   const guint *ages;
@@ -298,12 +297,12 @@ update_categories_from_language (MctUserControls *self)
   g_autofree gchar *disabled_action = NULL;
 
   rating_system = get_content_rating_system (self);
-  rating_system_str = gs_content_rating_system_to_str (rating_system);
+  rating_system_str = as_content_rating_system_to_string (rating_system);
 
   g_debug ("Using rating system %s", rating_system_str);
 
-  entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
+  entries = as_content_rating_system_get_formatted_ages (rating_system);
+  ages = as_content_rating_system_get_csm_ages (rating_system, &n_ages);
 
   /* Fill in the age menu */
   g_menu_remove_all (self->age_menu);
@@ -357,7 +356,7 @@ G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_INTENSE == (int) AS_CONTENT_RAT
 static void
 update_oars_level (MctUserControls *self)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   g_autofree gchar *rating_age_category = NULL;
   guint maximum_age, selected_age;
   gsize i;
@@ -376,7 +375,7 @@ update_oars_level (MctUserControls *self)
 
       oars_value = mct_app_filter_get_oars_value (self->filter, oars_categories[i]);
       all_categories_unset &= (oars_value == MCT_APP_FILTER_OARS_VALUE_UNKNOWN);
-      age = as_content_rating_id_value_to_csm_age (oars_categories[i], (AsContentRatingValue) oars_value);
+      age = as_content_rating_attribute_to_csm_age (oars_categories[i], (AsContentRatingValue) oars_value);
 
       g_debug ("OARS value for '%s': %s", oars_categories[i], oars_value_to_string (oars_value));
 
@@ -388,7 +387,7 @@ update_oars_level (MctUserControls *self)
            all_categories_unset ? "all categories unset" : "some categories set");
 
   rating_system = get_content_rating_system (self);
-  rating_age_category = gs_utils_content_rating_age_to_str (rating_system, maximum_age);
+  rating_age_category = as_content_rating_system_format_age (rating_system, maximum_age);
 
   /* Unrestricted? */
   if (rating_age_category == NULL || all_categories_unset)
@@ -649,7 +648,7 @@ on_set_age_action_activated (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   MctUserControls *self;
   g_auto(GStrv) entries = NULL;
   const guint *ages;
@@ -661,8 +660,8 @@ on_set_age_action_activated (GSimpleAction *action,
   age = g_variant_get_uint32 (param);
 
   rating_system = get_content_rating_system (self);
-  entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
+  entries = as_content_rating_system_get_formatted_ages (rating_system);
+  ages = as_content_rating_system_get_csm_ages (rating_system, &n_ages);
 
   /* Update the button */
   if (age == oars_disabled_age)
@@ -1504,7 +1503,7 @@ mct_user_controls_build_app_filter (MctUserControls     *self,
       const gchar *oars_category;
 
       oars_category = oars_categories[i];
-      oars_value = (MctAppFilterOarsValue) as_content_rating_id_csm_age_to_value (oars_category, self->selected_age);
+      oars_value = (MctAppFilterOarsValue) as_content_rating_attribute_from_csm_age (oars_category, self->selected_age);
 
       g_debug ("\t\t → %s: %s", oars_category, oars_value_to_string (oars_value));
 
