@@ -6,87 +6,89 @@
   <template class="MctCarousel" parent="AdwBin">
     <child>
       <object class="GtkRevealer" id="revealer">
-    <property name="transition_duration">400</property>
-    <property name="reveal-child">True</property>
-    <child>
-      <object class="GtkOverlay">
-        <property name="hexpand">True</property>
+        <property name="transition_duration">400</property>
+        <property name="reveal-child">True</property>
         <child>
-          <object class="GtkStack" id="stack">
-            <property name="margin-top">16</property>
-            <property name="margin-bottom">16</property>
-            <property name="margin-start">16</property>
-            <property name="margin-end">16</property>
-            <property name="transition_duration">400</property>
-            <property name="transition_type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
-            <style>
-              <class name="location-bar"/>
-            </style>
-          </object>
-        </child>
-        <child type="overlay">
           <object class="GtkOverlay">
+            <property name="hexpand">True</property>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <child>
-                  <object class="GtkButton" id="go_back_button">
-                    <property name="visible">False</property>
-                    <property name="valign">center</property>
-                    <property name="icon_name">go-previous-symbolic</property>
-                    <accessibility>
-                      <property name="label" translatable="yes">Previous Page</property>
-                    </accessibility>
-                    <style>
-                      <class name="circular"/>
-                    </style>
-                    <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="go_next_button">
-                    <property name="valign">center</property>
-                    <property name="halign">end</property>
-                    <property name="hexpand">True</property>
-                    <property name="icon_name">go-next-symbolic</property>
-                    <accessibility>
-                      <property name="label" translatable="yes">Next Page</property>
-                    </accessibility>
-                    <style>
-                      <class name="circular"/>
-                    </style>
-                    <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
-                  </object>
-                </child>
+              <object class="GtkStack" id="stack">
+                <property name="margin-top">16</property>
+                <property name="margin-bottom">16</property>
+                <property name="margin-start">16</property>
+                <property name="margin-end">16</property>
+                <property name="transition_duration">400</property>
+                <property name="transition_type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
+                <style>
+                  <class name="location-bar"/>
+                </style>
               </object>
             </child>
             <child type="overlay">
-              <object class="GtkBox">
-                <property name="can-focus">False</property>
-                <property name="valign">GTK_ALIGN_END</property>
-                <style>
-                  <class name="carousel-arrow-container"/>
-                </style>
+              <object class="GtkOverlay">
                 <child>
-                  <object class="GtkOverlay">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
                     <child>
-                      <object class="GtkBox" id="arrow">
-                        <property name="halign">GTK_ALIGN_END</property>
+                      <object class="GtkButton" id="go_back_button">
+                        <property name="visible">False</property>
+                        <property name="valign">center</property>
+                        <property name="icon_name">go-previous-symbolic</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Previous Page</property>
+                        </accessibility>
                         <style>
-                          <class name="carousel-arrow"/>
+                          <class name="circular"/>
                         </style>
+                        <signal name="clicked" handler="mct_carousel_goto_previous_page" object="MctCarousel" swapped="no"/>
                       </object>
                     </child>
-                    <child type="overlay">
-                      <object class="GtkBox">
-                        <property name="halign">GTK_ALIGN_END</property>
+                    <child>
+                      <object class="GtkButton" id="go_next_button">
+                        <property name="valign">center</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="icon_name">go-next-symbolic</property>
+                        <accessibility>
+                          <property name="label" translatable="yes">Next Page</property>
+                        </accessibility>
                         <style>
-                          <class name="carousel-inner-arrow"/>
+                          <class name="circular"/>
                         </style>
+                        <signal name="clicked" handler="mct_carousel_goto_next_page" object="MctCarousel" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="overlay">
+                  <object class="GtkBox">
+                    <property name="can-focus">False</property>
+                    <property name="valign">GTK_ALIGN_END</property>
+                    <style>
+                      <class name="carousel-arrow-container"/>
+                    </style>
+                    <child>
+                      <object class="GtkOverlay">
+                        <child>
+                          <object class="GtkBox" id="arrow">
+                            <property name="halign">GTK_ALIGN_END</property>
+                            <style>
+                              <class name="carousel-arrow"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child type="overlay">
+                          <object class="GtkBox">
+                            <property name="halign">GTK_ALIGN_END</property>
+                            <style>
+                              <class name="carousel-inner-arrow"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -95,8 +97,6 @@
             </child>
           </object>
         </child>
-      </object>
-    </child>
       </object>
     </child>
   </template>
