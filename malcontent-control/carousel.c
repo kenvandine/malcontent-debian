@@ -105,7 +105,7 @@ mct_carousel_item_get_x (MctCarouselItem *item,
   gint width;
   gdouble dest_x;
 
-  parent = GTK_WIDGET (carousel->stack);
+  parent = GTK_WIDGET (carousel->revealer);
   widget = GTK_WIDGET (item);
 
   width = gtk_widget_get_allocated_width (widget);
