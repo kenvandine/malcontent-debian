@@ -82,6 +82,10 @@
                     <child>
                       <object class="GtkLockButton" id="lock_button">
                         <property name="halign">center</property>
+                        <style>
+                          <class name="suggested-action" />
+                          <class name="pill" />
+                        </style>
                       </object>
                     </child>
                   </object>
