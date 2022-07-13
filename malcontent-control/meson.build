@@ -78,7 +78,7 @@ endif
 
 xmllint = find_program('xmllint', required: false)
 if xmllint.found()
-  gtk_prefix = dependency('gtk+-3.0').get_pkgconfig_variable('prefix')
+  gtk_prefix = dependency('gtk+-3.0').get_variable(pkgconfig: 'prefix')
   test(
     'validate-ui', xmllint,
     args: [

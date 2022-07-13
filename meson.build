@@ -1,6 +1,6 @@
 project('malcontent', 'c',
   version : '0.10.5',
-  meson_version : '>= 0.50.0',
+  meson_version : '>= 0.57.0',
   license: ['LGPL-2.1-or-later', 'GPL-2.0-or-later'],
   default_options : [
     'buildtype=debugoptimized',
@@ -34,12 +34,12 @@ if pamlibdir == ''
 endif
 
 dbus = dependency('dbus-1')
-dbusinterfacesdir = dbus.get_pkgconfig_variable('interfaces_dir',
-  define_variable: ['datadir', datadir])
+dbusinterfacesdir = dbus.get_variable(pkgconfig: 'interfaces_dir',
+  pkgconfig_define: ['datadir', datadir])
 
 polkit_gobject = dependency('polkit-gobject-1')
-polkitpolicydir = polkit_gobject.get_pkgconfig_variable('policydir',
-  define_variable: ['prefix', prefix])
+polkitpolicydir = polkit_gobject.get_variable(pkgconfig: 'policydir',
+  pkgconfig_define: ['prefix', prefix])
 
 config_h = configuration_data()
 config_h.set_quoted('GETTEXT_PACKAGE', 'malcontent')
