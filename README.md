@@ -115,7 +115,7 @@ Dependencies
 ------------
 
  * accounts-service
- * appstream-glib
+ * appstream
  * dbus-daemon
  * flatpak
  * gio-2.0 ≥ 2.60

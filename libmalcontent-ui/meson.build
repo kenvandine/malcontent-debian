@@ -12,7 +12,6 @@ resources = gnome.compile_resources(
 )
 
 libmalcontent_ui_sources = [
-  'gs-content-rating.c',
   'restrict-applications-dialog.c',
   'restrict-applications-selector.c',
   'user-controls.c',
@@ -22,9 +21,6 @@ libmalcontent_ui_headers = [
   'restrict-applications-dialog.h',
   'restrict-applications-selector.h',
   'user-controls.h',
-]
-libmalcontent_ui_private_headers = [
-  'gs-content-rating.h',
 ]
 
 libmalcontent_ui_public_deps = [
@@ -36,7 +32,7 @@ libmalcontent_ui_public_deps = [
   libmalcontent_dep,
 ]
 libmalcontent_ui_private_deps = [
-  dependency('appstream-glib', version: '>= 0.7.15'),
+  dependency('appstream', version: '>= 0.12.10'),
   dependency('flatpak'),
 ]
 
@@ -44,7 +40,7 @@ libmalcontent_ui_private_deps = [
 libmalcontent_ui_include_subdir = join_paths(libmalcontent_ui_api_name, 'libmalcontent-ui')
 
 libmalcontent_ui = library(libmalcontent_ui_api_name,
-  libmalcontent_ui_sources + libmalcontent_ui_headers + libmalcontent_ui_private_headers,
+  libmalcontent_ui_sources + libmalcontent_ui_headers,
   dependencies: libmalcontent_ui_public_deps + libmalcontent_ui_private_deps,
   include_directories: root_inc,
   install: true,
@@ -72,7 +68,7 @@ pkgconfig.generate(libmalcontent_ui,
 )
 
 libmalcontent_ui_gir = gnome.generate_gir(libmalcontent_ui,
-  sources: libmalcontent_ui_sources + libmalcontent_ui_headers + libmalcontent_ui_private_headers,
+  sources: libmalcontent_ui_sources + libmalcontent_ui_headers,
   nsversion: libmalcontent_ui_api_version,
   namespace: 'MalcontentUi',
   symbol_prefix: 'mct_',
@@ -85,7 +81,7 @@ libmalcontent_ui_gir = gnome.generate_gir(libmalcontent_ui,
 
 xmllint = find_program('xmllint', required: false)
 if xmllint.found()
-  gtk_prefix = dependency('gtk+-3.0').get_pkgconfig_variable('prefix')
+  gtk_prefix = dependency('gtk+-3.0').get_variable(pkgconfig: 'prefix')
   test(
     'validate-ui', xmllint,
     args: [
