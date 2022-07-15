@@ -18,6 +18,7 @@
  *
  * Authors:
  *  - Felipe Borges <felipeborges@gnome.org>
+ *  - Georges Basile Stavracas Neto <georges@endlessos.org>
  *  - Philip Withnall <withnall@endlessm.com>
  */
 

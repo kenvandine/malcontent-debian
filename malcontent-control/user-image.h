@@ -1,5 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
+ * Copyright © 2022 Endless Mobile, Inc.
  * Copyright © 2015 Red Hat, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +17,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  * Authors:
+ *  - Georges Basile Stavracas Neto <georges@endlessos.org>
  *  - Ondrej Holy <oholy@redhat.com>
  */
 
