@@ -5,6 +5,7 @@
   <template class="MctRestrictApplicationsSelector" parent="GtkBox">
     <child>
       <object class="GtkListBox" id="listbox">
+        <property name="hexpand">True</property>
         <property name="selection-mode">none</property>
 
         <child type="placeholder">
