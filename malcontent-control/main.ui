@@ -22,10 +22,20 @@
                 <property name="direction">none</property>
                 <property name="use-popover">True</property>
                 <property name="menu-model">primary-menu</property>
-                <accelerator key="F10" signal="activate"/>
                 <style>
                   <class name="image-button"/>
                 </style>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name="scope">global</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">F10</property>
+                        <property name="action">activate</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
