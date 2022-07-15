@@ -370,10 +370,10 @@ reload_users (MctUserSelector *self,
   g_object_get (settings, "gtk-enable-animations", &animations, NULL);
   g_object_set (settings, "gtk-enable-animations", FALSE, NULL);
 
-  mct_carousel_purge_items (self->carousel);
-
   list = act_user_manager_list_users (self->user_manager);
   g_debug ("Got %u users", g_slist_length (list));
+
+  mct_carousel_purge_items (self->carousel);
 
   list = g_slist_sort (list, (GCompareFunc) sort_users);
   for (l = list; l; l = l->next)
