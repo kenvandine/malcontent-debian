@@ -1,11 +1,11 @@
 /* FIXME: This ‘negative’ variant of a GtkSwitch should probably be
  * upstreamed to GTK. See https://gitlab.gnome.org/GNOME/gtk/issues/2470 */
 switch:checked.restricts {
-  background-color: #fffd33;
+  background-color: @yellow_5;
 }
 
 switch:checked.restricts, switch:checked.restricts slider {
-  border-color: #ffd52b;
+  border-color: @yellow_3;
 }
 
 switch:disabled.restricts {
@@ -14,5 +14,5 @@ switch:disabled.restricts {
 }
 
 switch:disabled.restricts slider {
-  border-color: #bfb8b1;
+  filter: grayscale(100%);
 }
