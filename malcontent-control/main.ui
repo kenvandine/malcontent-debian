@@ -128,9 +128,10 @@
                     <child type="center">
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Loading…</property>
-                        <attributes>
-                          <attribute name="scale" value="1.4"/>
-                        </attributes>
+                        <property name="vexpand">True</property>
+                        <style>
+                          <class name="title-1" />
+                        </style>
                       </object>
                     </child>
                   </object>
