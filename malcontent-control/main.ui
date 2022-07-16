@@ -58,12 +58,20 @@
                       </object>
                     </child>
                     <child>
-                      <object class="MctUserControls" id="user_controls">
-                        <!-- Content is set in code; this string is just a placeholder -->
-                        <property name="description">It’s recommended that restrictions are set as part of an ongoing conversation with $name. Read guidance on what to consider.</property>
-                        <property name="height-request">270</property>
-                        <property name="dbus-connection">dbus_connection</property>
-                        <property name="vexpand">True</property>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <child>
+                              <object class="MctUserControls" id="user_controls">
+                                <!-- Content is set in code; this string is just a placeholder -->
+                                <property name="description">It’s recommended that restrictions are set as part of an ongoing conversation with $name. Read guidance on what to consider.</property>
+                                <property name="height-request">270</property>
+                                <property name="dbus-connection">dbus_connection</property>
+                                <property name="vexpand">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
