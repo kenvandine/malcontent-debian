@@ -5,13 +5,14 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     git \
     gtk-doc-tools \
     lcov \
+    libadwaita-1-dev \
     libaccountsservice-dev \
     libappstream-dev \
     libflatpak-dev \
     libgirepository1.0-dev \
     libglib2.0-dev \
     libglib-testing-0-dev \
-    libgtk-3-dev \
+    libgtk-4-dev \
     libpam0g-dev \
     libpolkit-gobject-1-dev \
     libxml2-utils \

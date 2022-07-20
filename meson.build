@@ -134,6 +134,12 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
+  libadwaita_dep = dependency(
+    'libadwaita-1',
+    version: '>= 1.1',
+    fallback: ['libadwaita', 'libadwaita_dep'],
+    default_options: ['examples=false', 'introspection=disabled', 'tests=false', 'vapi=false'],
+  )
   subdir('libmalcontent-ui')
 endif
 subdir('malcontent-client')

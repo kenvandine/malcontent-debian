@@ -28,6 +28,7 @@
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libmalcontent/app-filter.h>
 
 #include "restrict-applications-selector.h"
@@ -60,6 +61,7 @@ struct _MctRestrictApplicationsSelector
   GtkBox parent_instance;
 
   GtkListBox *listbox;
+  GtkLabel *placeholder;
 
   GList *cached_apps;  /* (nullable) (owned) (element-type GAppInfo) */
   GListStore *apps;  /* (owned) */
@@ -222,11 +224,14 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
   gtk_widget_class_set_template_from_resource (widget_class, "/org/freedesktop/MalcontentUi/ui/restrict-applications-selector.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, listbox);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, placeholder);
 }
 
 static void
 mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
 {
+  guint n_apps;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->apps = g_list_store_new (G_TYPE_APP_INFO);
@@ -242,6 +247,10 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
                            create_row_for_app_cb,
                            self,
                            NULL);
+
+  /* Hide placeholder if not empty */
+  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->apps));
+  gtk_widget_set_visible (GTK_WIDGET (self->placeholder), n_apps != 0);
 
   self->blocklisted_apps = g_hash_table_new_full (g_direct_hash,
                                                   g_direct_equal,
@@ -312,9 +321,8 @@ create_row_for_app_cb (gpointer item,
   MctRestrictApplicationsSelector *self = MCT_RESTRICT_APPLICATIONS_SELECTOR (user_data);
   GAppInfo *app = G_APP_INFO (item);
   g_autoptr(GIcon) icon = NULL;
-  GtkWidget *box, *w;
+  GtkWidget *row, *w;
   const gchar *app_name;
-  gint size;
   GtkStyleContext *context;
 
   app_name = g_app_info_get_name (app);
@@ -327,23 +335,15 @@ create_row_for_app_cb (gpointer item,
   else
     g_object_ref (icon);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 12);
-  gtk_widget_set_margin_end (box, 12);
+  row = adw_action_row_new ();
 
   /* Icon */
-  w = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &size, NULL);
-  gtk_image_set_pixel_size (GTK_IMAGE (w), size);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  w = gtk_image_new_from_gicon (icon);
+  gtk_image_set_icon_size (GTK_IMAGE (w), GTK_ICON_SIZE_LARGE);
+  adw_action_row_add_prefix (ADW_ACTION_ROW (row), w);
 
   /* App name label */
-  w = g_object_new (GTK_TYPE_LABEL,
-                    "label", app_name,
-                    "hexpand", TRUE,
-                    "xalign", 0.0,
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (box), w);
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), app_name);
 
   /* Switch */
   w = g_object_new (GTK_TYPE_SWITCH,
@@ -354,16 +354,16 @@ create_row_for_app_cb (gpointer item,
   gtk_style_context_add_provider (context,
                                   GTK_STYLE_PROVIDER (self->css_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
-  gtk_container_add (GTK_CONTAINER (box), w);
-
-  gtk_widget_show_all (box);
+  adw_action_row_add_suffix (ADW_ACTION_ROW (row), w);
+  adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
   /* Fetch status from AccountService */
+  g_object_set_data (G_OBJECT (row), "GtkSwitch", w);
   g_object_set_data_full (G_OBJECT (w), "GAppInfo", g_object_ref (app), g_object_unref);
   update_listbox_row_switch (self, GTK_SWITCH (w));
   g_signal_connect (w, "notify::active", G_CALLBACK (on_switch_active_changed_cb), self);
 
-  return box;
+  return row;
 }
 
 static gint
@@ -779,20 +779,13 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
   for (guint i = 0; i < n_apps; i++)
     {
       GtkListBoxRow *row;
-      GtkWidget *box, *w;
-      g_autoptr(GList) children = NULL;  /* (element-type GtkWidget) */
+      GtkWidget *w;
 
       /* Navigate the widget hierarchy set up in create_row_for_app_cb(). */
       row = gtk_list_box_get_row_at_index (self->listbox, i);
       g_assert (row != NULL && GTK_IS_LIST_BOX_ROW (row));
 
-      box = gtk_bin_get_child (GTK_BIN (row));
-      g_assert (box != NULL && GTK_IS_BOX (box));
-
-      children = gtk_container_get_children (GTK_CONTAINER (box));
-      g_assert (children != NULL);
-
-      w = g_list_nth_data (children, 2);
+      w = g_object_get_data (G_OBJECT (row), "GtkSwitch");
       g_assert (w != NULL && GTK_IS_SWITCH (w));
 
       update_listbox_row_switch (self, GTK_SWITCH (w));

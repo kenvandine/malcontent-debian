@@ -27,6 +27,7 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libmalcontent-ui/malcontent-ui.h>
 #include <polkit/polkit.h>
 
@@ -76,8 +77,7 @@ struct _MctApplication
   MctUserSelector *user_selector;
   MctUserControls *user_controls;
   GtkStack *main_stack;
-  GtkLabel *error_title;
-  GtkLabel *error_message;
+  AdwStatusPage *error_page;
   GtkLockButton *lock_button;
   GtkButton *user_accounts_panel_button;
   GtkLabel *help_label;
@@ -209,11 +209,9 @@ mct_application_activate (GApplication *application)
       self->main_stack = GTK_STACK (gtk_builder_get_object (builder, "main_stack"));
       self->user_selector = MCT_USER_SELECTOR (gtk_builder_get_object (builder, "user_selector"));
       self->user_controls = MCT_USER_CONTROLS (gtk_builder_get_object (builder, "user_controls"));
-      self->error_title = GTK_LABEL (gtk_builder_get_object (builder, "error_title"));
-      self->error_message = GTK_LABEL (gtk_builder_get_object (builder, "error_message"));
+      self->error_page = ADW_STATUS_PAGE (gtk_builder_get_object (builder, "error_page"));
       self->lock_button = GTK_LOCK_BUTTON (gtk_builder_get_object (builder, "lock_button"));
       self->user_accounts_panel_button = GTK_BUTTON (gtk_builder_get_object (builder, "user_accounts_panel_button"));
-      self->help_label = GTK_LABEL (gtk_builder_get_object (builder, "help_label"));
 
       /* Connect signals. */
       g_signal_connect_object (self->user_selector, "notify::user",
@@ -230,7 +228,7 @@ mct_application_activate (GApplication *application)
       user_selector_notify_user_cb (G_OBJECT (self->user_selector), NULL, self);
       user_manager_notify_is_loaded_cb (G_OBJECT (self->user_manager), NULL, self);
 
-      gtk_widget_show (GTK_WIDGET (window));
+      gtk_window_present (GTK_WINDOW (window));
     }
 
   /* Bring the window to the front. */
@@ -249,6 +247,8 @@ mct_application_startup (GApplication *application)
 
   /* Chain up. */
   G_APPLICATION_CLASS (mct_application_parent_class)->startup (application);
+
+  adw_init ();
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries,
                                    G_N_ELEMENTS (app_entries), application);
@@ -323,13 +323,16 @@ about_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data
 }
 
 static void
-help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
+on_malcontent_help_shown_finished_cb (GObject      *source,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
   g_autoptr(GError) local_error = NULL;
 
-  if (!gtk_show_uri_on_window (mct_application_get_main_window (self), "help:malcontent",
-                               gtk_get_current_event_time (), &local_error))
+  if (!gtk_show_uri_full_finish (mct_application_get_main_window (self),
+                                 result,
+                                 &local_error))
     {
       GtkWidget *dialog = gtk_message_dialog_new (mct_application_get_main_window (self),
                                                   GTK_DIALOG_MODAL,
@@ -337,11 +340,21 @@ help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
                                                   GTK_BUTTONS_OK,
                                                   _("The help contents could not be displayed"));
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", local_error->message);
-
-      gtk_dialog_run (GTK_DIALOG (dialog));
-
-      gtk_widget_destroy (dialog);
+      gtk_window_present (GTK_WINDOW (dialog));
     }
+}
+
+static void
+help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
+{
+  MctApplication *self = MCT_APPLICATION (user_data);
+
+  gtk_show_uri_full (mct_application_get_main_window (self),
+                     "help:malcontent",
+                     GDK_CURRENT_TIME,
+                     NULL,
+                     on_malcontent_help_shown_finished_cb,
+                     self);
 }
 
 static void
@@ -371,10 +384,10 @@ update_main_stack (MctApplication *self)
   if ((is_user_manager_loaded && act_user_manager_no_service (self->user_manager)) ||
       self->permission_error != NULL)
     {
-      gtk_label_set_label (self->error_title,
-                           _("Failed to load user data from the system"));
-      gtk_label_set_label (self->error_message,
-                           _("Please make sure that the AccountsService is installed and enabled."));
+      adw_status_page_set_title (self->error_page,
+                                 _("Failed to load user data from the system"));
+      adw_status_page_set_description (self->error_page,
+                                       _("Please make sure that the AccountsService is installed and enabled."));
 
       new_page_name = "error";
       new_focus_widget = NULL;
@@ -410,7 +423,7 @@ update_main_stack (MctApplication *self)
                                       "with %s. <a href='https://www.commonsensemedia.org/privacy-and-internet-safety'>"
                                       "Read guidance</a> on what to consider."),
                                     act_user_get_real_name (selected_user));
-      gtk_label_set_markup (self->help_label, help_label);
+      mct_user_controls_set_description (self->user_controls, help_label);
 
       mct_user_controls_set_user (self->user_controls, selected_user);
 
@@ -427,12 +440,7 @@ update_main_stack (MctApplication *self)
   gtk_stack_set_visible_child_name (self->main_stack, new_page_name);
 
   if (new_focus_widget != NULL && !g_str_equal (old_page_name, new_page_name))
-    {
-      if (gtk_widget_get_can_focus (new_focus_widget))
-        gtk_widget_grab_focus (new_focus_widget);
-      else
-        gtk_widget_child_focus (new_focus_widget, GTK_DIR_TAB_FORWARD);
-    }
+    gtk_widget_grab_focus (new_focus_widget);
 }
 
 static void
