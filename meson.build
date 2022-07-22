@@ -134,6 +134,7 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
+  gtk_dep = dependency('gtk4', version: '>= 4.6')
   libadwaita_dep = dependency(
     'libadwaita-1',
     version: '>= 1.1',

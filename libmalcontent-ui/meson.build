@@ -28,7 +28,7 @@ libmalcontent_ui_public_deps = [
   dependency('gio-2.0', version: '>= 2.44'),
   dependency('glib-2.0', version: '>= 2.54.2'),
   dependency('gobject-2.0', version: '>= 2.54'),
-  dependency('gtk4', version: '>= 4.6'),
+  gtk_dep,
   libadwaita_dep,
   libmalcontent_dep,
 ]
@@ -82,7 +82,7 @@ libmalcontent_ui_gir = gnome.generate_gir(libmalcontent_ui,
 
 xmllint = find_program('xmllint', required: false)
 if xmllint.found()
-  gtk_prefix = dependency('gtk+-3.0').get_variable(pkgconfig: 'prefix')
+  gtk_prefix = gtk_dep.get_variable(pkgconfig: 'prefix')
   test(
     'validate-ui', xmllint,
     args: [
