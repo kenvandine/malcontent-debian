@@ -1,4 +1,4 @@
-libmalcontent_ui_api_version = '0'
+libmalcontent_ui_api_version = '1'
 libmalcontent_ui_api_name = 'malcontent-ui-' + libmalcontent_ui_api_version
 
 if not cc.has_function('atexit')
