@@ -75,7 +75,7 @@ libmalcontent_ui_gir = gnome.generate_gir(libmalcontent_ui,
   symbol_prefix: 'mct_',
   identifier_prefix: 'Mct',
   export_packages: 'libmalcontent-ui',
-  includes: ['AccountsService-1.0', 'Gio-2.0', 'GObject-2.0', 'Gtk-3.0', libmalcontent_gir[0]],
+  includes: ['AccountsService-1.0', 'Gio-2.0', 'GObject-2.0', 'Gtk-4.0', 'Adw-1', libmalcontent_gir[0]],
   install: true,
   dependencies: libmalcontent_ui_dep,
 )
