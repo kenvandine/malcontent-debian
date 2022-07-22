@@ -27,7 +27,7 @@ malcontent_control = executable('malcontent-control',
     dependency('gio-2.0', version: '>= 2.44'),
     dependency('glib-2.0', version: '>= 2.54.2'),
     dependency('gobject-2.0', version: '>= 2.54'),
-    dependency('gtk4', version: '>= 4.6'),
+    gtk_dep,
     dependency('polkit-gobject-1'),
     libadwaita_dep,
     libmalcontent_dep,
@@ -79,7 +79,7 @@ endif
 
 xmllint = find_program('xmllint', required: false)
 if xmllint.found()
-  gtk_prefix = dependency('gtk+-3.0').get_variable(pkgconfig: 'prefix')
+  gtk_prefix = gtk_dep.get_variable(pkgconfig: 'prefix')
   test(
     'validate-ui', xmllint,
     args: [

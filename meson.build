@@ -1,5 +1,5 @@
 project('malcontent', 'c',
-  version : '0.10.5',
+  version : '0.11.0',
   meson_version : '>= 0.57.0',
   license: ['LGPL-2.1-or-later', 'GPL-2.0-or-later'],
   default_options : [
@@ -134,6 +134,7 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
+  gtk_dep = dependency('gtk4', version: '>= 4.6')
   libadwaita_dep = dependency(
     'libadwaita-1',
     version: '>= 1.1',
