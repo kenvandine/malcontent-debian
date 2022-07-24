@@ -109,7 +109,7 @@
                     <property name="icon-name">system-users-symbolic</property>
                     <property name="title" translatable="yes">No Standard User Accounts</property>
                     <property name="description" translatable="yes">Parental controls can only be applied to standard user
-        accounts. These can be created in the user settings.</property>
+accounts. These can be created in the user settings.</property>
                     <child>
                       <object class="GtkButton" id="user_accounts_panel_button">
                         <property name="label" translatable="yes">_User Settings</property>
