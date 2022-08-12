@@ -10,6 +10,8 @@ Overview of changes in malcontent 0.11.0
 * As a result of these changes, the pkg-config name has been bumped to
   libmalcontent-ui-1, and the gobject-introspection name to MalcontentUi-1.
 
+* Improve keyboard navigation of the malcontent-control application. (#52)
+
 * Translation updates:
  - Italian
  - Russian
