@@ -31,6 +31,7 @@
                 <!-- Set dynamically from user-controls.c: -->
                 <property name="subtitle">Prevents {username} from running web browsers. Limited web content may still be available in other applications.</property>
                 <property name="subtitle_lines">0</property>
+                <property name="focusable">False</property>
                 <child>
                   <object class="GtkSwitch" id="restrict_web_browsers_switch">
                     <property name="halign">end</property>
@@ -79,6 +80,7 @@
                 <!-- Set dynamically from user-controls.c: -->
                 <property name="subtitle">Prevents {username} from installing applications.</property>
                 <property name="subtitle_lines">0</property>
+                <property name="focusable">False</property>
                 <child>
                   <object class="GtkSwitch" id="restrict_software_installation_switch">
                     <property name="halign">end</property>
@@ -99,6 +101,7 @@
                 <property name="activatable_widget">oars_button</property>
                 <property name="subtitle" translatable="yes">Restricts browsing or installation of applications to applications suitable for certain ages or above.</property>
                 <property name="subtitle_lines">0</property>
+                <property name="focusable">False</property>
                 <child>
                   <object class="GtkMenuButton" id="oars_button">
                     <property name="halign">end</property>
