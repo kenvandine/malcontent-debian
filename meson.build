@@ -146,8 +146,11 @@ endif
 subdir('malcontent-client')
 if get_option('ui').enabled()
   subdir('malcontent-control')
+
+  gnome.post_install(
+    gtk_update_icon_cache: true,
+    update_desktop_database: true,
+  )
 endif
 subdir('pam')
 subdir('po')
-
-meson.add_install_script('build-aux/meson_post_install.py')
