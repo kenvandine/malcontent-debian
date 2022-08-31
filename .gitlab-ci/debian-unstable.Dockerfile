@@ -30,7 +30,7 @@ RUN locale-gen C.UTF-8 && /usr/sbin/update-locale LANG=C.UTF-8
 
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN pip3 install meson==0.57.0
+RUN pip3 install meson==0.59.4
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
