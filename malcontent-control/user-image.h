@@ -1,5 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
+ * Copyright © 2022 Endless Mobile, Inc.
  * Copyright © 2015 Red Hat, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,19 +17,20 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  * Authors:
+ *  - Georges Basile Stavracas Neto <georges@endlessos.org>
  *  - Ondrej Holy <oholy@redhat.com>
  */
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 #include <act/act.h>
 
 
 G_BEGIN_DECLS
 
 #define MCT_TYPE_USER_IMAGE (mct_user_image_get_type ())
-G_DECLARE_FINAL_TYPE (MctUserImage, mct_user_image, MCT, USER_IMAGE, GtkImage)
+G_DECLARE_FINAL_TYPE (MctUserImage, mct_user_image, MCT, USER_IMAGE, AdwBin)
 
 GtkWidget *mct_user_image_new      (void);
 void       mct_user_image_set_user (MctUserImage *image,

@@ -5,7 +5,6 @@
   <template class="MctUserSelector" parent="GtkBox">
     <child>
       <object class="MctCarousel" id="carousel">
-        <property name="visible">True</property>
         <property name="hexpand">True</property>
         <signal name="item-activated" handler="carousel_item_activated"/>
       </object>

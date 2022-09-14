@@ -26,6 +26,7 @@
 #include <glib-object.h>
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "restrict-applications-dialog.h"
 #include "restrict-applications-selector.h"
@@ -53,13 +54,13 @@ struct _MctRestrictApplicationsDialog
   GtkDialog parent_instance;
 
   MctRestrictApplicationsSelector *selector;
-  GtkLabel *description;
+  AdwPreferencesGroup *group;
 
   MctAppFilter *app_filter;  /* (owned) (not nullable) */
   gchar *user_display_name;  /* (owned) (nullable) */
 };
 
-G_DEFINE_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, ADW_TYPE_PREFERENCES_WINDOW)
 
 typedef enum
 {
@@ -195,7 +196,7 @@ mct_restrict_applications_dialog_class_init (MctRestrictApplicationsDialogClass 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/freedesktop/MalcontentUi/ui/restrict-applications-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, selector);
-  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, description);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, group);
 }
 
 static void
@@ -214,15 +215,14 @@ update_description (MctRestrictApplicationsDialog *self)
 
   if (self->user_display_name == NULL)
     {
-      gtk_widget_hide (GTK_WIDGET (self->description));
+      adw_preferences_group_set_description (self->group, NULL);
       return;
     }
 
   /* Translators: the placeholder is a user’s full name */
   description = g_strdup_printf (_("Restrict %s from using the following installed applications."),
                                  self->user_display_name);
-  gtk_label_set_text (self->description, description);
-  gtk_widget_show (GTK_WIDGET (self->description));
+  adw_preferences_group_set_description (self->group, description);
 }
 
 /**
