@@ -115,14 +115,15 @@ Dependencies
 ------------
 
  * accounts-service
- * appstream-glib
+ * appstream
  * dbus-daemon
  * flatpak
  * gio-2.0 ≥ 2.60
  * gio-unix-2.0 ≥ 2.60
  * glib-2.0 ≥ 2.60
  * gobject-2.0 ≥ 2.60
- * gtk+-3.0
+ * gtk4
+ * libadwaita
  * polkit-gobject-1
 
 Licensing

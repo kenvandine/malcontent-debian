@@ -27,13 +27,14 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libmalcontent/malcontent.h>
 
 
 G_BEGIN_DECLS
 
 #define MCT_TYPE_USER_CONTROLS (mct_user_controls_get_type())
-G_DECLARE_FINAL_TYPE (MctUserControls, mct_user_controls, MCT, USER_CONTROLS, GtkGrid)
+G_DECLARE_FINAL_TYPE (MctUserControls, mct_user_controls, MCT, USER_CONTROLS, AdwBin)
 
 ActUser *mct_user_controls_get_user (MctUserControls *self);
 void     mct_user_controls_set_user (MctUserControls *self,
@@ -58,6 +59,9 @@ void         mct_user_controls_set_user_locale (MctUserControls *self,
 const gchar *mct_user_controls_get_user_display_name (MctUserControls *self);
 void         mct_user_controls_set_user_display_name (MctUserControls *self,
                                                       const gchar     *user_display_name);
+
+void mct_user_controls_set_description (MctUserControls *self,
+                                        const gchar     *description);
 
 void mct_user_controls_build_app_filter (MctUserControls     *self,
                                          MctAppFilterBuilder *builder);

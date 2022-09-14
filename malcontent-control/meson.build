@@ -27,8 +27,9 @@ malcontent_control = executable('malcontent-control',
     dependency('gio-2.0', version: '>= 2.44'),
     dependency('glib-2.0', version: '>= 2.54.2'),
     dependency('gobject-2.0', version: '>= 2.54'),
-    dependency('gtk+-3.0'),
+    gtk_dep,
     dependency('polkit-gobject-1'),
+    libadwaita_dep,
     libmalcontent_dep,
     libmalcontent_ui_dep,
   ],
@@ -78,12 +79,12 @@ endif
 
 xmllint = find_program('xmllint', required: false)
 if xmllint.found()
-  gtk_prefix = dependency('gtk+-3.0').get_pkgconfig_variable('prefix')
+  gtk_prefix = gtk_dep.get_variable(pkgconfig: 'prefix')
   test(
     'validate-ui', xmllint,
     args: [
       '--nonet', '--noblanks', '--noout',
-      '--relaxng', join_paths(gtk_prefix, 'share', 'gtk-3.0', 'gtkbuilder.rng'),
+      '--relaxng', join_paths(gtk_prefix, 'share', 'gtk-4.0', 'gtk4builder.rng'),
       files(
         'carousel.ui',
         'main.ui',

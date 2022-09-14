@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <appstream-glib.h>
+#include <appstream.h>
 #include <libmalcontent/malcontent.h>
 #include <locale.h>
 #include <gio/gio.h>
@@ -30,7 +30,6 @@
 #include <glib/gi18n-lib.h>
 #include <strings.h>
 
-#include "gs-content-rating.h"
 #include "restrict-applications-dialog.h"
 #include "user-controls.h"
 
@@ -74,22 +73,19 @@ static const guint32 oars_disabled_age = (guint32) -1;
  */
 struct _MctUserControls
 {
-  GtkGrid     parent_instance;
+  AdwBin     parent_instance;
 
+  GtkLabel *description_label;
   GMenu      *age_menu;
   GtkSwitch  *restrict_software_installation_switch;
-  GtkLabel   *restrict_software_installation_description;
+  AdwActionRow *restrict_software_installation_row;
   GtkSwitch  *restrict_web_browsers_switch;
-  GtkLabel   *restrict_web_browsers_description;
-  GtkButton  *oars_button;
-  GtkLabel   *oars_button_label;
-  GtkPopover *oars_popover;
+  AdwActionRow *restrict_web_browsers_row;
+  GtkMenuButton *oars_button;
+  GtkPopoverMenu *oars_popover;
   MctRestrictApplicationsDialog *restrict_applications_dialog;
   GtkLabel   *restrict_applications_description;
-  GtkListBoxRow *restrict_applications_row;
-
-  GtkListBox *application_usage_permissions_listbox;
-  GtkListBox *software_installation_permissions_listbox;
+  AdwActionRow *restrict_applications_row;
 
   GSimpleActionGroup *action_group; /* (owned) */
 
@@ -112,6 +108,7 @@ struct _MctUserControls
   ActUserAccountType  user_account_type;
   gchar              *user_locale;  /* (nullable) (owned) */
   gchar              *user_display_name;  /* (nullable) (owned) */
+  gchar              *description;  /* (nullable) (owned) */
 };
 
 static gboolean blocklist_apps_cb (gpointer data);
@@ -124,20 +121,12 @@ static void on_restrict_web_browsers_switch_active_changed_cb (GtkSwitch        
                                                                GParamSpec       *pspec,
                                                                MctUserControls *self);
 
-static void on_restrict_applications_button_clicked_cb (GtkButton *button,
-                                                        gpointer   user_data);
+static void on_restrict_applications_action_activated (GSimpleAction *action,
+                                                       GVariant      *param,
+                                                       gpointer       user_data);
 
-static gboolean on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
-                                                                 GdkEvent  *event,
-                                                                 gpointer   user_data);
-
-static void on_restrict_applications_dialog_response_cb (GtkDialog *dialog,
-                                                         gint       response_id,
-                                                         gpointer   user_data);
-
-static void on_application_usage_permissions_listbox_activated_cb (GtkListBox    *list_box,
-                                                                   GtkListBoxRow *row,
-                                                                   gpointer       user_data);
+static gboolean on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
+                                                                  gpointer   user_data);
 
 static void on_set_age_action_activated (GSimpleAction *action,
                                          GVariant      *param,
@@ -147,7 +136,7 @@ static void on_permission_allowed_cb (GObject    *obj,
                                       GParamSpec *pspec,
                                       gpointer    user_data);
 
-G_DEFINE_TYPE (MctUserControls, mct_user_controls, GTK_TYPE_GRID)
+G_DEFINE_TYPE (MctUserControls, mct_user_controls, ADW_TYPE_BIN)
 
 typedef enum
 {
@@ -158,23 +147,25 @@ typedef enum
   PROP_USER_LOCALE,
   PROP_USER_DISPLAY_NAME,
   PROP_DBUS_CONNECTION,
+  PROP_DESCRIPTION,
 } MctUserControlsProperty;
 
-static GParamSpec *properties[PROP_DBUS_CONNECTION + 1];
+static GParamSpec *properties[PROP_DESCRIPTION + 1];
 
 static const GActionEntry actions[] = {
-  { "set-age", on_set_age_action_activated, "u", NULL, NULL, { 0, }}
+  { "set-age", on_set_age_action_activated, "u", NULL, NULL, { 0, }},
+  { "restrict-applications", on_restrict_applications_action_activated, NULL, NULL, NULL, { 0, }}
 };
 
 /* Auxiliary methods */
 
-static GsContentRatingSystem
+static AsContentRatingSystem
 get_content_rating_system (MctUserControls *self)
 {
   if (self->user_locale == NULL)
-    return GS_CONTENT_RATING_SYSTEM_UNKNOWN;
+    return AS_CONTENT_RATING_SYSTEM_UNKNOWN;
 
-  return gs_utils_content_rating_system_from_locale (self->user_locale);
+  return as_content_rating_system_from_locale (self->user_locale);
 }
 
 static const gchar *
@@ -290,7 +281,7 @@ update_restricted_apps (MctUserControls *self)
 static void
 update_categories_from_language (MctUserControls *self)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   g_auto(GStrv) entries = NULL;
   const gchar *rating_system_str;
   const guint *ages;
@@ -298,12 +289,12 @@ update_categories_from_language (MctUserControls *self)
   g_autofree gchar *disabled_action = NULL;
 
   rating_system = get_content_rating_system (self);
-  rating_system_str = gs_content_rating_system_to_str (rating_system);
+  rating_system_str = as_content_rating_system_to_string (rating_system);
 
   g_debug ("Using rating system %s", rating_system_str);
 
-  entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
+  entries = as_content_rating_system_get_formatted_ages (rating_system);
+  ages = as_content_rating_system_get_csm_ages (rating_system, &n_ages);
 
   /* Fill in the age menu */
   g_menu_remove_all (self->age_menu);
@@ -357,7 +348,7 @@ G_STATIC_ASSERT ((int) MCT_APP_FILTER_OARS_VALUE_INTENSE == (int) AS_CONTENT_RAT
 static void
 update_oars_level (MctUserControls *self)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   g_autofree gchar *rating_age_category = NULL;
   guint maximum_age, selected_age;
   gsize i;
@@ -376,7 +367,7 @@ update_oars_level (MctUserControls *self)
 
       oars_value = mct_app_filter_get_oars_value (self->filter, oars_categories[i]);
       all_categories_unset &= (oars_value == MCT_APP_FILTER_OARS_VALUE_UNKNOWN);
-      age = as_content_rating_id_value_to_csm_age (oars_categories[i], (AsContentRatingValue) oars_value);
+      age = as_content_rating_attribute_to_csm_age (oars_categories[i], (AsContentRatingValue) oars_value);
 
       g_debug ("OARS value for '%s': %s", oars_categories[i], oars_value_to_string (oars_value));
 
@@ -388,7 +379,7 @@ update_oars_level (MctUserControls *self)
            all_categories_unset ? "all categories unset" : "some categories set");
 
   rating_system = get_content_rating_system (self);
-  rating_age_category = gs_utils_content_rating_age_to_str (rating_system, maximum_age);
+  rating_age_category = as_content_rating_system_format_age (rating_system, maximum_age);
 
   /* Unrestricted? */
   if (rating_age_category == NULL || all_categories_unset)
@@ -402,7 +393,7 @@ update_oars_level (MctUserControls *self)
       selected_age = maximum_age;
     }
 
-  gtk_label_set_label (self->oars_button_label, rating_age_category);
+  gtk_menu_button_set_label (self->oars_button, rating_age_category);
   self->selected_age = selected_age;
 }
 
@@ -473,19 +464,21 @@ update_labels_from_name (MctUserControls *self)
 {
   g_autofree gchar *l = NULL;
 
+  gtk_label_set_markup (self->description_label, self->description);
+
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents %s from running web browsers. Limited web content may still be available in other applications."), self->user_display_name);
-  gtk_label_set_label (self->restrict_web_browsers_description, l);
+  adw_action_row_set_subtitle (self->restrict_web_browsers_row, l);
   g_clear_pointer (&l, g_free);
 
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents specified applications from being used by %s."), self->user_display_name);
-  gtk_label_set_label (self->restrict_applications_description, l);
+  adw_action_row_set_subtitle (self->restrict_applications_row, l);
   g_clear_pointer (&l, g_free);
 
   /* Translators: The placeholder is a user’s display name. */
   l = g_strdup_printf (_("Prevents %s from installing applications."), self->user_display_name);
-  gtk_label_set_label (self->restrict_software_installation_description, l);
+  adw_action_row_set_subtitle (self->restrict_software_installation_row, l);
   g_clear_pointer (&l, g_free);
 }
 
@@ -586,29 +579,29 @@ on_restrict_web_browsers_switch_active_changed_cb (GtkSwitch        *s,
 }
 
 static void
-on_restrict_applications_button_clicked_cb (GtkButton *button,
-                                            gpointer   user_data)
+on_restrict_applications_action_activated (GSimpleAction *action,
+                                           GVariant      *param,
+                                           gpointer       user_data)
 {
   MctUserControls *self = MCT_USER_CONTROLS (user_data);
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
   /* Show the restrict applications dialogue modally, making sure to update its
    * state first. */
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  if (GTK_IS_WINDOW (toplevel))
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  if (GTK_IS_WINDOW (root))
     gtk_window_set_transient_for (GTK_WINDOW (self->restrict_applications_dialog),
-                                  GTK_WINDOW (toplevel));
+                                  GTK_WINDOW (root));
 
   mct_restrict_applications_dialog_set_user_display_name (self->restrict_applications_dialog, self->user_display_name);
   mct_restrict_applications_dialog_set_app_filter (self->restrict_applications_dialog, self->filter);
 
-  gtk_widget_show (GTK_WIDGET (self->restrict_applications_dialog));
+  gtk_window_present (GTK_WINDOW (self->restrict_applications_dialog));
 }
 
 static gboolean
-on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
-                                                 GdkEvent  *event,
-                                                 gpointer   user_data)
+on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
+                                                  gpointer   user_data)
 {
   MctUserControls *self = MCT_USER_CONTROLS (user_data);
 
@@ -624,32 +617,11 @@ on_restrict_applications_dialog_delete_event_cb (GtkWidget *widget,
 }
 
 static void
-on_restrict_applications_dialog_response_cb (GtkDialog *dialog,
-                                             gint       response_id,
-                                             gpointer   user_data)
-{
-  MctUserControls *self = MCT_USER_CONTROLS (user_data);
-
-  on_restrict_applications_dialog_delete_event_cb (GTK_WIDGET (dialog), NULL, self);
-}
-
-static void
-on_application_usage_permissions_listbox_activated_cb (GtkListBox    *list_box,
-                                                       GtkListBoxRow *row,
-                                                       gpointer       user_data)
-{
-  MctUserControls *self = MCT_USER_CONTROLS (user_data);
-
-  if (row == self->restrict_applications_row)
-    on_restrict_applications_button_clicked_cb (NULL, self);
-}
-
-static void
 on_set_age_action_activated (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
 {
-  GsContentRatingSystem rating_system;
+  AsContentRatingSystem rating_system;
   MctUserControls *self;
   g_auto(GStrv) entries = NULL;
   const guint *ages;
@@ -661,18 +633,18 @@ on_set_age_action_activated (GSimpleAction *action,
   age = g_variant_get_uint32 (param);
 
   rating_system = get_content_rating_system (self);
-  entries = gs_utils_content_rating_get_values (rating_system);
-  ages = gs_utils_content_rating_get_ages (rating_system, &n_ages);
+  entries = as_content_rating_system_get_formatted_ages (rating_system);
+  ages = as_content_rating_system_get_csm_ages (rating_system, &n_ages);
 
   /* Update the button */
   if (age == oars_disabled_age)
-    gtk_label_set_label (self->oars_button_label, _("All Ages"));
+    gtk_menu_button_set_label (self->oars_button, _("All Ages"));
 
   for (i = 0; age != oars_disabled_age && entries[i] != NULL; i++)
     {
       if (ages[i] == age)
         {
-          gtk_label_set_label (self->oars_button_label, entries[i]);
+          gtk_menu_button_set_label (self->oars_button, entries[i]);
           break;
         }
     }
@@ -687,53 +659,6 @@ on_set_age_action_activated (GSimpleAction *action,
   self->selected_age = age;
 
   schedule_update_blocklisted_apps (self);
-}
-
-static void
-list_box_header_func (GtkListBoxRow *row,
-                      GtkListBoxRow *before,
-                      gpointer       user_data)
-{
-  GtkWidget *current;
-
-  if (before == NULL)
-    {
-      gtk_list_box_row_set_header (row, NULL);
-      return;
-    }
-
-  current = gtk_list_box_row_get_header (row);
-  if (current == NULL)
-    {
-      current = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_show (current);
-      gtk_list_box_row_set_header (row, current);
-    }
-}
-
-static gboolean
-on_keynav_failed (GtkWidget        *listbox,
-                  GtkDirectionType  direction,
-                  gpointer          user_data)
-{
-  MctUserControls *self = MCT_USER_CONTROLS (user_data);
-  GtkWidget *new_widget = NULL;
-
-  /* There are currently two listboxes, so don’t over-complicate this function. */
-  if (listbox == GTK_WIDGET (self->application_usage_permissions_listbox) &&
-      direction == GTK_DIR_DOWN)
-    new_widget = GTK_WIDGET (self->software_installation_permissions_listbox);
-  else if (listbox == GTK_WIDGET (self->software_installation_permissions_listbox) &&
-           direction == GTK_DIR_UP)
-    new_widget = GTK_WIDGET (self->application_usage_permissions_listbox);
-
-  if (new_widget != NULL)
-    {
-      gtk_widget_child_focus (new_widget, direction);
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 /* GObject overrides */
@@ -851,6 +776,10 @@ mct_user_controls_get_property (GObject    *object,
       g_value_set_object (value, self->dbus_connection);
       break;
 
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, self->description);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -894,6 +823,10 @@ mct_user_controls_set_property (GObject      *object,
       /* Construct only. */
       g_assert (self->dbus_connection == NULL);
       self->dbus_connection = g_value_dup_object (value);
+      break;
+
+    case PROP_DESCRIPTION:
+      mct_user_controls_set_description (self, g_value_get_string (value));
       break;
 
     default:
@@ -1015,6 +948,25 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
                            G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * MctUserControls:description: (nullable)
+   *
+   * The description for the currently selected user account, or %NULL if no
+   * user is selected.
+   *
+   * If set, it must be valid UTF-8 and non-empty.
+   *
+   * Since: 0.11.0
+   */
+  properties[PROP_DESCRIPTION] =
+      g_param_spec_string ("description",
+                           "Description",
+                           "The description for the currently selected user account, or %NULL if no user is selected.",
+                           NULL,
+                           G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS |
+                           G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * MctUserControls:dbus-connection: (not nullable)
    *
    * A connection to the system bus. This will be used for retrieving details
@@ -1037,32 +989,24 @@ mct_user_controls_class_init (MctUserControlsClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/freedesktop/MalcontentUi/ui/user-controls.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, age_menu);
+  gtk_widget_class_bind_template_child (widget_class, MctUserControls, description_label);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_software_installation_switch);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_software_installation_description);
+  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_software_installation_row);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_web_browsers_switch);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_web_browsers_description);
+  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_web_browsers_row);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, oars_button);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, oars_button_label);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, oars_popover);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_dialog);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_description);
   gtk_widget_class_bind_template_child (widget_class, MctUserControls, restrict_applications_row);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, application_usage_permissions_listbox);
-  gtk_widget_class_bind_template_child (widget_class, MctUserControls, software_installation_permissions_listbox);
 
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_installation_switch_active_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_restrict_web_browsers_switch_active_changed_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_button_clicked_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_delete_event_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_response_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_application_usage_permissions_listbox_activated_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_keynav_failed);
+  gtk_widget_class_bind_template_callback (widget_class, on_restrict_applications_dialog_close_request_cb);
 }
 
 static void
 mct_user_controls_init (MctUserControls *self)
 {
-  g_autoptr(GError) error = NULL;
   g_autoptr(GtkCssProvider) provider = NULL;
 
   /* Ensure the types used in the UI are registered. */
@@ -1073,9 +1017,9 @@ mct_user_controls_init (MctUserControls *self)
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider,
                                        "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 
   self->selected_age = (guint) -1;
 
@@ -1091,13 +1035,7 @@ mct_user_controls_init (MctUserControls *self)
                                   "permissions",
                                   G_ACTION_GROUP (self->action_group));
 
-  gtk_popover_bind_model (self->oars_popover, G_MENU_MODEL (self->age_menu), NULL);
-
-  /* Automatically add separators between rows. */
-  gtk_list_box_set_header_func (self->application_usage_permissions_listbox,
-                                list_box_header_func, NULL, NULL);
-  gtk_list_box_set_header_func (self->software_installation_permissions_listbox,
-                                list_box_header_func, NULL, NULL);
+  gtk_popover_menu_set_menu_model (self->oars_popover, G_MENU_MODEL (self->age_menu));
 }
 
 /**
@@ -1463,6 +1401,38 @@ mct_user_controls_set_user_display_name (MctUserControls *self,
 }
 
 /**
+ * mct_user_controls_set_description:
+ * @self: an #MctUserControls
+ * @description: (nullable) (transfer none): the description shown
+ *    above the controls, or %NULL if none.
+ *
+ * Set the value of #MctUserControls:description.
+ *
+ * Since: 0.11.0
+ */
+void
+mct_user_controls_set_description (MctUserControls *self,
+                                   const gchar     *description)
+{
+  g_return_if_fail (MCT_IS_USER_CONTROLS (self));
+  g_return_if_fail (description != NULL);
+
+  /* If we have pending unsaved changes from the previous user, force them to be
+   * saved first. */
+  flush_update_blocklisted_apps (self);
+
+  if (g_strcmp0 (self->description, description) == 0)
+    return;
+
+  g_clear_pointer (&self->description, g_free);
+  self->description = g_strdup (description);
+
+  setup_parental_control_settings (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DESCRIPTION]);
+}
+
+/**
  * mct_user_controls_build_app_filter:
  * @self: an #MctUserControls
  * @builder: an existing #MctAppFilterBuilder to modify
@@ -1504,7 +1474,7 @@ mct_user_controls_build_app_filter (MctUserControls     *self,
       const gchar *oars_category;
 
       oars_category = oars_categories[i];
-      oars_value = (MctAppFilterOarsValue) as_content_rating_id_csm_age_to_value (oars_category, self->selected_age);
+      oars_value = (MctAppFilterOarsValue) as_content_rating_attribute_from_csm_age (oars_category, self->selected_age);
 
       g_debug ("\t\t → %s: %s", oars_category, oars_value_to_string (oars_value));
 
