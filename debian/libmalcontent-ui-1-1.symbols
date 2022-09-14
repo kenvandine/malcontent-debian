@@ -21,6 +21,7 @@ libmalcontent-ui-1.so.1 libmalcontent-ui-1-1 #MINVER#
  mct_user_controls_get_user_display_name@Base 0.6.0
  mct_user_controls_get_user_locale@Base 0.6.0
  mct_user_controls_set_app_filter@Base 0.6.0
+ mct_user_controls_set_description@Base 0.11.0
  mct_user_controls_set_permission@Base 0.6.0
  mct_user_controls_set_user@Base 0.6.0
  mct_user_controls_set_user_account_type@Base 0.6.0
