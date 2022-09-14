@@ -1,5 +1,5 @@
-libmalcontent-ui-0.so.0 libmalcontent-ui-0-0 #MINVER#
-* Build-Depends-Package: libmalcontent-ui-0-dev
+libmalcontent-ui-1.so.1 libmalcontent-ui-1-1 #MINVER#
+* Build-Depends-Package: libmalcontent-ui-1-dev
  mct_restrict_applications_dialog_build_app_filter@Base 0.6.0
  mct_restrict_applications_dialog_get_app_filter@Base 0.6.0
  mct_restrict_applications_dialog_get_type@Base 0.6.0

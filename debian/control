@@ -138,7 +138,7 @@ Description: GObject introspection bindings for libmalcontent
  .
  This package contains the GObject introspection bindings for libmalcontent.
 
-Package: libmalcontent-ui-0-0
+Package: libmalcontent-ui-1-1
 Build-Profiles: <!pkg.malcontent.nogui>
 Section: libs
 Architecture: linux-any
@@ -161,19 +161,19 @@ Description: library for parental control of applications - GTK+ widgets and dia
  This package contains the libmalcontent-ui library to display GTK+ widgets and
  dialogs.
 
-Package: libmalcontent-ui-0-dev
+Package: libmalcontent-ui-dev
 Build-Profiles: <!pkg.malcontent.nogui>
 Section: libdevel
 Architecture: linux-any
 Multi-Arch: same
-Depends: gir1.2-malcontentui-0 (= ${binary:Version}),
+Depends: gir1.2-malcontentui-1 (= ${binary:Version}),
          libaccountsservice-dev,
          libappstream-glib-dev,
          libflatpak-dev,
          libglib2.0-dev (>= 2.60),
          libgtk-3-dev,
          libmalcontent-0-dev (= ${binary:Version}),
-         libmalcontent-ui-0-0 (= ${binary:Version}),
+         libmalcontent-ui-1-1 (= ${binary:Version}),
          ${misc:Depends}
 Description: development files for libmalcontent-ui
  malcontent implements support for restricting the type of content accessible
@@ -191,7 +191,7 @@ Description: development files for libmalcontent-ui
  .
  This package contains the development files for libmalcontent-ui.
 
-Package: gir1.2-malcontentui-0
+Package: gir1.2-malcontentui-1
 Build-Profiles: <!pkg.malcontent.nogui>
 Section: introspection
 Architecture: linux-any
