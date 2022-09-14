@@ -23,7 +23,7 @@ Build-Depends: appstream-util,
                meson (>= 0.50.0),
                policykit-1
 Rules-Requires-Root: no
-Standards-Version: 4.6.0
+Standards-Version: 4.6.1
 Section: admin
 Homepage: https://gitlab.freedesktop.org/pwithnall/malcontent/
 Vcs-Browser: https://salsa.debian.org/freedesktop-team/malcontent
