@@ -1,8 +1,14 @@
-malcontent (0.11.0-1) UNRELEASED; urgency=medium
+malcontent (0.11.0-1) unstable; urgency=medium
 
+  * Team upload
   * New upstream release
+  * Rename binary packages for UI API bump
+  * Build with GTK4 & libadwaita instead of GTK3
+  * debian/control: Build-Depend on libappstream-dev
+  * debian/libmalcontent-ui-1-1.symbols: Add new symbol
+  * Enable all hardening flags
 
- -- Jeremy Bicha <jbicha@ubuntu.com>  Wed, 14 Sep 2022 11:13:18 -0400
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Wed, 14 Sep 2022 11:33:02 -0400
 
 malcontent (0.10.5-1) unstable; urgency=medium
 
