@@ -1,3 +1,10 @@
+malcontent (0.11.0-3) unstable; urgency=medium
+
+  * Team upload
+  * Update libmalcontent-ui-dev's Depends to match its pkgconfig file
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 19 Sep 2022 11:40:28 -0400
+
 malcontent (0.11.0-2) unstable; urgency=medium
 
   * Team upload
