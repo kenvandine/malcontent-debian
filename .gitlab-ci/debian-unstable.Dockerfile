@@ -1,6 +1,7 @@
 FROM debian:unstable
 
 RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
+    desktop-file-utils \
     gettext \
     git \
     gtk-doc-tools \
@@ -8,6 +9,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     libadwaita-1-dev \
     libaccountsservice-dev \
     libappstream-dev \
+    libdbus-1-dev \
     libflatpak-dev \
     libgirepository1.0-dev \
     libglib2.0-dev \
