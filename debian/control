@@ -20,7 +20,7 @@ Build-Depends: appstream-util,
                libpolkit-gobject-1-dev,
                libxml2-utils,
                meson (>= 0.50.0),
-               policykit-1
+               polkitd | policykit-1,
 Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Section: admin
@@ -33,7 +33,7 @@ Architecture: all
 Depends: accountsservice,
          gir1.2-glib-2.0,
          gir1.2-malcontent-0 (>= ${binary:Version}),
-         policykit-1,
+         polkitd | policykit-1,
          python3,
          python3-gi,
          ${misc:Depends}
