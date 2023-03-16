@@ -1,3 +1,21 @@
+Overview of changes in malcontent 0.11.1
+========================================
+
+* Bugs fixed:
+  - !147 0.11.0
+  - !148 build: Switch to Meson’s gnome.post_install function
+  - !149 po: add Georgian translation
+  - !150 Update Hungarian translation
+  - !151 Update Hindi (hi) translation
+  - !152 doc: Add Turkish Translation
+
+* Translation updates:
+  - Georgian (NorwayFun)
+  - Hindi (Hemish)
+  - Hungarian (Balázs Úr)
+  - Turkish (Sabri Unal)
+
+
 Overview of changes in malcontent 0.11.0
 ========================================
 
