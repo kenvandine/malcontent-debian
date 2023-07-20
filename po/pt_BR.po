@@ -404,9 +404,17 @@ msgstr ""
 msgid "Create _Child User"
 msgstr "_Criar usuário filho"
 
+#: malcontent-control/main.ui:182
+msgid "No Standard User Accounts"
+msgstr "Não há conta de usuário padrão"
+
 #: malcontent-control/main.ui:202
 msgid "Loading…"
 msgstr "Carregando…"
+
+#: malcontent-control/main.ui:210
+msgid "_User Settings"
+msgstr "Configurações do _Usuário"
 
 #: malcontent-control/main.ui:265
 msgid "_Help"
