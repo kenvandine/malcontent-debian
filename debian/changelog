@@ -1,8 +1,10 @@
-malcontent (0.11.1-1) UNRELEASED; urgency=medium
+malcontent (0.11.1-1) unstable; urgency=medium
 
+  * Team upload
   * New upstream release
+  * Drop alternate dependency on policykit-1
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 19 Sep 2023 13:44:55 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 19 Sep 2023 13:48:15 -0400
 
 malcontent (0.11.0-4) unstable; urgency=medium
 
