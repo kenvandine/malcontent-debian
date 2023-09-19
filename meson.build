@@ -1,6 +1,6 @@
 project('malcontent', 'c',
-  version : '0.11.0',
-  meson_version : '>= 0.57.0',
+  version : '0.11.1',
+  meson_version : '>= 0.59.0',
   license: ['LGPL-2.1-or-later', 'GPL-2.0-or-later'],
   default_options : [
     'buildtype=debugoptimized',
@@ -146,8 +146,11 @@ endif
 subdir('malcontent-client')
 if get_option('ui').enabled()
   subdir('malcontent-control')
+
+  gnome.post_install(
+    gtk_update_icon_cache: true,
+    update_desktop_database: true,
+  )
 endif
 subdir('pam')
 subdir('po')
-
-meson.add_install_script('build-aux/meson_post_install.py')
