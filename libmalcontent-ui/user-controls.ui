@@ -99,7 +99,7 @@
                 <property name="title" translatable="yes">Application _Suitability</property>
                 <property name="use_underline">True</property>
                 <property name="activatable_widget">oars_button</property>
-                <property name="subtitle" translatable="yes">Restricts browsing or installation of applications to applications suitable for certain ages or above.</property>
+                <property name="subtitle" translatable="yes">Restricts the browsing or installation of applications unsuitable for this age or younger.</property>
                 <property name="subtitle_lines">0</property>
                 <property name="focusable">False</property>
                 <child>
