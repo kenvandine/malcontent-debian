@@ -9,7 +9,7 @@
         <property name="selection-mode">none</property>
 
         <child type="placeholder">
-          <object class="GtkLabel" id="placeholder">
+          <object class="GtkLabel">
             <property name="label" translatable="yes">No applications found to restrict.</property>
           </object>
         </child>

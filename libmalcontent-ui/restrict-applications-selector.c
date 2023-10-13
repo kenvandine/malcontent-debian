@@ -61,7 +61,6 @@ struct _MctRestrictApplicationsSelector
   GtkBox parent_instance;
 
   GtkListBox *listbox;
-  GtkLabel *placeholder;
 
   GList *cached_apps;  /* (nullable) (owned) (element-type GAppInfo) */
   GListStore *apps;
@@ -223,7 +222,6 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
   gtk_widget_class_set_template_from_resource (widget_class, "/org/freedesktop/MalcontentUi/ui/restrict-applications-selector.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, listbox);
-  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, placeholder);
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, apps);
 }
 
@@ -244,10 +242,6 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
                            create_row_for_app_cb,
                            self,
                            NULL);
-
-  /* Hide placeholder if not empty */
-  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->apps));
-  gtk_widget_set_visible (GTK_WIDGET (self->placeholder), n_apps != 0);
 
   self->blocklisted_apps = g_hash_table_new_full (g_direct_hash,
                                                   g_direct_equal,
