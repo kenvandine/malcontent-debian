@@ -55,10 +55,17 @@ struct _MctRestrictApplicationsDialog
 
   MctRestrictApplicationsSelector *selector;
   AdwPreferencesGroup *group;
+  GtkSearchEntry *search_entry;
 
   MctAppFilter *app_filter;  /* (owned) (not nullable) */
   gchar *user_display_name;  /* (owned) (nullable) */
 };
+
+static void search_entry_stop_search_cb (GtkSearchEntry *search_entry,
+                                         gpointer        user_data);
+static gboolean focus_search_cb (GtkWidget *widget,
+                                 GVariant  *arguments,
+                                 gpointer   user_data);
 
 G_DEFINE_TYPE (MctRestrictApplicationsDialog, mct_restrict_applications_dialog, ADW_TYPE_PREFERENCES_WINDOW)
 
@@ -141,6 +148,19 @@ mct_restrict_applications_dialog_dispose (GObject *object)
 }
 
 static void
+mct_restrict_applications_dialog_map (GtkWidget *widget)
+{
+  MctRestrictApplicationsDialog *self = (MctRestrictApplicationsDialog *)widget;
+
+  GTK_WIDGET_CLASS (mct_restrict_applications_dialog_parent_class)->map (widget);
+
+  /* Clear and focus the search entry, in case the dialogue is being shown for
+   * a second time. */
+  gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
+static void
 mct_restrict_applications_dialog_class_init (MctRestrictApplicationsDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -150,6 +170,8 @@ mct_restrict_applications_dialog_class_init (MctRestrictApplicationsDialogClass 
   object_class->get_property = mct_restrict_applications_dialog_get_property;
   object_class->set_property = mct_restrict_applications_dialog_set_property;
   object_class->dispose = mct_restrict_applications_dialog_dispose;
+
+  widget_class->map = mct_restrict_applications_dialog_map;
 
   /**
    * MctRestrictApplicationsDialog:app-filter: (not nullable)
@@ -197,6 +219,15 @@ mct_restrict_applications_dialog_class_init (MctRestrictApplicationsDialogClass 
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, selector);
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, group);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsDialog, search_entry);
+
+  gtk_widget_class_bind_template_callback (widget_class, search_entry_stop_search_cb);
+
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_f, GDK_CONTROL_MASK,
+                                focus_search_cb,
+                                NULL);
+
 }
 
 static void
@@ -206,6 +237,8 @@ mct_restrict_applications_dialog_init (MctRestrictApplicationsDialog *self)
   g_type_ensure (MCT_TYPE_RESTRICT_APPLICATIONS_SELECTOR);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_search_entry_set_key_capture_widget (self->search_entry, GTK_WIDGET (self));
 }
 
 static void
@@ -223,6 +256,25 @@ update_description (MctRestrictApplicationsDialog *self)
   description = g_strdup_printf (_("Restrict %s from using the following installed applications."),
                                  self->user_display_name);
   adw_preferences_group_set_description (self->group, description);
+}
+
+static void
+search_entry_stop_search_cb (GtkSearchEntry *search_entry,
+                             gpointer        user_data)
+{
+  /* Clear the search text as the search filtering is bound to that. */
+  gtk_editable_set_text (GTK_EDITABLE (search_entry), "");
+}
+
+static gboolean
+focus_search_cb (GtkWidget *widget,
+                 GVariant  *arguments,
+                 gpointer   user_data)
+{
+  MctRestrictApplicationsDialog *self = MCT_RESTRICT_APPLICATIONS_DIALOG (widget);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+  return TRUE;
 }
 
 /**
