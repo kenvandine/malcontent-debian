@@ -14,7 +14,21 @@
             <!-- Translated dynamically: -->
             <property name="description">Restrict {username} from using the following installed applications.</property>
             <child>
-              <object class="MctRestrictApplicationsSelector" id="selector" />
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="placeholder-text" translatable="yes">Search for applications…</property>
+                    <signal name="stop-search" handler="search_entry_stop_search_cb" />
+                  </object>
+                </child>
+                <child>
+                  <object class="MctRestrictApplicationsSelector" id="selector">
+                    <property name="search" bind-source="search_entry" bind-property="text" />
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
         </child>

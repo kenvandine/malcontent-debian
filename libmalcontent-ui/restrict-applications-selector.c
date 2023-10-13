@@ -41,6 +41,7 @@ static void app_info_changed_cb (GAppInfoMonitor *monitor,
 static void reload_apps (MctRestrictApplicationsSelector *self);
 static GtkWidget *create_row_for_app_cb (gpointer item,
                                          gpointer user_data);
+static char *app_info_dup_name (GAppInfo *app_info);
 
 /**
  * MctRestrictApplicationsSelector:
@@ -54,6 +55,11 @@ static GtkWidget *create_row_for_app_cb (gpointer item,
  * #MctAppFilterBuilder using
  * mct_restrict_applications_selector_build_app_filter().
  *
+ * Search terms may be applied using #MctRestrictApplicationsSelector:search.
+ * These will filter the list of displayed apps so that only ones matching the
+ * search terms (by name, using UTF-8 normalisation and casefolding) will be
+ * displayed.
+ *
  * Since: 0.5.0
  */
 struct _MctRestrictApplicationsSelector
@@ -64,6 +70,8 @@ struct _MctRestrictApplicationsSelector
 
   GList *cached_apps;  /* (nullable) (owned) (element-type GAppInfo) */
   GListStore *apps;
+  GtkFilterListModel *filtered_apps;
+  GtkStringFilter *search_filter;
   GAppInfoMonitor *app_info_monitor;  /* (owned) */
   gulong app_info_monitor_changed_id;
   GHashTable *blocklisted_apps; /* (owned) (element-type GAppInfo) */
@@ -74,6 +82,8 @@ struct _MctRestrictApplicationsSelector
   FlatpakInstallation *user_installation; /* (owned) */
 
   GtkCssProvider *css_provider;  /* (owned) */
+
+  gchar *search;  /* (nullable) (owned) */
 };
 
 G_DEFINE_TYPE (MctRestrictApplicationsSelector, mct_restrict_applications_selector, GTK_TYPE_BOX)
@@ -81,9 +91,10 @@ G_DEFINE_TYPE (MctRestrictApplicationsSelector, mct_restrict_applications_select
 typedef enum
 {
   PROP_APP_FILTER = 1,
+  PROP_SEARCH,
 } MctRestrictApplicationsSelectorProperty;
 
-static GParamSpec *properties[PROP_APP_FILTER + 1];
+static GParamSpec *properties[PROP_SEARCH + 1];
 
 enum {
   SIGNAL_CHANGED,
@@ -124,6 +135,9 @@ mct_restrict_applications_selector_get_property (GObject    *object,
     case PROP_APP_FILTER:
       g_value_set_boxed (value, self->app_filter);
       break;
+    case PROP_SEARCH:
+      g_value_set_string (value, self->search);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -142,6 +156,9 @@ mct_restrict_applications_selector_set_property (GObject      *object,
     {
     case PROP_APP_FILTER:
       mct_restrict_applications_selector_set_app_filter (self, g_value_get_boxed (value));
+      break;
+    case PROP_SEARCH:
+      mct_restrict_applications_selector_set_search (self, g_value_get_string (value));
       break;
 
     default:
@@ -167,6 +184,7 @@ mct_restrict_applications_selector_dispose (GObject *object)
   g_clear_object (&self->system_installation);
   g_clear_object (&self->user_installation);
   g_clear_object (&self->css_provider);
+  g_clear_pointer (&self->search, g_free);
 
   G_OBJECT_CLASS (mct_restrict_applications_selector_parent_class)->dispose (object);
 }
@@ -201,6 +219,23 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * MctRestrictApplicationsSelector:search: (nullable)
+   *
+   * Search terms to filter the displayed list of apps by, or %NULL to not
+   * filter the search.
+   *
+   * Since: 0.12.0
+   */
+  properties[PROP_SEARCH] =
+      g_param_spec_string ("search",
+                           "Search",
+                           "Search terms to filter the displayed list of apps by.",
+                           NULL,
+                           G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS |
+                           G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
   /**
@@ -223,12 +258,15 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, listbox);
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, apps);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, filtered_apps);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, search_filter);
+
+  gtk_widget_class_bind_template_callback (widget_class, app_info_dup_name);
 }
 
 static void
 mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
 {
-  guint n_apps;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -238,7 +276,7 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
                         (GCallback) app_info_changed_cb, self);
 
   gtk_list_box_bind_model (self->listbox,
-                           G_LIST_MODEL (self->apps),
+                           G_LIST_MODEL (self->filtered_apps),
                            create_row_for_app_cb,
                            self,
                            NULL);
@@ -357,6 +395,12 @@ create_row_for_app_cb (gpointer item,
   g_signal_connect (w, "notify::active", G_CALLBACK (on_switch_active_changed_cb), self);
 
   return row;
+}
+
+static char *
+app_info_dup_name (GAppInfo *app_info)
+{
+  return g_strdup (g_app_info_get_name (app_info));
 }
 
 static gint
@@ -767,7 +811,7 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
   self->app_filter = mct_app_filter_ref (app_filter);
 
   /* Update the status of each app row. */
-  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->apps));
+  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->filtered_apps));
 
   for (guint i = 0; i < n_apps; i++)
     {
@@ -785,4 +829,51 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_APP_FILTER]);
+}
+
+/**
+ * mct_restrict_applications_selector_get_search:
+ * @self: an #MctRestrictApplicationsSelector
+ *
+ * Get the value of #MctRestrictApplicationsSelector:search.
+ *
+ * Returns: current search terms, or %NULL if no search filtering is active
+ * Since: 0.12.0
+ */
+const gchar *
+mct_restrict_applications_selector_get_search (MctRestrictApplicationsSelector *self)
+{
+  g_return_val_if_fail (MCT_IS_RESTRICT_APPLICATIONS_SELECTOR (self), NULL);
+
+  return self->search;
+}
+
+/**
+ * mct_restrict_applications_selector_set_search:
+ * @self: an #MctRestrictApplicationsSelector
+ * @search: (nullable): search terms, or %NULL to not filter the app list
+ *
+ * Set the value of #MctRestrictApplicationsSelector:search, or clear it to
+ * %NULL.
+ *
+ * Since: 0.12.0
+ */
+void
+mct_restrict_applications_selector_set_search (MctRestrictApplicationsSelector *self,
+                                               const gchar                     *search)
+{
+  g_return_if_fail (MCT_IS_RESTRICT_APPLICATIONS_SELECTOR (self));
+
+  /* Squash empty search terms down to nothing. */
+  if (search != NULL && *search == '\0')
+    search = NULL;
+
+  if (g_strcmp0 (search, self->search) == 0)
+    return;
+
+  g_clear_pointer (&self->search, g_free);
+  self->search = g_strdup (search);
+
+  gtk_string_filter_set_search (self->search_filter, self->search);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH]);
 }

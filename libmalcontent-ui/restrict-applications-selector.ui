@@ -26,4 +26,15 @@
   <object class="GListStore" id="apps">
     <property name="item-type">GAppInfo</property>
   </object>
+
+  <object class="GtkFilterListModel" id="filtered_apps">
+    <property name="model">apps</property>
+    <property name="filter">search_filter</property>
+  </object>
+
+  <object class="GtkStringFilter" id="search_filter">
+    <property name="expression">
+      <closure type="gchararray" function="app_info_dup_name" />
+    </property>
+  </object>
 </interface>
