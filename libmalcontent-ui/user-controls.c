@@ -702,6 +702,7 @@ mct_user_controls_finalize (GObject *object)
   g_clear_object (&self->user);
   g_clear_pointer (&self->user_locale, g_free);
   g_clear_pointer (&self->user_display_name, g_free);
+  g_clear_pointer (&self->description, g_free);
 
   if (self->permission != NULL && self->permission_allowed_id != 0)
     {
