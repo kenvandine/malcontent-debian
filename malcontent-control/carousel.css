@@ -28,3 +28,12 @@ carousel-item {
   border: none;
   color: @theme_fg_color;
 }
+
+carousel-item:focus:focus-visible avatar {
+  /* this should actually be $focus_border_color from
+   * gtk/theme/Default/_colors.scss, but we have to simplify the theming slightly */
+  outline-color: @theme_selected_bg_color;
+  outline-offset: -2px;
+  outline-width: 2px;
+  outline-style: solid;
+}
