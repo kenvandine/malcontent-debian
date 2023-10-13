@@ -20,4 +20,8 @@
       </object>
     </child>
   </template>
+
+  <object class="GListStore" id="apps">
+    <property name="item-type">GAppInfo</property>
+  </object>
 </interface>

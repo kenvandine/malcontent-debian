@@ -64,7 +64,7 @@ struct _MctRestrictApplicationsSelector
   GtkLabel *placeholder;
 
   GList *cached_apps;  /* (nullable) (owned) (element-type GAppInfo) */
-  GListStore *apps;  /* (owned) */
+  GListStore *apps;
   GAppInfoMonitor *app_info_monitor;  /* (owned) */
   gulong app_info_monitor_changed_id;
   GHashTable *blocklisted_apps; /* (owned) (element-type GAppInfo) */
@@ -156,7 +156,6 @@ mct_restrict_applications_selector_dispose (GObject *object)
   MctRestrictApplicationsSelector *self = (MctRestrictApplicationsSelector *)object;
 
   g_clear_pointer (&self->blocklisted_apps, g_hash_table_unref);
-  g_clear_object (&self->apps);
   g_clear_list (&self->cached_apps, g_object_unref);
 
   if (self->app_info_monitor != NULL && self->app_info_monitor_changed_id != 0)
@@ -225,6 +224,7 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, listbox);
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, placeholder);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, apps);
 }
 
 static void
@@ -233,9 +233,6 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
   guint n_apps;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->apps = g_list_store_new (G_TYPE_APP_INFO);
-  self->cached_apps = NULL;
 
   self->app_info_monitor = g_app_info_monitor_get ();
   self->app_info_monitor_changed_id =
