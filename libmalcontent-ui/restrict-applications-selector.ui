@@ -11,6 +11,8 @@
         <child type="placeholder">
           <object class="GtkLabel">
             <property name="label" translatable="yes">No applications found to restrict.</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
           </object>
         </child>
 
