@@ -1,16 +1,16 @@
 # Swedish translations for malcontent package.
-# Copyright (C) 2020 THE malcontent'S COPYRIGHT HOLDER
+# Copyright © 2020-2023 malcontent's COPYRIGHT HOLDER
 # This file is distributed under the same license as the malcontent package.
 # Automatically generated, 2020.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2020.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: malcontent\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
-"POT-Creation-Date: 2020-12-09 03:28+0000\n"
-"PO-Revision-Date: 2020-12-17 18:28+0100\n"
+"POT-Creation-Date: 2023-10-13 16:18+0000\n"
+"PO-Revision-Date: 2023-10-20 21:11+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: accounts-service/com.endlessm.ParentalControls.policy.in:4
 msgid "Change your own app filter"
@@ -165,79 +165,36 @@ msgstr "Sessionsgräns för användare %u har en okänd typ ”%u”"
 msgid "Session limit for user %u has invalid daily schedule %u–%u"
 msgstr "Sessionsgräns för användare %u har ett ogiltigt dagsschema %u–%u"
 
-#. TRANSLATORS: This is the formatting of English and localized name
-#. of the rating e.g. "Adults Only (solo adultos)"
-#: libmalcontent-ui/gs-content-rating.c:75
-#, c-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-# Alla åldrar i MDA-systemet
-#: libmalcontent-ui/gs-content-rating.c:209
-msgid "General"
-msgstr "Alla"
-
-#: libmalcontent-ui/gs-content-rating.c:218
-msgid "ALL"
-msgstr "ALLA"
-
-#: libmalcontent-ui/gs-content-rating.c:222
-#: libmalcontent-ui/gs-content-rating.c:485
-msgid "Adults Only"
-msgstr "Endast för vuxna"
-
-#: libmalcontent-ui/gs-content-rating.c:224
-#: libmalcontent-ui/gs-content-rating.c:484
-msgid "Mature"
-msgstr "Mogen"
-
-#: libmalcontent-ui/gs-content-rating.c:226
-#: libmalcontent-ui/gs-content-rating.c:483
-msgid "Teen"
-msgstr "Tonåring"
-
-#: libmalcontent-ui/gs-content-rating.c:228
-#: libmalcontent-ui/gs-content-rating.c:482
-msgid "Everyone 10+"
-msgstr "Alla över 10 år"
-
-#: libmalcontent-ui/gs-content-rating.c:230
-#: libmalcontent-ui/gs-content-rating.c:481
-msgid "Everyone"
-msgstr "Alla"
-
-#: libmalcontent-ui/gs-content-rating.c:232
-#: libmalcontent-ui/gs-content-rating.c:480
-msgid "Early Childhood"
-msgstr "Tidig barndom"
-
 #. Translators: the placeholder is a user’s full name
-#: libmalcontent-ui/restrict-applications-dialog.c:222
+#: libmalcontent-ui/restrict-applications-dialog.c:256
 #, c-format
 msgid "Restrict %s from using the following installed applications."
 msgstr "Begränsa %s från att använda följande installerade program."
 
 #: libmalcontent-ui/restrict-applications-dialog.ui:6
-#: libmalcontent-ui/restrict-applications-dialog.ui:12
 msgid "Restrict Applications"
 msgstr "Begränsa program"
 
-#: libmalcontent-ui/restrict-applications-selector.ui:24
+#: libmalcontent-ui/restrict-applications-dialog.ui:22
+msgid "Search for applications…"
+msgstr "Sök efter program…"
+
+#: libmalcontent-ui/restrict-applications-selector.ui:13
 msgid "No applications found to restrict."
 msgstr "Inga program att begränsa hittades."
 
 #. Translators: this is the full name for an unknown user account.
-#: libmalcontent-ui/user-controls.c:207 libmalcontent-ui/user-controls.c:218
+#: libmalcontent-ui/user-controls.c:198 libmalcontent-ui/user-controls.c:209
 msgid "unknown"
 msgstr "okänd"
 
-#: libmalcontent-ui/user-controls.c:312 libmalcontent-ui/user-controls.c:397
-#: libmalcontent-ui/user-controls.c:669
+#: libmalcontent-ui/user-controls.c:303 libmalcontent-ui/user-controls.c:388
+#: libmalcontent-ui/user-controls.c:641
 msgid "All Ages"
 msgstr "Alla åldrar"
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:477
+#: libmalcontent-ui/user-controls.c:470
 #, c-format
 msgid ""
 "Prevents %s from running web browsers. Limited web content may still be "
@@ -247,48 +204,48 @@ msgstr ""
 "fortfarande finnas tillgängligt i andra program."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:482
+#: libmalcontent-ui/user-controls.c:475
 #, c-format
 msgid "Prevents specified applications from being used by %s."
 msgstr "Förhindrar angivna program från att användas av %s."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:487
+#: libmalcontent-ui/user-controls.c:480
 #, c-format
 msgid "Prevents %s from installing applications."
 msgstr "Förhindrar %s från att installera program."
 
-#: libmalcontent-ui/user-controls.ui:16
+#: libmalcontent-ui/user-controls.ui:25
 msgid "Application Usage Restrictions"
 msgstr "Begränsningar av programanvändning"
 
-#: libmalcontent-ui/user-controls.ui:67
+#: libmalcontent-ui/user-controls.ui:28
 msgid "Restrict _Web Browsers"
 msgstr "Begränsa _webbläsare"
 
-#: libmalcontent-ui/user-controls.ui:151
+#: libmalcontent-ui/user-controls.ui:51
 msgid "_Restrict Applications"
 msgstr "_Begränsa program"
 
-#: libmalcontent-ui/user-controls.ui:230
+#: libmalcontent-ui/user-controls.ui:73
 msgid "Software Installation Restrictions"
 msgstr "Begränsningar av programvaruinstallation"
 
-#: libmalcontent-ui/user-controls.ui:280
+#: libmalcontent-ui/user-controls.ui:77
 msgid "Restrict Application _Installation"
 msgstr "Begränsa _installation av program"
 
-#: libmalcontent-ui/user-controls.ui:365
+#: libmalcontent-ui/user-controls.ui:99
 msgid "Application _Suitability"
 msgstr "_Lämplighet för program"
 
-#: libmalcontent-ui/user-controls.ui:387
+#: libmalcontent-ui/user-controls.ui:102
 msgid ""
-"Restricts browsing or installation of applications to applications suitable "
-"for certain ages or above."
+"Restricts the browsing or installation of applications unsuitable for this "
+"age or younger."
 msgstr ""
-"Begränsar bläddring bland eller installation av program till program som är "
-"lämpliga för vissa åldrar och uppåt."
+"Begränsar bläddring bland eller installation av program som är olämpliga för "
+"denna ålder och yngre."
 
 #. Translators: This documents the --user command line option to malcontent-control:
 #: malcontent-control/application.c:102
@@ -300,44 +257,44 @@ msgstr "Användare att välja i användargränssnittet"
 msgid "USERNAME"
 msgstr "ANVÄNDARNAMN"
 
-#: malcontent-control/application.c:115
+#: malcontent-control/application.c:116
 msgid "— view and edit parental controls"
 msgstr "— visa och redigera föräldrakontroller"
 
 #. Translators: This is the title of the main window
 #. Translators: the name of the application as it appears in a software center
-#: malcontent-control/application.c:122 malcontent-control/main.ui:12
+#: malcontent-control/application.c:123 malcontent-control/main.ui:17
 #: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:9
 #: malcontent-control/org.freedesktop.MalcontentControl.desktop.in:3
 msgid "Parental Controls"
 msgstr "Föräldrakontroller"
 
-#: malcontent-control/application.c:308
+#: malcontent-control/application.c:309
 msgid "Copyright © 2019, 2020 Endless Mobile, Inc."
 msgstr "Copyright © 2019, 2020 Endless Mobile, Inc."
 
 #. Translators: this should be "translated" to the
 #. names of people who have translated Malcontent into
 #. this language, one per line.
-#: malcontent-control/application.c:313
+#: malcontent-control/application.c:314
 msgid "translator-credits"
 msgstr "Anders Jonsson <anders.jonsson@norsjovallen.se>"
 
 #. Translators: "Malcontent" is the brand name of this
 #. project, so should not be translated.
-#: malcontent-control/application.c:319
+#: malcontent-control/application.c:320
 msgid "Malcontent Website"
 msgstr "Webbplats för Malcontent"
 
-#: malcontent-control/application.c:337
+#: malcontent-control/application.c:341
 msgid "The help contents could not be displayed"
 msgstr "Hjälpinnehållet kunde inte visas"
 
-#: malcontent-control/application.c:374
+#: malcontent-control/application.c:388
 msgid "Failed to load user data from the system"
 msgstr "Misslyckades med att läsa in användardata från systemet"
 
-#: malcontent-control/application.c:376
+#: malcontent-control/application.c:390
 msgid "Please make sure that the AccountsService is installed and enabled."
 msgstr "Försäkra dig om att AccountsService är installerat och aktiverat."
 
@@ -350,7 +307,7 @@ msgstr "Försäkra dig om att AccountsService är installerat och aktiverat."
 #. * further!
 #. * https://gitlab.freedesktop.org/pwithnall/malcontent/-/issues/new
 #.
-#: malcontent-control/application.c:407
+#: malcontent-control/application.c:421
 #, c-format
 msgid ""
 "It’s recommended that restrictions are set as part of an ongoing "
@@ -362,30 +319,30 @@ msgstr ""
 "internet-safety'>Du kan läsa denna guide</a> (på engelska) om vad som finns "
 "att ta i beaktande."
 
-#: malcontent-control/carousel.ui:48
+#: malcontent-control/carousel.ui:38
 msgid "Previous Page"
 msgstr "Föregående sida"
 
-#: malcontent-control/carousel.ui:74
+#: malcontent-control/carousel.ui:57
 msgid "Next Page"
 msgstr "Nästa sida"
 
-#: malcontent-control/main.ui:115
+#: malcontent-control/main.ui:87
 msgid "Permission Required"
 msgstr "Behörighet krävs"
 
-#: malcontent-control/main.ui:129
+#: malcontent-control/main.ui:88
 msgid ""
 "Permission is required to view and change user parental controls settings."
 msgstr ""
 "Behörighet krävs för att visa och ändra inställningar för föräldrakontroll "
 "för användare."
 
-#: malcontent-control/main.ui:182
+#: malcontent-control/main.ui:110
 msgid "No Standard User Accounts"
 msgstr "Inga standardanvändarkonton"
 
-#: malcontent-control/main.ui:197
+#: malcontent-control/main.ui:111
 msgid ""
 "Parental controls can only be applied to standard user\n"
 "accounts. These can be created in the user settings."
@@ -394,19 +351,19 @@ msgstr ""
 "standardanvändarkonton. Dessa kan skapas i\n"
 "användarinställningarna."
 
-#: malcontent-control/main.ui:210
+#: malcontent-control/main.ui:115
 msgid "_User Settings"
 msgstr "_Användarinställningar"
 
-#: malcontent-control/main.ui:238
+#: malcontent-control/main.ui:138
 msgid "Loading…"
 msgstr "Läser in…"
 
-#: malcontent-control/main.ui:301
+#: malcontent-control/main.ui:171
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: malcontent-control/main.ui:305
+#: malcontent-control/main.ui:175
 msgid "_About Parental Controls"
 msgstr "_Om Föräldrakontroller"
 
@@ -431,12 +388,12 @@ msgstr ""
 msgid "Main window"
 msgstr "Huvudfönster"
 
-#: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:38
+#: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:39
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
 #. Translators: Search terms to find this application. Do NOT translate or localise the semicolons! The list MUST also end with a semicolon!
-#: malcontent-control/org.freedesktop.MalcontentControl.desktop.in:13
+#: malcontent-control/org.freedesktop.MalcontentControl.desktop.in:14
 msgid ""
 "parental controls;screen time;app restrictions;web browser restrictions;oars;"
 "usage;usage limit;kid;child;"
@@ -478,26 +435,3 @@ msgstr "Användaren ”%s” har ingen återstående tid"
 #, c-format
 msgid "Error setting time limit on login session: %s"
 msgstr "Fel vid inställning av tidsgräns på inloggningssession: %s"
-
-#~ msgid "Not allowed to query session limits data for user %u"
-#~ msgstr "Ej tillåtet att efterfråga sessionsgränsdata för användare %u"
-
-#~ msgid "Applications installed by %s will not appear for other users."
-#~ msgstr "Program installerade av %s kommer inte visas för andra användare."
-
-# Systeminstallation ej tillåtet, användaren kan bara installera åt sig själv
-#~ msgid "Restrict Application Installation for _Others"
-#~ msgstr "Begränsa installation av program åt _andra"
-
-#~ msgid "No Child Users Configured"
-#~ msgstr "Inga barnanvändare konfigurerade"
-
-#~ msgid ""
-#~ "No child users are currently set up on the system. Create one before "
-#~ "setting up their parental controls."
-#~ msgstr ""
-#~ "Inga barnanvändare har konfigurerats på systemet. Skapa en innan du "
-#~ "konfigurerar deras föräldrakontroller."
-
-#~ msgid "Create _Child User"
-#~ msgstr "Skapa _barnanvändare"
