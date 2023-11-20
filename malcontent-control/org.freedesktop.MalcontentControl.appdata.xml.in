@@ -31,7 +31,8 @@
   <launchable type="desktop-id">org.freedesktop.MalcontentControl.desktop</launchable>
   <url type="homepage">https://gitlab.freedesktop.org/pwithnall/malcontent</url>
   <url type="bugtracker">https://gitlab.freedesktop.org/pwithnall/malcontent/issues</url>
-  <url type="donation">http://www.gnome.org/friends/</url>
+  <url type="donation">https://www.gnome.org/donate/</url>
+  <url type="vcs-browser">https://gitlab.freedesktop.org/pwithnall/malcontent</url>
   <url type="translate">https://wiki.gnome.org/TranslationProject/LocalisationGuide</url>
   <update_contact>philip_at_tecnocode.co.uk</update_contact>
   <compulsory_for_desktop>GNOME</compulsory_for_desktop>
