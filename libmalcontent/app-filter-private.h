@@ -48,6 +48,7 @@ typedef enum
 
 struct _MctAppFilter
 {
+  /*< private >*/
   gint ref_count;
 
   uid_t user_id;

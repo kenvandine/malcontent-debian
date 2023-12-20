@@ -66,7 +66,7 @@ pkgconfig.generate(libmalcontent,
 )
 
 libmalcontent_gir = gnome.generate_gir(libmalcontent,
-  sources: libmalcontent_sources + libmalcontent_headers + libmalcontent_private_headers + enums,
+  sources: libmalcontent_sources + libmalcontent_headers + enums,
   nsversion: libmalcontent_api_version,
   namespace: 'Malcontent',
   symbol_prefix: 'mct_',
