@@ -342,6 +342,7 @@ gboolean
 mct_app_filter_is_appinfo_allowed (MctAppFilter *filter,
                                    GAppInfo     *app_info)
 {
+  const char *exec;
   g_autofree gchar *abs_path = NULL;
   const gchar * const *types = NULL;
 
@@ -349,7 +350,8 @@ mct_app_filter_is_appinfo_allowed (MctAppFilter *filter,
   g_return_val_if_fail (filter->ref_count >= 1, FALSE);
   g_return_val_if_fail (G_IS_APP_INFO (app_info), FALSE);
 
-  abs_path = g_find_program_in_path (g_app_info_get_executable (app_info));
+  exec = g_app_info_get_executable (app_info);
+  abs_path = (exec != NULL) ? g_find_program_in_path (exec) : NULL;
 
   if (abs_path != NULL &&
       !mct_app_filter_is_path_allowed (filter, abs_path))

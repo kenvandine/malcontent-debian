@@ -741,7 +741,7 @@ mct_restrict_applications_selector_build_app_filter (MctRestrictApplicationsSele
       else
         {
           const gchar *executable = g_app_info_get_executable (G_APP_INFO (app));
-          g_autofree gchar *path = g_find_program_in_path (executable);
+          g_autofree gchar *path = (executable != NULL) ? g_find_program_in_path (executable) : NULL;
 
           if (!path)
             {
