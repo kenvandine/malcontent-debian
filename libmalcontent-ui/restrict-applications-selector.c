@@ -81,8 +81,6 @@ struct _MctRestrictApplicationsSelector
   FlatpakInstallation *system_installation; /* (owned) */
   FlatpakInstallation *user_installation; /* (owned) */
 
-  GtkCssProvider *css_provider;  /* (owned) */
-
   gchar *search;  /* (nullable) (owned) */
 };
 
@@ -183,10 +181,24 @@ mct_restrict_applications_selector_dispose (GObject *object)
   g_clear_pointer (&self->app_filter, mct_app_filter_unref);
   g_clear_object (&self->system_installation);
   g_clear_object (&self->user_installation);
-  g_clear_object (&self->css_provider);
   g_clear_pointer (&self->search, g_free);
 
   G_OBJECT_CLASS (mct_restrict_applications_selector_parent_class)->dispose (object);
+}
+
+static void
+mct_restrict_applications_selector_realize (GtkWidget *widget)
+{
+  g_autoptr(GtkCssProvider) provider = NULL;
+
+  GTK_WIDGET_CLASS (mct_restrict_applications_selector_parent_class)->realize (widget);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider,
+                                       "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 }
 
 static void
@@ -199,6 +211,8 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
   object_class->get_property = mct_restrict_applications_selector_get_property;
   object_class->set_property = mct_restrict_applications_selector_set_property;
   object_class->dispose = mct_restrict_applications_selector_dispose;
+
+  widget_class->realize = mct_restrict_applications_selector_realize;
 
   /**
    * MctRestrictApplicationsSelector:app-filter: (not nullable)
@@ -288,10 +302,6 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
 
   self->system_installation = flatpak_installation_new_system (NULL, NULL);
   self->user_installation = flatpak_installation_new_user (NULL, NULL);
-
-  self->css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (self->css_provider,
-                                       "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
 }
 
 static void
@@ -352,7 +362,6 @@ create_row_for_app_cb (gpointer item,
   g_autoptr(GIcon) icon = NULL;
   GtkWidget *row, *w;
   const gchar *app_name;
-  GtkStyleContext *context;
 
   app_name = g_app_info_get_name (app);
 
@@ -378,11 +387,7 @@ create_row_for_app_cb (gpointer item,
   w = g_object_new (GTK_TYPE_SWITCH,
                     "valign", GTK_ALIGN_CENTER,
                     NULL);
-  context = gtk_widget_get_style_context (w);
-  gtk_style_context_add_class (context, "restricts");
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (self->css_provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+  gtk_widget_add_css_class (w, "restricts");
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), w);
   adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
