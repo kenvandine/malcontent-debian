@@ -18,6 +18,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     libgtk-4-dev \
     libpam0g-dev \
     libpolkit-gobject-1-dev \
+    libtimedate-perl \
     libxml2-utils \
     locales \
     meson \
