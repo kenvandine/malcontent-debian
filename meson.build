@@ -122,6 +122,12 @@ test_env = [
   'LC_ALL=C.UTF-8',
 ]
 
+# Keep in sync with GTK version dependency below
+add_project_arguments([
+  '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_12',
+  '-DGDK_VERSION_MAX_ALLOWED=G_ENCODE_VERSION(4,14)'
+], language: 'c')
+
 subdir('accounts-service')
 subdir('help')
 if not get_option('use_system_libmalcontent')
@@ -133,7 +139,8 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
-  gtk_dep = dependency('gtk4', version: '>= 4.6')
+  # Keep in sync with GDK_VERSION_MIN_REQUIRED etc above
+  gtk_dep = dependency('gtk4', version: '>= 4.12')
   libadwaita_dep = dependency(
     'libadwaita-1',
     version: '>= 1.1',
