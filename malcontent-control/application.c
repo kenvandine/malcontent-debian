@@ -335,13 +335,12 @@ on_malcontent_help_shown_finished_cb (GObject      *source,
                                        result,
                                        &local_error))
     {
-      GtkWidget *dialog = gtk_message_dialog_new (mct_application_get_main_window (self),
-                                                  GTK_DIALOG_MODAL,
-                                                  GTK_MESSAGE_ERROR,
-                                                  GTK_BUTTONS_OK,
-                                                  _("The help contents could not be displayed"));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", local_error->message);
-      gtk_window_present (GTK_WINDOW (dialog));
+      g_autoptr(GtkAlertDialog) dialog = NULL;
+
+      dialog = gtk_alert_dialog_new (_("The help contents could not be displayed"));
+      gtk_alert_dialog_set_detail (dialog, local_error->message);
+      gtk_alert_dialog_set_modal (dialog, TRUE);
+      gtk_alert_dialog_show (dialog, mct_application_get_main_window (self));
     }
 }
 
