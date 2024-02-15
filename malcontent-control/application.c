@@ -328,11 +328,12 @@ on_malcontent_help_shown_finished_cb (GObject      *source,
                                       gpointer      user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
+  GtkUriLauncher *launcher = GTK_URI_LAUNCHER (source);
   g_autoptr(GError) local_error = NULL;
 
-  if (!gtk_show_uri_full_finish (mct_application_get_main_window (self),
-                                 result,
-                                 &local_error))
+  if (!gtk_uri_launcher_launch_finish (launcher,
+                                       result,
+                                       &local_error))
     {
       GtkWidget *dialog = gtk_message_dialog_new (mct_application_get_main_window (self),
                                                   GTK_DIALOG_MODAL,
@@ -348,13 +349,14 @@ static void
 help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
+  g_autoptr(GtkUriLauncher) launcher = NULL;
 
-  gtk_show_uri_full (mct_application_get_main_window (self),
-                     "help:malcontent",
-                     GDK_CURRENT_TIME,
-                     NULL,
-                     on_malcontent_help_shown_finished_cb,
-                     self);
+  launcher = gtk_uri_launcher_new ("help:malcontent");
+  gtk_uri_launcher_launch (launcher,
+                           mct_application_get_main_window (self),
+                           NULL,
+                           on_malcontent_help_shown_finished_cb,
+                           self);
 }
 
 static void
