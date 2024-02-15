@@ -125,7 +125,6 @@ mct_carousel_item_get_x (MctCarouselItem *item,
 static void
 mct_carousel_move_arrow (MctCarousel *self)
 {
-  GtkStyleContext *context;
   gchar *css;
   gint end_x;
 
@@ -134,15 +133,16 @@ mct_carousel_move_arrow (MctCarousel *self)
 
   end_x = mct_carousel_item_get_x (self->selected_item, self);
 
-  context = gtk_widget_get_style_context (self->arrow);
   if (self->provider)
-    gtk_style_context_remove_provider (context, self->provider);
+    gtk_style_context_remove_provider_for_display (gtk_widget_get_display (self->arrow), self->provider);
   g_clear_object (&self->provider);
 
-  css = g_strdup_printf ("* { margin-left: %dpx; }", end_x);
+  css = g_strdup_printf (".carousel-arrow { margin-left: %dpx; }", end_x);
   self->provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (self->provider), css, -1);
-  gtk_style_context_add_provider (context, self->provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_css_provider_load_from_string (GTK_CSS_PROVIDER (self->provider), css);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (self->arrow),
+                                              self->provider,
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   g_free (css);
 }
