@@ -5,6 +5,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     gettext \
     git \
     gtk-doc-tools \
+    itstool \
     lcov \
     libadwaita-1-dev \
     libaccountsservice-dev \
