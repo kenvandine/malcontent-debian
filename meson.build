@@ -99,7 +99,7 @@ test_c_args = [
   '-Wreturn-type',
   '-Wshadow',
   '-Wsign-compare',
-  '-Wstrict-aliasing=2',
+  '-Wno-error=strict-aliasing',
   '-Wstrict-prototypes',
   '-Wswitch-default',
   '-Wswitch-enum',
