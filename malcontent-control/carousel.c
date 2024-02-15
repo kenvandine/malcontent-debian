@@ -104,22 +104,22 @@ mct_carousel_item_get_x (MctCarouselItem *item,
   GtkWidget *widget, *parent;
   gint width;
   gdouble dest_x;
+  graphene_point_t p;
 
   parent = GTK_WIDGET (carousel->revealer);
   widget = GTK_WIDGET (item);
 
-  width = gtk_widget_get_allocated_width (widget);
-  if (!gtk_widget_translate_coordinates (widget,
-                                         parent,
-                                         width / 2,
-                                         0,
-                                         &dest_x,
-                                         NULL))
+  width = gtk_widget_get_width (widget);
+  if (!gtk_widget_compute_point (widget, parent,
+                                 &GRAPHENE_POINT_INIT (width / 2, 0),
+                                 &p))
     return 0;
+
+  dest_x = p.x;
 
   return CLAMP (dest_x - ARROW_SIZE,
                 0,
-                gtk_widget_get_allocated_width (parent));
+                gtk_widget_get_width (parent));
 }
 
 static void
