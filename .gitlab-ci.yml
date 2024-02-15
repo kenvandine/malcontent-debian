@@ -30,13 +30,13 @@ debian:
   variables:
     CFLAGS: "-coverage -ftest-coverage -fprofile-arcs"
   script:
-    - meson ${MESON_COMMON_OPTIONS}
+    - meson setup ${MESON_COMMON_OPTIONS}
             --werror
             -Db_coverage=true
             -Dinstalled_tests=true
             -Dprivileged_group=sudo
             _build
-    - ninja -C _build
+    - meson compile -C _build
     - mkdir -p _coverage
     - lcov --config-file .gitlab-ci/lcovrc --directory _build --capture --initial --output-file "_coverage/${CI_JOB_NAME}-baseline.lcov"
     - .gitlab-ci/run-tests.sh
