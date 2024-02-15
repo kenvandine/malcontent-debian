@@ -104,28 +104,27 @@ mct_carousel_item_get_x (MctCarouselItem *item,
   GtkWidget *widget, *parent;
   gint width;
   gdouble dest_x;
+  graphene_point_t p;
 
   parent = GTK_WIDGET (carousel->revealer);
   widget = GTK_WIDGET (item);
 
-  width = gtk_widget_get_allocated_width (widget);
-  if (!gtk_widget_translate_coordinates (widget,
-                                         parent,
-                                         width / 2,
-                                         0,
-                                         &dest_x,
-                                         NULL))
+  width = gtk_widget_get_width (widget);
+  if (!gtk_widget_compute_point (widget, parent,
+                                 &GRAPHENE_POINT_INIT (width / 2, 0),
+                                 &p))
     return 0;
+
+  dest_x = p.x;
 
   return CLAMP (dest_x - ARROW_SIZE,
                 0,
-                gtk_widget_get_allocated_width (parent));
+                gtk_widget_get_width (parent));
 }
 
 static void
 mct_carousel_move_arrow (MctCarousel *self)
 {
-  GtkStyleContext *context;
   gchar *css;
   gint end_x;
 
@@ -134,15 +133,16 @@ mct_carousel_move_arrow (MctCarousel *self)
 
   end_x = mct_carousel_item_get_x (self->selected_item, self);
 
-  context = gtk_widget_get_style_context (self->arrow);
   if (self->provider)
-    gtk_style_context_remove_provider (context, self->provider);
+    gtk_style_context_remove_provider_for_display (gtk_widget_get_display (self->arrow), self->provider);
   g_clear_object (&self->provider);
 
-  css = g_strdup_printf ("* { margin-left: %dpx; }", end_x);
+  css = g_strdup_printf (".carousel-arrow { margin-left: %dpx; }", end_x);
   self->provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (self->provider), css, -1);
-  gtk_style_context_add_provider (context, self->provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_css_provider_load_from_string (GTK_CSS_PROVIDER (self->provider), css);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (self->arrow),
+                                              self->provider,
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   g_free (css);
 }

@@ -432,8 +432,7 @@ create_carousel_entry (MctUserSelector *self,
   g_free (label);
 
   gtk_box_append (GTK_BOX (box), widget);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget),
-                               "dim-label");
+  gtk_widget_add_css_class (widget, "dim-label");
 
   return box;
 }

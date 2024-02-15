@@ -1,6 +1,6 @@
 project('malcontent', 'c',
   version : '0.12.0',
-  meson_version : '>= 0.59.0',
+  meson_version : '>= 1.2.0',
   license: ['LGPL-2.1-or-later', 'GPL-2.0-or-later'],
   default_options : [
     'buildtype=debugoptimized',
@@ -57,7 +57,6 @@ test_c_args = [
   '-fno-strict-aliasing',
   '-fstack-protector-strong',
   '-Waggregate-return',
-  '-Wall',
   '-Wunused',
   '-Warray-bounds',
   '-Wcast-align',
@@ -100,7 +99,7 @@ test_c_args = [
   '-Wreturn-type',
   '-Wshadow',
   '-Wsign-compare',
-  '-Wstrict-aliasing=2',
+  '-Wno-error=strict-aliasing',
   '-Wstrict-prototypes',
   '-Wswitch-default',
   '-Wswitch-enum',
@@ -123,6 +122,12 @@ test_env = [
   'LC_ALL=C.UTF-8',
 ]
 
+# Keep in sync with GTK version dependency below
+add_project_arguments([
+  '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_12',
+  '-DGDK_VERSION_MAX_ALLOWED=G_ENCODE_VERSION(4,14)'
+], language: 'c')
+
 subdir('accounts-service')
 subdir('help')
 if not get_option('use_system_libmalcontent')
@@ -134,7 +139,8 @@ else
                        'Malcontent-' + libmalcontent_api_version + '.typelib']
 endif
 if get_option('ui').enabled()
-  gtk_dep = dependency('gtk4', version: '>= 4.6')
+  # Keep in sync with GDK_VERSION_MIN_REQUIRED etc above
+  gtk_dep = dependency('gtk4', version: '>= 4.12')
   libadwaita_dep = dependency(
     'libadwaita-1',
     version: '>= 1.1',

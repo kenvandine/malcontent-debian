@@ -608,7 +608,7 @@ on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
   /* When the ‘Restrict Applications’ dialogue is closed, don’t destroy it,
    * since it contains the app filter settings which we’ll want to reuse next
    * time the dialogue is shown or the app filter is saved. */
-  gtk_widget_hide (GTK_WIDGET (self->restrict_applications_dialog));
+  gtk_widget_set_visible (GTK_WIDGET (self->restrict_applications_dialog), FALSE);
 
   /* Schedule an update to the saved state. */
   schedule_update_blocklisted_apps (self);
