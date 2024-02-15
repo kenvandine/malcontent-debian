@@ -400,7 +400,9 @@ update_main_stack (MctApplication *self)
     }
   else if (is_permission_loaded && !has_permission)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_lock_button_set_permission (self->lock_button, self->permission);
+      G_GNUC_END_IGNORE_DEPRECATIONS
       mct_user_controls_set_permission (self->user_controls, self->permission);
 
       new_page_name = "unlock";
