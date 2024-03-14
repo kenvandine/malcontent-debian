@@ -287,6 +287,7 @@ update_categories_from_language (MctUserControls *self)
   const guint *ages;
   gsize i, n_ages;
   g_autofree gchar *disabled_action = NULL;
+  g_autoptr(GMenu) top_subsection = NULL, bottom_subsection = NULL;
 
   rating_system = get_content_rating_system (self);
   rating_system_str = as_content_rating_system_to_string (rating_system);
@@ -300,8 +301,12 @@ update_categories_from_language (MctUserControls *self)
   g_menu_remove_all (self->age_menu);
 
   disabled_action = g_strdup_printf ("permissions.set-age(uint32 %u)", oars_disabled_age);
-  g_menu_append (self->age_menu, _("Unrestricted"), disabled_action);
 
+  top_subsection = g_menu_new ();
+  g_menu_append (top_subsection, _("Unrestricted"), disabled_action);
+  g_menu_append_section (self->age_menu, NULL, G_MENU_MODEL (top_subsection));
+
+  bottom_subsection = g_menu_new ();
   for (i = 0; entries[i] != NULL; i++)
     {
       g_autofree gchar *action = g_strdup_printf ("permissions.set-age(uint32 %u)", ages[i]);
@@ -310,10 +315,11 @@ update_categories_from_language (MctUserControls *self)
        * special ‘disabled’ value. */
       g_assert (ages[i] != oars_disabled_age);
 
-      g_menu_append (self->age_menu, entries[i], action);
+      g_menu_append (bottom_subsection, entries[i], action);
     }
 
   g_assert (i == n_ages);
+  g_menu_append_section (self->age_menu, NULL, G_MENU_MODEL (bottom_subsection));
 }
 
 /* Returns a human-readable but untranslated string, not suitable
