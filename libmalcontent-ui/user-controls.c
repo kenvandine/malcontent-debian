@@ -300,7 +300,7 @@ update_categories_from_language (MctUserControls *self)
   g_menu_remove_all (self->age_menu);
 
   disabled_action = g_strdup_printf ("permissions.set-age(uint32 %u)", oars_disabled_age);
-  g_menu_append (self->age_menu, _("All Ages"), disabled_action);
+  g_menu_append (self->age_menu, _("Unrestricted"), disabled_action);
 
   for (i = 0; entries[i] != NULL; i++)
     {
@@ -385,7 +385,7 @@ update_oars_level (MctUserControls *self)
   if (rating_age_category == NULL || all_categories_unset)
     {
       g_clear_pointer (&rating_age_category, g_free);
-      rating_age_category = g_strdup (_("All Ages"));
+      rating_age_category = g_strdup (_("Unrestricted"));
       selected_age = oars_disabled_age;
     }
   else
@@ -638,7 +638,7 @@ on_set_age_action_activated (GSimpleAction *action,
 
   /* Update the button */
   if (age == oars_disabled_age)
-    gtk_menu_button_set_label (self->oars_button, _("All Ages"));
+    gtk_menu_button_set_label (self->oars_button, _("Unrestricted"));
 
   for (i = 0; age != oars_disabled_age && entries[i] != NULL; i++)
     {
