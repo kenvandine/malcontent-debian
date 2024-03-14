@@ -321,7 +321,7 @@ def command_check_app_filter(user, arg, quiet=False, interactive=True):
         # Content type
         is_allowed = app_filter.is_content_type_allowed(arg)
         noun = 'Content type'
-    elif is_maybe_path and is_maybe_desktop_file
+    elif is_maybe_path and is_maybe_desktop_file:
         path = os.path.abspath(arg)
         app_info = Gio.DesktopAppInfo.new_from_filename(path)
         is_allowed = app_filter.is_appinfo_allowed(app_info)
