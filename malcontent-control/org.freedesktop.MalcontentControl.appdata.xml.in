@@ -45,6 +45,17 @@
   </kudos>
   <translation type="gettext">malcontent</translation>
   <releases>
+    <release version="0.12.0" date="2024-03-15" type="stable">
+      <description>
+        <p>This is a stable release with the following changes:</p>
+        <ul>
+          <li>Support searching list of apps to restrict</li>
+          <li>Improve keyboard navigation</li>
+          <li>Improving some wording in the UI</li>
+          <li>Translation updates</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.11.1" date="2023-03-16" type="stable">
       <description>
         <p>This is a stable release with the following changes:</p>

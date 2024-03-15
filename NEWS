@@ -1,3 +1,38 @@
+Overview of changes in malcontent 0.12.0
+========================================
+
+* Bugs fixed:
+  - #31 Support searching list of apps to restrict (Philip Withnall)
+  - #53 Keynav focus disappears after GTK4 port (Philip Withnall)
+  - #56 Confusing sentence in user-controls.ui: above, below? (Philip Withnall)
+  - #66 mct_app_filter_is_appinfo_allowed fails when desktop entry is missing
+    Exec key (Philip Withnall)
+  - #68 “All Ages” option for Application Suitability is misleading (Philip
+    Withnall)
+  - !153 Update pt_BR translation
+  - !157 Add AppInfo support to malcontent-client check-app-filter
+  - !159 Update Czech translation
+  - !160 update ru.po
+  - !161 Update Swedish translation
+  - !162 data: Update appdata
+  - !163 build: Hide private structs from generated GIR files
+  - !165 Various build and dependency cleanups for GTK 4.12
+  - !166 Update Turkish translation
+  - !167 Update pt_BR translation
+  - !168 Update Polish translation 240303
+  - !169 Update Hungarian translation
+  - !170 malcontent-client: Fix syntax error in appinfo support
+
+* Translation updates:
+  - Czech (AsciiWolf)
+  - Hungarian (Balázs Úr)
+  - Polish (Piotr Drąg)
+  - Portuguese (Brazil) (Matheus Polkorny)
+  - Russian (Ser82-png)
+  - Swedish (Anders Jonsson)
+  - Turkish (Sabri Ünal)
+
+
 Overview of changes in malcontent 0.11.1
 ========================================
 
