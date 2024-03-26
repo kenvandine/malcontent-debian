@@ -1,3 +1,12 @@
+malcontent (0.11.1-2) unstable; urgency=medium
+
+  * Team upload
+  * Temporarily disable GUI on armel, armhf and most -ports architectures.
+    This is necessary for the 64-bit time_t transition, to allow flatpak
+    to be rebuilt on the affected architectures.
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 26 Mar 2024 14:05:52 +0000
+
 malcontent (0.11.1-1) unstable; urgency=medium
 
   * Team upload
