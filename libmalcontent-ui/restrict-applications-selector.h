@@ -41,4 +41,8 @@ void          mct_restrict_applications_selector_set_app_filter (MctRestrictAppl
 void mct_restrict_applications_selector_build_app_filter (MctRestrictApplicationsSelector *self,
                                                           MctAppFilterBuilder             *builder);
 
+const gchar *mct_restrict_applications_selector_get_search (MctRestrictApplicationsSelector *self);
+void mct_restrict_applications_selector_set_search (MctRestrictApplicationsSelector *self,
+                                                    const gchar                     *search);
+
 G_END_DECLS

@@ -50,6 +50,7 @@ typedef enum
 
 struct _MctSessionLimits
 {
+  /*< private >*/
   gint ref_count;
 
   uid_t user_id;

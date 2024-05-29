@@ -297,6 +297,7 @@ def command_check_app_filter(user, arg, quiet=False, interactive=True):
     # when passing flatpak IDs as argument
     is_maybe_content_type = not is_maybe_flatpak_id and is_valid_content_type(arg)
     is_maybe_path = os.path.exists(arg)
+    is_maybe_desktop_file = arg.endswith('.desktop')
 
     recognised_types = sum([is_maybe_flatpak_id, is_maybe_flatpak_ref,
                             is_maybe_content_type, is_maybe_path])
@@ -320,6 +321,11 @@ def command_check_app_filter(user, arg, quiet=False, interactive=True):
         # Content type
         is_allowed = app_filter.is_content_type_allowed(arg)
         noun = 'Content type'
+    elif is_maybe_path and is_maybe_desktop_file:
+        path = os.path.abspath(arg)
+        app_info = Gio.DesktopAppInfo.new_from_filename(path)
+        is_allowed = app_filter.is_appinfo_allowed(app_info)
+        noun = 'Desktop file'
     elif is_maybe_path:
         path = os.path.abspath(arg)
         is_allowed = app_filter.is_path_allowed(path)

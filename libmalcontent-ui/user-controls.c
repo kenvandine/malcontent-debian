@@ -287,6 +287,7 @@ update_categories_from_language (MctUserControls *self)
   const guint *ages;
   gsize i, n_ages;
   g_autofree gchar *disabled_action = NULL;
+  g_autoptr(GMenu) top_subsection = NULL, bottom_subsection = NULL;
 
   rating_system = get_content_rating_system (self);
   rating_system_str = as_content_rating_system_to_string (rating_system);
@@ -300,8 +301,12 @@ update_categories_from_language (MctUserControls *self)
   g_menu_remove_all (self->age_menu);
 
   disabled_action = g_strdup_printf ("permissions.set-age(uint32 %u)", oars_disabled_age);
-  g_menu_append (self->age_menu, _("All Ages"), disabled_action);
 
+  top_subsection = g_menu_new ();
+  g_menu_append (top_subsection, _("Unrestricted"), disabled_action);
+  g_menu_append_section (self->age_menu, NULL, G_MENU_MODEL (top_subsection));
+
+  bottom_subsection = g_menu_new ();
   for (i = 0; entries[i] != NULL; i++)
     {
       g_autofree gchar *action = g_strdup_printf ("permissions.set-age(uint32 %u)", ages[i]);
@@ -310,10 +315,11 @@ update_categories_from_language (MctUserControls *self)
        * special ‘disabled’ value. */
       g_assert (ages[i] != oars_disabled_age);
 
-      g_menu_append (self->age_menu, entries[i], action);
+      g_menu_append (bottom_subsection, entries[i], action);
     }
 
   g_assert (i == n_ages);
+  g_menu_append_section (self->age_menu, NULL, G_MENU_MODEL (bottom_subsection));
 }
 
 /* Returns a human-readable but untranslated string, not suitable
@@ -385,7 +391,7 @@ update_oars_level (MctUserControls *self)
   if (rating_age_category == NULL || all_categories_unset)
     {
       g_clear_pointer (&rating_age_category, g_free);
-      rating_age_category = g_strdup (_("All Ages"));
+      rating_age_category = g_strdup (_("Unrestricted"));
       selected_age = oars_disabled_age;
     }
   else
@@ -608,7 +614,7 @@ on_restrict_applications_dialog_close_request_cb (GtkWidget *widget,
   /* When the ‘Restrict Applications’ dialogue is closed, don’t destroy it,
    * since it contains the app filter settings which we’ll want to reuse next
    * time the dialogue is shown or the app filter is saved. */
-  gtk_widget_hide (GTK_WIDGET (self->restrict_applications_dialog));
+  gtk_widget_set_visible (GTK_WIDGET (self->restrict_applications_dialog), FALSE);
 
   /* Schedule an update to the saved state. */
   schedule_update_blocklisted_apps (self);
@@ -638,7 +644,7 @@ on_set_age_action_activated (GSimpleAction *action,
 
   /* Update the button */
   if (age == oars_disabled_age)
-    gtk_menu_button_set_label (self->oars_button, _("All Ages"));
+    gtk_menu_button_set_label (self->oars_button, _("Unrestricted"));
 
   for (i = 0; age != oars_disabled_age && entries[i] != NULL; i++)
     {
@@ -702,6 +708,7 @@ mct_user_controls_finalize (GObject *object)
   g_clear_object (&self->user);
   g_clear_pointer (&self->user_locale, g_free);
   g_clear_pointer (&self->user_display_name, g_free);
+  g_clear_pointer (&self->description, g_free);
 
   if (self->permission != NULL && self->permission_allowed_id != 0)
     {

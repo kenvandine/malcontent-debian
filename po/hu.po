@@ -1,23 +1,23 @@
 # Hungarian translation for malcontent.
-# Copyright (C) 2022 Free Software Foundation, Inc.
+# Copyright (C) 2022, 2024 Free Software Foundation, Inc.
 # This file is distributed under the same license as the malcontent package.
 #
-# Balázs Úr <ur.balazs at fsf dot hu>, 2022.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: malcontent\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
-"POT-Creation-Date: 2022-07-25 03:26+0000\n"
-"PO-Revision-Date: 2022-09-22 01:02+0200\n"
+"POT-Creation-Date: 2023-10-13 16:18+0000\n"
+"PO-Revision-Date: 2024-03-10 21:03+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
-"Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
+"Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #: accounts-service/com.endlessm.ParentalControls.policy.in:4
 msgid "Change your own app filter"
@@ -176,7 +176,7 @@ msgstr ""
 "%u felhasználó munkamenetkorlátjának érvénytelen %u–%u napi ütemezése van"
 
 #. Translators: the placeholder is a user’s full name
-#: libmalcontent-ui/restrict-applications-dialog.c:223
+#: libmalcontent-ui/restrict-applications-dialog.c:256
 #, c-format
 msgid "Restrict %s from using the following installed applications."
 msgstr ""
@@ -185,6 +185,10 @@ msgstr ""
 #: libmalcontent-ui/restrict-applications-dialog.ui:6
 msgid "Restrict Applications"
 msgstr "Alkalmazások korlátozása"
+
+#: libmalcontent-ui/restrict-applications-dialog.ui:22
+msgid "Search for applications…"
+msgstr "Alkalmazások keresése…"
 
 #: libmalcontent-ui/restrict-applications-selector.ui:13
 msgid "No applications found to restrict."
@@ -230,29 +234,29 @@ msgstr "Alkalmazáshasználati korlátozások"
 msgid "Restrict _Web Browsers"
 msgstr "_Webböngészők korlátozása"
 
-#: libmalcontent-ui/user-controls.ui:50
+#: libmalcontent-ui/user-controls.ui:51
 msgid "_Restrict Applications"
 msgstr "_Alkalmazások korlátozása"
 
-#: libmalcontent-ui/user-controls.ui:72
+#: libmalcontent-ui/user-controls.ui:73
 msgid "Software Installation Restrictions"
 msgstr "Szoftvertelepítési korlátozások"
 
-#: libmalcontent-ui/user-controls.ui:76
+#: libmalcontent-ui/user-controls.ui:77
 msgid "Restrict Application _Installation"
 msgstr "Alkalmazás_telepítés korlátozása"
 
-#: libmalcontent-ui/user-controls.ui:97
+#: libmalcontent-ui/user-controls.ui:99
 msgid "Application _Suitability"
 msgstr "Alkalmazás _alkalmassága"
 
-#: libmalcontent-ui/user-controls.ui:100
+#: libmalcontent-ui/user-controls.ui:102
 msgid ""
-"Restricts browsing or installation of applications to applications suitable "
-"for certain ages or above."
+"Restricts the browsing or installation of applications unsuitable for this "
+"age or younger."
 msgstr ""
-"Korlátozza az alkalmazások böngészését vagy telepítését a bizonyos "
-"korosztályok vagy afölöttiek számára alkalmas alkalmazásokra."
+"Korlátozza az ebben a korban lévőknek vagy fiatalabbaknak nem megfelelő "
+"alkalmazások böngészését vagy telepítését."
 
 #. Translators: This documents the --user command line option to malcontent-control:
 #: malcontent-control/application.c:102
