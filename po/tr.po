@@ -1,8 +1,8 @@
 # Turkish translations for malcontent package.
-# Copyright (C) 2022 malcontent's COPYRIGHT HOLDER
+# Copyright (C) 2022-2024 malcontent's COPYRIGHT HOLDER
 # This file is distributed under the same license as the malcontent package.
 #
-# Sabri Ünal <libreajans@gmail.com>, 2022.
+# Sabri Ünal <libreajans@gmail.com>, 2022, 2024.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2022.
 #
 msgid ""
@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: malcontent\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
-"POT-Creation-Date: 2022-05-18 03:25+0000\n"
-"PO-Revision-Date: 2023-03-09 03:35+0300\n"
+"POT-Creation-Date: 2024-02-24 15:26+0000\n"
+"PO-Revision-Date: 2024-02-25 05:01+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
-"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
+"Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-POOTLE-MTIME: 1434043811.000000\n"
 
 #: accounts-service/com.endlessm.ParentalControls.policy.in:4
@@ -126,12 +126,12 @@ msgid "Authentication is required to read another user’s account info."
 msgstr ""
 "Başka kullanıcının hesap bilgilerini okumak için kimlik doğrulanmalıdır."
 
-#: libmalcontent/app-filter.c:694
+#: libmalcontent/app-filter.c:696
 #, c-format
 msgid "App filter for user %u was in an unrecognized format"
 msgstr "%u kullanıcısı için uygulama süzgeci tanınmayan biçimde"
 
-#: libmalcontent/app-filter.c:725
+#: libmalcontent/app-filter.c:727
 #, c-format
 msgid "OARS filter for user %u has an unrecognized kind ‘%s’"
 msgstr "%u kullanıcısı için OARS süzgeci tanınmayan ‘%s’ türünde"
@@ -174,78 +174,36 @@ msgstr "%u kullanıcısı için oturum kısıtları tanınmayan ‘%u’ türün
 msgid "Session limit for user %u has invalid daily schedule %u–%u"
 msgstr "%u kullanıcısı için oturum kısıtları geçersiz günlük düzende %u–%u"
 
-#. TRANSLATORS: This is the formatting of English and localized name
-#. of the rating e.g. "Adults Only (solo adultos)"
-#: libmalcontent-ui/gs-content-rating.c:75
-#, c-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#: libmalcontent-ui/gs-content-rating.c:209
-msgid "General"
-msgstr "Genel"
-
-#: libmalcontent-ui/gs-content-rating.c:218
-msgid "ALL"
-msgstr "TÜMÜ"
-
-#: libmalcontent-ui/gs-content-rating.c:222
-#: libmalcontent-ui/gs-content-rating.c:485
-msgid "Adults Only"
-msgstr "Yalnızca Yetişkinler"
-
-#: libmalcontent-ui/gs-content-rating.c:224
-#: libmalcontent-ui/gs-content-rating.c:484
-msgid "Mature"
-msgstr "Yetişkin"
-
-#: libmalcontent-ui/gs-content-rating.c:226
-#: libmalcontent-ui/gs-content-rating.c:483
-msgid "Teen"
-msgstr "Genç"
-
-#: libmalcontent-ui/gs-content-rating.c:228
-#: libmalcontent-ui/gs-content-rating.c:482
-msgid "Everyone 10+"
-msgstr "10 Yaş Üstü Herkes"
-
-#: libmalcontent-ui/gs-content-rating.c:230
-#: libmalcontent-ui/gs-content-rating.c:481
-msgid "Everyone"
-msgstr "Herkes"
-
-#: libmalcontent-ui/gs-content-rating.c:232
-#: libmalcontent-ui/gs-content-rating.c:480
-msgid "Early Childhood"
-msgstr "Erken Çocukluk"
-
 #. Translators: the placeholder is a user’s full name
-#: libmalcontent-ui/restrict-applications-dialog.c:222
+#: libmalcontent-ui/restrict-applications-dialog.c:256
 #, c-format
 msgid "Restrict %s from using the following installed applications."
 msgstr "%s kullanıcısının aşağıdaki kurulu uygulamaları kullanmasını kısıtla."
 
 #: libmalcontent-ui/restrict-applications-dialog.ui:6
-#: libmalcontent-ui/restrict-applications-dialog.ui:12
 msgid "Restrict Applications"
 msgstr "Uygulamaları Kısıtla"
 
-#: libmalcontent-ui/restrict-applications-selector.ui:24
+#: libmalcontent-ui/restrict-applications-dialog.ui:22
+msgid "Search for applications…"
+msgstr "Uygulamaları ara…"
+
+#: libmalcontent-ui/restrict-applications-selector.ui:13
 msgid "No applications found to restrict."
 msgstr "Kısıtlanacak uygulama bulunamadı."
 
 #. Translators: this is the full name for an unknown user account.
-#: libmalcontent-ui/user-controls.c:207 libmalcontent-ui/user-controls.c:218
+#: libmalcontent-ui/user-controls.c:198 libmalcontent-ui/user-controls.c:209
 msgid "unknown"
 msgstr "bilinmeyen"
 
-#: libmalcontent-ui/user-controls.c:312 libmalcontent-ui/user-controls.c:397
-#: libmalcontent-ui/user-controls.c:669
+#: libmalcontent-ui/user-controls.c:303 libmalcontent-ui/user-controls.c:388
+#: libmalcontent-ui/user-controls.c:641
 msgid "All Ages"
 msgstr "Tüm Yaşlar"
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:477
+#: libmalcontent-ui/user-controls.c:470
 #, c-format
 msgid ""
 "Prevents %s from running web browsers. Limited web content may still be "
@@ -255,49 +213,49 @@ msgstr ""
 "sınırlı web içeriği diğer uygulamalarda da bulunabilir."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:482
+#: libmalcontent-ui/user-controls.c:475
 #, c-format
 msgid "Prevents specified applications from being used by %s."
 msgstr "Belirtilen uygulamaların %s tarafından kullanılmasını engeller."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:487
+#: libmalcontent-ui/user-controls.c:480
 #, c-format
 msgid "Prevents %s from installing applications."
 msgstr "%s kullanıcısının uygulama kurmasını engeller."
 
-#: libmalcontent-ui/user-controls.ui:16
+#: libmalcontent-ui/user-controls.ui:25
 msgid "Application Usage Restrictions"
 msgstr "Uygulama Kullanım Kısıtlamaları"
 
-#: libmalcontent-ui/user-controls.ui:68
+#: libmalcontent-ui/user-controls.ui:28
 msgid "Restrict _Web Browsers"
 msgstr "_Web Tarayıcılarını Kısıtla"
 
-#: libmalcontent-ui/user-controls.ui:152
+#: libmalcontent-ui/user-controls.ui:51
 msgid "_Restrict Applications"
 msgstr "Uygulamaları _Kısıtla"
 
-#: libmalcontent-ui/user-controls.ui:231
+#: libmalcontent-ui/user-controls.ui:73
 msgid "Software Installation Restrictions"
 msgstr "Yazılım Kurulumu Kısıtlamaları"
 
-#: libmalcontent-ui/user-controls.ui:282
+#: libmalcontent-ui/user-controls.ui:77
 msgid "Restrict Application _Installation"
 msgstr "Uygulama _Kurulumunu Kısıtla"
 
-#: libmalcontent-ui/user-controls.ui:367
+#: libmalcontent-ui/user-controls.ui:99
 msgid "Application _Suitability"
 msgstr "Uygulama _Uygunluğu"
 
 # Biraz serbest çeviri oldu.
-#: libmalcontent-ui/user-controls.ui:389
+#: libmalcontent-ui/user-controls.ui:102
 msgid ""
-"Restricts browsing or installation of applications to applications suitable "
-"for certain ages or above."
+"Restricts the browsing or installation of applications unsuitable for this "
+"age or younger."
 msgstr ""
-"Gezinmeyi veya uygulamaların kurulmasını belirli yaşa veya üstüne elverişli "
-"uygulamalarla kısıtla."
+"Bu yaş ya da daha küçükler için uygun olmayan uygulamaların taranmasını ya "
+"da kurulmasını kısıtlar."
 
 #. Translators: This documents the --user command line option to malcontent-control:
 #: malcontent-control/application.c:102
@@ -315,7 +273,7 @@ msgstr "— ebeveyn denetimlerini görüntüle ve düzenle"
 
 #. Translators: This is the title of the main window
 #. Translators: the name of the application as it appears in a software center
-#: malcontent-control/application.c:123 malcontent-control/main.ui:12
+#: malcontent-control/application.c:123 malcontent-control/main.ui:17
 #: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:9
 #: malcontent-control/org.freedesktop.MalcontentControl.desktop.in:3
 msgid "Parental Controls"
@@ -340,15 +298,15 @@ msgstr ""
 msgid "Malcontent Website"
 msgstr "Malcontent Web Sitesi"
 
-#: malcontent-control/application.c:338
+#: malcontent-control/application.c:340
 msgid "The help contents could not be displayed"
 msgstr "Yardım içeriği gösterilemiyor"
 
-#: malcontent-control/application.c:375
+#: malcontent-control/application.c:389
 msgid "Failed to load user data from the system"
 msgstr "Sistemden kullanıcı verisi yüklenemedi"
 
-#: malcontent-control/application.c:377
+#: malcontent-control/application.c:391
 msgid "Please make sure that the AccountsService is installed and enabled."
 msgstr "AccountsService’in kurulu ve etkinleştirildiğinden emin olun."
 
@@ -361,7 +319,7 @@ msgstr "AccountsService’in kurulu ve etkinleştirildiğinden emin olun."
 #. * further!
 #. * https://gitlab.freedesktop.org/pwithnall/malcontent/-/issues/new
 #.
-#: malcontent-control/application.c:408
+#: malcontent-control/application.c:424
 #, c-format
 msgid ""
 "It’s recommended that restrictions are set as part of an ongoing "
@@ -372,30 +330,30 @@ msgstr ""
 "önerilir. Nelere özenilmesi gerektiğine ilişkin <a href='https://www."
 "guvenliweb.org.tr/e_kilavuz'>kılavuzu okuyun</a>."
 
-#: malcontent-control/carousel.ui:48
+#: malcontent-control/carousel.ui:38
 msgid "Previous Page"
 msgstr "Önceki Sayfa"
 
-#: malcontent-control/carousel.ui:74
+#: malcontent-control/carousel.ui:57
 msgid "Next Page"
 msgstr "Sonraki Sayfa"
 
-#: malcontent-control/main.ui:115
+#: malcontent-control/main.ui:87
 msgid "Permission Required"
 msgstr "İzin Gerekli"
 
-#: malcontent-control/main.ui:129
+#: malcontent-control/main.ui:88
 msgid ""
 "Permission is required to view and change user parental controls settings."
 msgstr ""
 "Kullanıcı ebeveyn denetimleri ayarlarını görüntülemek ve değiştirmek için "
 "izin gereklidir."
 
-#: malcontent-control/main.ui:184
+#: malcontent-control/main.ui:110
 msgid "No Standard User Accounts"
 msgstr "Standart Kullanıcı Hesabı Yok"
 
-#: malcontent-control/main.ui:199
+#: malcontent-control/main.ui:111
 msgid ""
 "Parental controls can only be applied to standard user\n"
 "accounts. These can be created in the user settings."
@@ -403,19 +361,19 @@ msgstr ""
 "Ebeveyn denetimleri yalnızca standart kullanıcı hesaplarına uygulanabilir. \n"
 "Bunlar kullanıcı ayarlarından oluşturulabilir."
 
-#: malcontent-control/main.ui:212
+#: malcontent-control/main.ui:115
 msgid "_User Settings"
 msgstr "_Kullanıcı Ayarları"
 
-#: malcontent-control/main.ui:242
+#: malcontent-control/main.ui:138
 msgid "Loading…"
 msgstr "Yükleniyor…"
 
-#: malcontent-control/main.ui:305
+#: malcontent-control/main.ui:171
 msgid "_Help"
 msgstr "_Yardım"
 
-#: malcontent-control/main.ui:309
+#: malcontent-control/main.ui:175
 msgid "_About Parental Controls"
 msgstr "Ebeveyn Denetimleri _Hakkında"
 
@@ -440,7 +398,7 @@ msgstr ""
 msgid "Main window"
 msgstr "Ana pencere"
 
-#: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:39
+#: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:40
 msgid "The GNOME Project"
 msgstr "GNOME Projesi"
 

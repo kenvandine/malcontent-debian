@@ -5,6 +5,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     gettext \
     git \
     gtk-doc-tools \
+    itstool \
     lcov \
     libadwaita-1-dev \
     libaccountsservice-dev \
@@ -17,6 +18,7 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
     libgtk-4-dev \
     libpam0g-dev \
     libpolkit-gobject-1-dev \
+    libtimedate-perl \
     libxml2-utils \
     locales \
     meson \
@@ -29,8 +31,6 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -qq -y \
 RUN locale-gen C.UTF-8 && /usr/sbin/update-locale LANG=C.UTF-8
 
 ENV LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8
-
-RUN pip3 install meson==0.59.4
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}

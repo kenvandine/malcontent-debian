@@ -15,7 +15,7 @@ libmalcontent_ui_sources = [
   'restrict-applications-dialog.c',
   'restrict-applications-selector.c',
   'user-controls.c',
-] + resources
+]
 libmalcontent_ui_headers = [
   'malcontent-ui.h',
   'restrict-applications-dialog.h',
@@ -41,7 +41,7 @@ libmalcontent_ui_private_deps = [
 libmalcontent_ui_include_subdir = join_paths(libmalcontent_ui_api_name, 'libmalcontent-ui')
 
 libmalcontent_ui = library(libmalcontent_ui_api_name,
-  libmalcontent_ui_sources + libmalcontent_ui_headers,
+  libmalcontent_ui_sources + resources + libmalcontent_ui_headers,
   dependencies: libmalcontent_ui_public_deps + libmalcontent_ui_private_deps,
   include_directories: root_inc,
   install: true,

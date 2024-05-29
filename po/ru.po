@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: malcontent\n"
 "Report-Msgid-Bugs-To: https://gitlab.freedesktop.org/pwithnall/malcontent/"
 "issues\n"
-"POT-Creation-Date: 2022-06-04 15:25+0000\n"
-"PO-Revision-Date: 2022-06-19 20:05+1000\n"
+"POT-Creation-Date: 2023-10-13 16:18+0000\n"
+"PO-Revision-Date: 2023-10-29 01:03+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: accounts-service/com.endlessm.ParentalControls.policy.in:4
 msgid "Change your own app filter"
@@ -177,78 +177,36 @@ msgstr ""
 "Ограничение сеанса для пользователя %u имеет недопустимое ежедневное "
 "расписание %u–%u"
 
-#. TRANSLATORS: This is the formatting of English and localized name
-#. of the rating e.g. "Adults Only (solo adultos)"
-#: libmalcontent-ui/gs-content-rating.c:75
-#, c-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#: libmalcontent-ui/gs-content-rating.c:209
-msgid "General"
-msgstr "Общие"
-
-#: libmalcontent-ui/gs-content-rating.c:218
-msgid "ALL"
-msgstr "ВСЕ"
-
-#: libmalcontent-ui/gs-content-rating.c:222
-#: libmalcontent-ui/gs-content-rating.c:485
-msgid "Adults Only"
-msgstr "Только для взрослых"
-
-#: libmalcontent-ui/gs-content-rating.c:224
-#: libmalcontent-ui/gs-content-rating.c:484
-msgid "Mature"
-msgstr "Для повзрослевшых"
-
-#: libmalcontent-ui/gs-content-rating.c:226
-#: libmalcontent-ui/gs-content-rating.c:483
-msgid "Teen"
-msgstr "Для подростков"
-
-#: libmalcontent-ui/gs-content-rating.c:228
-#: libmalcontent-ui/gs-content-rating.c:482
-msgid "Everyone 10+"
-msgstr "Для всех старше 10"
-
-#: libmalcontent-ui/gs-content-rating.c:230
-#: libmalcontent-ui/gs-content-rating.c:481
-msgid "Everyone"
-msgstr "Для всех"
-
-#: libmalcontent-ui/gs-content-rating.c:232
-#: libmalcontent-ui/gs-content-rating.c:480
-msgid "Early Childhood"
-msgstr "Для маленьких"
-
 #. Translators: the placeholder is a user’s full name
-#: libmalcontent-ui/restrict-applications-dialog.c:222
+#: libmalcontent-ui/restrict-applications-dialog.c:256
 #, c-format
 msgid "Restrict %s from using the following installed applications."
 msgstr "Запретить %s использовать следующие установленные приложения."
 
 #: libmalcontent-ui/restrict-applications-dialog.ui:6
-#: libmalcontent-ui/restrict-applications-dialog.ui:12
 msgid "Restrict Applications"
 msgstr "Ограничение доступа к приложениям"
 
-#: libmalcontent-ui/restrict-applications-selector.ui:24
+#: libmalcontent-ui/restrict-applications-dialog.ui:22
+msgid "Search for applications…"
+msgstr "Поиск приложений…"
+
+#: libmalcontent-ui/restrict-applications-selector.ui:13
 msgid "No applications found to restrict."
 msgstr "Не найдено приложений, доступ к которым ограничен."
 
 #. Translators: this is the full name for an unknown user account.
-#: libmalcontent-ui/user-controls.c:207 libmalcontent-ui/user-controls.c:218
+#: libmalcontent-ui/user-controls.c:198 libmalcontent-ui/user-controls.c:209
 msgid "unknown"
 msgstr "неизвестный"
 
-#: libmalcontent-ui/user-controls.c:312 libmalcontent-ui/user-controls.c:397
-#: libmalcontent-ui/user-controls.c:669
+#: libmalcontent-ui/user-controls.c:303 libmalcontent-ui/user-controls.c:388
+#: libmalcontent-ui/user-controls.c:641
 msgid "All Ages"
 msgstr "Все возрастные группы"
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:477
+#: libmalcontent-ui/user-controls.c:470
 #, c-format
 msgid ""
 "Prevents %s from running web browsers. Limited web content may still be "
@@ -258,48 +216,48 @@ msgstr ""
 "доступен в других приложениях."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:482
+#: libmalcontent-ui/user-controls.c:475
 #, c-format
 msgid "Prevents specified applications from being used by %s."
 msgstr "Запретить %s использование указанных приложений."
 
 #. Translators: The placeholder is a user’s display name.
-#: libmalcontent-ui/user-controls.c:487
+#: libmalcontent-ui/user-controls.c:480
 #, c-format
 msgid "Prevents %s from installing applications."
 msgstr "Запретить %s устанавливать приложения."
 
-#: libmalcontent-ui/user-controls.ui:16
+#: libmalcontent-ui/user-controls.ui:25
 msgid "Application Usage Restrictions"
 msgstr "Ограничения на использование приложений"
 
-#: libmalcontent-ui/user-controls.ui:68
+#: libmalcontent-ui/user-controls.ui:28
 msgid "Restrict _Web Browsers"
 msgstr "Ограничить доступ к _Веб-браузерам"
 
-#: libmalcontent-ui/user-controls.ui:152
+#: libmalcontent-ui/user-controls.ui:51
 msgid "_Restrict Applications"
 msgstr "_Ограничить доступ к приложениям"
 
-#: libmalcontent-ui/user-controls.ui:231
+#: libmalcontent-ui/user-controls.ui:73
 msgid "Software Installation Restrictions"
 msgstr "Ограничения на установку программного обеспечения"
 
-#: libmalcontent-ui/user-controls.ui:282
+#: libmalcontent-ui/user-controls.ui:77
 msgid "Restrict Application _Installation"
 msgstr "Ограничить _установку приложений"
 
-#: libmalcontent-ui/user-controls.ui:367
+#: libmalcontent-ui/user-controls.ui:99
 msgid "Application _Suitability"
 msgstr "_Пригодность приложений"
 
-#: libmalcontent-ui/user-controls.ui:389
+#: libmalcontent-ui/user-controls.ui:102
 msgid ""
-"Restricts browsing or installation of applications to applications suitable "
-"for certain ages or above."
+"Restricts the browsing or installation of applications unsuitable for this "
+"age or younger."
 msgstr ""
-"Ограничить просмотр или установку приложений в соответствии с распределением "
-"доступности по возрастным группам."
+"Ограничить просмотр или установку приложений неподходящих для этой "
+"возрастной группы."
 
 #. Translators: This documents the --user command line option to malcontent-control:
 #: malcontent-control/application.c:102
@@ -317,7 +275,7 @@ msgstr "— просмотр и редактирование родительс�
 
 #. Translators: This is the title of the main window
 #. Translators: the name of the application as it appears in a software center
-#: malcontent-control/application.c:123 malcontent-control/main.ui:12
+#: malcontent-control/application.c:123 malcontent-control/main.ui:17
 #: malcontent-control/org.freedesktop.MalcontentControl.appdata.xml.in:9
 #: malcontent-control/org.freedesktop.MalcontentControl.desktop.in:3
 msgid "Parental Controls"
@@ -332,7 +290,7 @@ msgstr "Copyright © 2019, 2020 Endless Mobile, Inc."
 #. this language, one per line.
 #: malcontent-control/application.c:314
 msgid "translator-credits"
-msgstr "Ser82-png <asvmail.as@gmail.com>, 2022"
+msgstr "Ser82-png <asvmail.as@gmail.com>, 2022-2023"
 
 #. Translators: "Malcontent" is the brand name of this
 #. project, so should not be translated.
@@ -340,15 +298,15 @@ msgstr "Ser82-png <asvmail.as@gmail.com>, 2022"
 msgid "Malcontent Website"
 msgstr "Веб-сайт Malcontent"
 
-#: malcontent-control/application.c:338
+#: malcontent-control/application.c:341
 msgid "The help contents could not be displayed"
 msgstr "Содержание справки не может быть отображено"
 
-#: malcontent-control/application.c:375
+#: malcontent-control/application.c:388
 msgid "Failed to load user data from the system"
 msgstr "Не удалось загрузить пользовательские данные из системы"
 
-#: malcontent-control/application.c:377
+#: malcontent-control/application.c:390
 msgid "Please make sure that the AccountsService is installed and enabled."
 msgstr "Убедитесь, что служба AccountsService установлена и включена."
 
@@ -361,7 +319,7 @@ msgstr "Убедитесь, что служба AccountsService установл
 #. * further!
 #. * https://gitlab.freedesktop.org/pwithnall/malcontent/-/issues/new
 #.
-#: malcontent-control/application.c:408
+#: malcontent-control/application.c:421
 #, c-format
 msgid ""
 "It’s recommended that restrictions are set as part of an ongoing "
@@ -372,30 +330,30 @@ msgstr ""
 "href='https://www.commonsensemedia.org/privacy-and-internet-"
 "safety'>Ознакомьтесь с инструкцией</a> о том, что нужно учитывать."
 
-#: malcontent-control/carousel.ui:48
+#: malcontent-control/carousel.ui:38
 msgid "Previous Page"
 msgstr "Предыдущая страница"
 
-#: malcontent-control/carousel.ui:74
+#: malcontent-control/carousel.ui:57
 msgid "Next Page"
 msgstr "Следующая страница"
 
-#: malcontent-control/main.ui:115
+#: malcontent-control/main.ui:87
 msgid "Permission Required"
 msgstr "Требуется разрешение"
 
-#: malcontent-control/main.ui:129
+#: malcontent-control/main.ui:88
 msgid ""
 "Permission is required to view and change user parental controls settings."
 msgstr ""
 "Требуется разрешение для просмотра и изменения настроек родительского "
 "контроля пользователя."
 
-#: malcontent-control/main.ui:184
+#: malcontent-control/main.ui:110
 msgid "No Standard User Accounts"
 msgstr "Нет обычных учётных записей пользователей"
 
-#: malcontent-control/main.ui:199
+#: malcontent-control/main.ui:111
 msgid ""
 "Parental controls can only be applied to standard user\n"
 "accounts. These can be created in the user settings."
@@ -403,19 +361,19 @@ msgstr ""
 "Родительский контроль может быть применен только к обычным учётным\n"
 "записям пользователей. Такие записи можно создать в настройках пользователя."
 
-#: malcontent-control/main.ui:212
+#: malcontent-control/main.ui:115
 msgid "_User Settings"
 msgstr "Настройки _пользователя"
 
-#: malcontent-control/main.ui:242
+#: malcontent-control/main.ui:138
 msgid "Loading…"
 msgstr "Загрузка…"
 
-#: malcontent-control/main.ui:305
+#: malcontent-control/main.ui:171
 msgid "_Help"
 msgstr "_Справка"
 
-#: malcontent-control/main.ui:309
+#: malcontent-control/main.ui:175
 msgid "_About Parental Controls"
 msgstr "_О родительском контроле"
 
@@ -454,7 +412,7 @@ msgid ""
 "usage;usage limit;kid;child;"
 msgstr ""
 "parental controls;screen time;app restrictions;web browser restrictions;oars;"
-"usage;usage limit;kid;child;родительский контроль;ребенок;"
+"usage;usage limit;kid;child;родительский контроль;ребенок;ограничение;"
 
 #: malcontent-control/org.freedesktop.MalcontentControl.policy.in:9
 msgid "Manage parental controls"
@@ -493,6 +451,34 @@ msgstr "У пользователя «%s» не осталось времени"
 #, c-format
 msgid "Error setting time limit on login session: %s"
 msgstr "Ошибка установки ограничения времени на сеанс входа в систему: %s"
+
+#, c-format
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "General"
+#~ msgstr "Общие"
+
+#~ msgid "ALL"
+#~ msgstr "ВСЕ"
+
+#~ msgid "Adults Only"
+#~ msgstr "Только для взрослых"
+
+#~ msgid "Mature"
+#~ msgstr "Для повзрослевшых"
+
+#~ msgid "Teen"
+#~ msgstr "Для подростков"
+
+#~ msgid "Everyone 10+"
+#~ msgstr "Для всех старше 10"
+
+#~ msgid "Everyone"
+#~ msgstr "Для всех"
+
+#~ msgid "Early Childhood"
+#~ msgstr "Для маленьких"
 
 #~ msgid "No cartoon violence"
 #~ msgstr "Отсутствуют сцены мультипликационного насилия"

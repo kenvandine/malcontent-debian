@@ -328,19 +328,19 @@ on_malcontent_help_shown_finished_cb (GObject      *source,
                                       gpointer      user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
+  GtkUriLauncher *launcher = GTK_URI_LAUNCHER (source);
   g_autoptr(GError) local_error = NULL;
 
-  if (!gtk_show_uri_full_finish (mct_application_get_main_window (self),
-                                 result,
-                                 &local_error))
+  if (!gtk_uri_launcher_launch_finish (launcher,
+                                       result,
+                                       &local_error))
     {
-      GtkWidget *dialog = gtk_message_dialog_new (mct_application_get_main_window (self),
-                                                  GTK_DIALOG_MODAL,
-                                                  GTK_MESSAGE_ERROR,
-                                                  GTK_BUTTONS_OK,
-                                                  _("The help contents could not be displayed"));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", local_error->message);
-      gtk_window_present (GTK_WINDOW (dialog));
+      g_autoptr(GtkAlertDialog) dialog = NULL;
+
+      dialog = gtk_alert_dialog_new (_("The help contents could not be displayed"));
+      gtk_alert_dialog_set_detail (dialog, local_error->message);
+      gtk_alert_dialog_set_modal (dialog, TRUE);
+      gtk_alert_dialog_show (dialog, mct_application_get_main_window (self));
     }
 }
 
@@ -348,13 +348,14 @@ static void
 help_action_cb (GSimpleAction *action, GVariant *parameters, gpointer user_data)
 {
   MctApplication *self = MCT_APPLICATION (user_data);
+  g_autoptr(GtkUriLauncher) launcher = NULL;
 
-  gtk_show_uri_full (mct_application_get_main_window (self),
-                     "help:malcontent",
-                     GDK_CURRENT_TIME,
-                     NULL,
-                     on_malcontent_help_shown_finished_cb,
-                     self);
+  launcher = gtk_uri_launcher_new ("help:malcontent");
+  gtk_uri_launcher_launch (launcher,
+                           mct_application_get_main_window (self),
+                           NULL,
+                           on_malcontent_help_shown_finished_cb,
+                           self);
 }
 
 static void
@@ -399,7 +400,9 @@ update_main_stack (MctApplication *self)
     }
   else if (is_permission_loaded && !has_permission)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_lock_button_set_permission (self->lock_button, self->permission);
+      G_GNUC_END_IGNORE_DEPRECATIONS
       mct_user_controls_set_permission (self->user_controls, self->permission);
 
       new_page_name = "unlock";

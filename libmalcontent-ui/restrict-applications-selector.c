@@ -41,6 +41,7 @@ static void app_info_changed_cb (GAppInfoMonitor *monitor,
 static void reload_apps (MctRestrictApplicationsSelector *self);
 static GtkWidget *create_row_for_app_cb (gpointer item,
                                          gpointer user_data);
+static char *app_info_dup_name (GAppInfo *app_info);
 
 /**
  * MctRestrictApplicationsSelector:
@@ -54,6 +55,11 @@ static GtkWidget *create_row_for_app_cb (gpointer item,
  * #MctAppFilterBuilder using
  * mct_restrict_applications_selector_build_app_filter().
  *
+ * Search terms may be applied using #MctRestrictApplicationsSelector:search.
+ * These will filter the list of displayed apps so that only ones matching the
+ * search terms (by name, using UTF-8 normalisation and casefolding) will be
+ * displayed.
+ *
  * Since: 0.5.0
  */
 struct _MctRestrictApplicationsSelector
@@ -61,10 +67,11 @@ struct _MctRestrictApplicationsSelector
   GtkBox parent_instance;
 
   GtkListBox *listbox;
-  GtkLabel *placeholder;
 
   GList *cached_apps;  /* (nullable) (owned) (element-type GAppInfo) */
-  GListStore *apps;  /* (owned) */
+  GListStore *apps;
+  GtkFilterListModel *filtered_apps;
+  GtkStringFilter *search_filter;
   GAppInfoMonitor *app_info_monitor;  /* (owned) */
   gulong app_info_monitor_changed_id;
   GHashTable *blocklisted_apps; /* (owned) (element-type GAppInfo) */
@@ -74,7 +81,7 @@ struct _MctRestrictApplicationsSelector
   FlatpakInstallation *system_installation; /* (owned) */
   FlatpakInstallation *user_installation; /* (owned) */
 
-  GtkCssProvider *css_provider;  /* (owned) */
+  gchar *search;  /* (nullable) (owned) */
 };
 
 G_DEFINE_TYPE (MctRestrictApplicationsSelector, mct_restrict_applications_selector, GTK_TYPE_BOX)
@@ -82,9 +89,10 @@ G_DEFINE_TYPE (MctRestrictApplicationsSelector, mct_restrict_applications_select
 typedef enum
 {
   PROP_APP_FILTER = 1,
+  PROP_SEARCH,
 } MctRestrictApplicationsSelectorProperty;
 
-static GParamSpec *properties[PROP_APP_FILTER + 1];
+static GParamSpec *properties[PROP_SEARCH + 1];
 
 enum {
   SIGNAL_CHANGED,
@@ -125,6 +133,9 @@ mct_restrict_applications_selector_get_property (GObject    *object,
     case PROP_APP_FILTER:
       g_value_set_boxed (value, self->app_filter);
       break;
+    case PROP_SEARCH:
+      g_value_set_string (value, self->search);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -144,6 +155,9 @@ mct_restrict_applications_selector_set_property (GObject      *object,
     case PROP_APP_FILTER:
       mct_restrict_applications_selector_set_app_filter (self, g_value_get_boxed (value));
       break;
+    case PROP_SEARCH:
+      mct_restrict_applications_selector_set_search (self, g_value_get_string (value));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -156,7 +170,6 @@ mct_restrict_applications_selector_dispose (GObject *object)
   MctRestrictApplicationsSelector *self = (MctRestrictApplicationsSelector *)object;
 
   g_clear_pointer (&self->blocklisted_apps, g_hash_table_unref);
-  g_clear_object (&self->apps);
   g_clear_list (&self->cached_apps, g_object_unref);
 
   if (self->app_info_monitor != NULL && self->app_info_monitor_changed_id != 0)
@@ -168,9 +181,24 @@ mct_restrict_applications_selector_dispose (GObject *object)
   g_clear_pointer (&self->app_filter, mct_app_filter_unref);
   g_clear_object (&self->system_installation);
   g_clear_object (&self->user_installation);
-  g_clear_object (&self->css_provider);
+  g_clear_pointer (&self->search, g_free);
 
   G_OBJECT_CLASS (mct_restrict_applications_selector_parent_class)->dispose (object);
+}
+
+static void
+mct_restrict_applications_selector_realize (GtkWidget *widget)
+{
+  g_autoptr(GtkCssProvider) provider = NULL;
+
+  GTK_WIDGET_CLASS (mct_restrict_applications_selector_parent_class)->realize (widget);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider,
+                                       "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
 }
 
 static void
@@ -183,6 +211,8 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
   object_class->get_property = mct_restrict_applications_selector_get_property;
   object_class->set_property = mct_restrict_applications_selector_set_property;
   object_class->dispose = mct_restrict_applications_selector_dispose;
+
+  widget_class->realize = mct_restrict_applications_selector_realize;
 
   /**
    * MctRestrictApplicationsSelector:app-filter: (not nullable)
@@ -202,6 +232,23 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
                           G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * MctRestrictApplicationsSelector:search: (nullable)
+   *
+   * Search terms to filter the displayed list of apps by, or %NULL to not
+   * filter the search.
+   *
+   * Since: 0.12.0
+   */
+  properties[PROP_SEARCH] =
+      g_param_spec_string ("search",
+                           "Search",
+                           "Search terms to filter the displayed list of apps by.",
+                           NULL,
+                           G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS |
+                           G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 
@@ -224,18 +271,18 @@ mct_restrict_applications_selector_class_init (MctRestrictApplicationsSelectorCl
   gtk_widget_class_set_template_from_resource (widget_class, "/org/freedesktop/MalcontentUi/ui/restrict-applications-selector.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, listbox);
-  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, placeholder);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, apps);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, filtered_apps);
+  gtk_widget_class_bind_template_child (widget_class, MctRestrictApplicationsSelector, search_filter);
+
+  gtk_widget_class_bind_template_callback (widget_class, app_info_dup_name);
 }
 
 static void
 mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
 {
-  guint n_apps;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->apps = g_list_store_new (G_TYPE_APP_INFO);
-  self->cached_apps = NULL;
 
   self->app_info_monitor = g_app_info_monitor_get ();
   self->app_info_monitor_changed_id =
@@ -243,14 +290,10 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
                         (GCallback) app_info_changed_cb, self);
 
   gtk_list_box_bind_model (self->listbox,
-                           G_LIST_MODEL (self->apps),
+                           G_LIST_MODEL (self->filtered_apps),
                            create_row_for_app_cb,
                            self,
                            NULL);
-
-  /* Hide placeholder if not empty */
-  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->apps));
-  gtk_widget_set_visible (GTK_WIDGET (self->placeholder), n_apps != 0);
 
   self->blocklisted_apps = g_hash_table_new_full (g_direct_hash,
                                                   g_direct_equal,
@@ -259,10 +302,6 @@ mct_restrict_applications_selector_init (MctRestrictApplicationsSelector *self)
 
   self->system_installation = flatpak_installation_new_system (NULL, NULL);
   self->user_installation = flatpak_installation_new_user (NULL, NULL);
-
-  self->css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (self->css_provider,
-                                       "/org/freedesktop/MalcontentUi/ui/restricts-switch.css");
 }
 
 static void
@@ -323,7 +362,6 @@ create_row_for_app_cb (gpointer item,
   g_autoptr(GIcon) icon = NULL;
   GtkWidget *row, *w;
   const gchar *app_name;
-  GtkStyleContext *context;
 
   app_name = g_app_info_get_name (app);
 
@@ -349,11 +387,7 @@ create_row_for_app_cb (gpointer item,
   w = g_object_new (GTK_TYPE_SWITCH,
                     "valign", GTK_ALIGN_CENTER,
                     NULL);
-  context = gtk_widget_get_style_context (w);
-  gtk_style_context_add_class (context, "restricts");
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (self->css_provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION - 1);
+  gtk_widget_add_css_class (w, "restricts");
   adw_action_row_add_suffix (ADW_ACTION_ROW (row), w);
   adw_action_row_set_activatable_widget (ADW_ACTION_ROW (row), w);
 
@@ -366,6 +400,12 @@ create_row_for_app_cb (gpointer item,
   g_signal_connect (w, "notify::active", G_CALLBACK (on_switch_active_changed_cb), self);
 
   return row;
+}
+
+static char *
+app_info_dup_name (GAppInfo *app_info)
+{
+  return g_strdup (g_app_info_get_name (app_info));
 }
 
 static gint
@@ -706,7 +746,7 @@ mct_restrict_applications_selector_build_app_filter (MctRestrictApplicationsSele
       else
         {
           const gchar *executable = g_app_info_get_executable (G_APP_INFO (app));
-          g_autofree gchar *path = g_find_program_in_path (executable);
+          g_autofree gchar *path = (executable != NULL) ? g_find_program_in_path (executable) : NULL;
 
           if (!path)
             {
@@ -776,7 +816,7 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
   self->app_filter = mct_app_filter_ref (app_filter);
 
   /* Update the status of each app row. */
-  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->apps));
+  n_apps = g_list_model_get_n_items (G_LIST_MODEL (self->filtered_apps));
 
   for (guint i = 0; i < n_apps; i++)
     {
@@ -794,4 +834,51 @@ mct_restrict_applications_selector_set_app_filter (MctRestrictApplicationsSelect
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_APP_FILTER]);
+}
+
+/**
+ * mct_restrict_applications_selector_get_search:
+ * @self: an #MctRestrictApplicationsSelector
+ *
+ * Get the value of #MctRestrictApplicationsSelector:search.
+ *
+ * Returns: current search terms, or %NULL if no search filtering is active
+ * Since: 0.12.0
+ */
+const gchar *
+mct_restrict_applications_selector_get_search (MctRestrictApplicationsSelector *self)
+{
+  g_return_val_if_fail (MCT_IS_RESTRICT_APPLICATIONS_SELECTOR (self), NULL);
+
+  return self->search;
+}
+
+/**
+ * mct_restrict_applications_selector_set_search:
+ * @self: an #MctRestrictApplicationsSelector
+ * @search: (nullable): search terms, or %NULL to not filter the app list
+ *
+ * Set the value of #MctRestrictApplicationsSelector:search, or clear it to
+ * %NULL.
+ *
+ * Since: 0.12.0
+ */
+void
+mct_restrict_applications_selector_set_search (MctRestrictApplicationsSelector *self,
+                                               const gchar                     *search)
+{
+  g_return_if_fail (MCT_IS_RESTRICT_APPLICATIONS_SELECTOR (self));
+
+  /* Squash empty search terms down to nothing. */
+  if (search != NULL && *search == '\0')
+    search = NULL;
+
+  if (g_strcmp0 (search, self->search) == 0)
+    return;
+
+  g_clear_pointer (&self->search, g_free);
+  self->search = g_strdup (search);
+
+  gtk_string_filter_set_search (self->search_filter, self->search);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH]);
 }
