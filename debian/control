@@ -143,7 +143,7 @@ Section: libs
 Architecture: amd64 arm64 armel armhf i386 mips64el ppc64el riscv64 s390x loong64 ppc64 x32
 Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: library for parental control of applications - GTK+ widgets and dialogs
+Description: library for parental control of applications - GTK widgets and dialogs
  malcontent implements support for restricting the type of content accessible
  to non-administrator accounts on a Linux system. Typically, when this is used,
  a non-administrator account will be for a child using the system; and the
@@ -157,7 +157,7 @@ Description: library for parental control of applications - GTK+ widgets and dia
  by applications should provide enough of an obstacle to prevent users easily or
  accidentally having access to content which they shouldn’t.
  .
- This package contains the libmalcontent-ui library to display GTK+ widgets and
+ This package contains the libmalcontent-ui library to display GTK widgets and
  dialogs.
 
 Package: libmalcontent-ui-dev
