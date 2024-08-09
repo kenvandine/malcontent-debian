@@ -1,4 +1,4 @@
-malcontent (0.12.0-1parental1) UNRELEASED; urgency=medium
+malcontent (0.12.0-1parental1) noble; urgency=medium
 
   * debian/patches/all_apps.patch
     - Allow all apps to be filtered
