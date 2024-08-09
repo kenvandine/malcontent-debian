@@ -1,4 +1,4 @@
-malcontent (0.12.0-1parental2) UNRELEASED; urgency=medium
+malcontent (0.12.0-1parental2) noble; urgency=medium
 
   * debian/patches/hide_unsupported_features.patch
     - Hide UI elements for features not supported in Ubuntu 
