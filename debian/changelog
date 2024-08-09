@@ -1,3 +1,10 @@
+malcontent (0.12.0-1parental1) UNRELEASED; urgency=medium
+
+  * debian/patches/all_apps.patch
+    - Allow all apps to be filtered
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 09 Aug 2024 15:15:50 -0400
+
 malcontent (0.12.0-1) unstable; urgency=medium
 
   * New upstream release
