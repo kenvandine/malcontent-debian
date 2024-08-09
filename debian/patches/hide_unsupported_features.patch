@@ -1,0 +1,12 @@
+Index: malcontent/libmalcontent-ui/user-controls.ui
+===================================================================
+--- malcontent.orig/libmalcontent-ui/user-controls.ui
++++ malcontent/libmalcontent-ui/user-controls.ui
+@@ -71,6 +71,7 @@
+         <child>
+           <object class="AdwPreferencesGroup">
+             <property name="title" translatable="yes">Software Installation Restrictions</property>
++	    <property name="visible">False</property>
+             <child>
+               <object class="AdwActionRow" id="restrict_software_installation_row">
+                 <property name="visible" bind-source="restrict_software_installation_switch" bind-property="visible" bind-flags="default|sync-create" />

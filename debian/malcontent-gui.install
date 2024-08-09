@@ -1,6 +1,12 @@
 usr/bin/malcontent-control
 usr/share/applications/
-usr/share/help/
+usr/share/help/*/malcontent/creating-a-child-user.page
+usr/share/help/*/malcontent/index.page
+usr/share/help/*/malcontent/internet.page
+usr/share/help/*/malcontent/introduction.page
+usr/share/help/*/malcontent/restricting-applications.page
+usr/share/help/*/malcontent/legal.xml
 usr/share/icons/
 usr/share/metainfo/
 usr/share/polkit-1/actions/org.freedesktop.MalcontentControl.policy
+
